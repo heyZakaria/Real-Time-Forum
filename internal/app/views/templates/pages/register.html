@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/internal/app/views/static/style.css">
+    <title>FORUM</title>
+
+</head>
+
+<body>
+
+
+    <div class="navbar">
+        <div>
+            <a href="/" class="button">Home</a>
+        </div>
+        <div>
+            <a href="/login" class="login_button">Login</a>
+            <a href="/register" class="register_button">Register</a>
+        </div>
+
+    </div>
+
+
+
+    <div class="form-container">
+        <h2>Register</h2>
+        <form class="regsiter_form" method="post">
+            <label for="username">USER NAME</label>
+            <input type="text" id="username" name="username" placeholder="Username">
+            <br>
+            <span id="error0"></span>
+            <label for="email">EMAIL *</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email here">
+            <br>
+            <span id="error1"></span>
+            <label for="password">PASSWORD *</label>
+            <input type="password" id="password" name="password" placeholder="Setup your password">
+            <br>
+            <span id="error2"></span>
+            <label for="password2">REPEAT YOUR PASSWORD *</label>
+            <input type="password" id="password2" name="password2" placeholder="Repeat your password">
+            <br>
+            <span id="error3"></span>
+            <input type="submit" id="submit" value="Register">
+            <div id="server_error"></div>
+        </form>
+    </div>
+    {{.Name}}
+    {{.Username}}
+    {{.Email}}
+    {{.Password}}
+    {{.Password2}}
+
+
+    <script src="internal/app/views/static/verify_registration.js" defer></script>
+
+</body>
+
+</html>
