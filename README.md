@@ -27,12 +27,10 @@ go run cmd/main.go
 
 
 ## Author:
-- YOUSSEF Hrouk
+
 - Zakaria Abdelali
 - Soufyane El-Asly
-- Ayoub draoui
-- Anouar Boutamgharine
  
 ------------------------------------------
 
-Thank you for checking out the Forum Project! We hope you find it useful and engaging.
+Thank you for checking out the Real Time Forum Project! We hope you find it useful and engaging.

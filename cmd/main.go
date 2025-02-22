@@ -17,9 +17,8 @@ import (
 
 func main() {
 	db, _ := database.CreateDatabase()
-
+	
 	utils.Db1.Db = db
-
 
 	http.HandleFunc("/internal/app/views/static/", SetupStaticFilesHandler)
 
@@ -53,15 +52,15 @@ func SetupStaticFilesHandler(w http.ResponseWriter, r *http.Request) {
 
 	afterStatic := r.URL.Path[len("/internal/app/views/static/"):]
 	if strings.HasSuffix(afterStatic, "/") {
-		utils.MessageError(w,r, http.StatusNotFound, "What are you doing here!")
+		utils.MessageError(w, r, http.StatusNotFound, "What are you doing here!")
 		return
 	}
 
 	fullPath := filepath.Join(staticDir, afterStatic)
 
 	fileinfo, err := os.Stat(fullPath) // get the endpoint file infos: name size adress...
-	if err != nil || fileinfo.IsDir()  {
-		utils.MessageError(w,r, http.StatusNotFound, "What are you doing here!")
+	if err != nil || fileinfo.IsDir() {
+		utils.MessageError(w, r, http.StatusNotFound, "What are you doing here!")
 		return
 	}
 

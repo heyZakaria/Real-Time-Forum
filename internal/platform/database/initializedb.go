@@ -20,7 +20,7 @@ func CreateDatabase() (*sql.DB, error) {
 
 	_, err = db.Exec(string(schema))
 	if err != nil {
-		log.Fatal("err222222222288822", err)
+		log.Fatal("err", err)
 	}
 
 	creatCategory(db, "sport")
