@@ -1,4 +1,4 @@
-# FORUM
+<!-- # FORUM
 ## Description
 
  The Forum Project is an interactive online platform designed for users to engage in meaningful discussions and share knowledge on a variety of topics. 
@@ -33,4 +33,7 @@ go run cmd/main.go
  
 ------------------------------------------
 
-Thank you for checking out the Real Time Forum Project! We hope you find it useful and engaging.
+Thank you for checking out the Real Time Forum Project! We hope you find it useful and engaging. -->
+
+
+go run *.go
