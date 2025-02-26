@@ -1,4 +1,4 @@
-module lesowebsocket
+module websocket
 
 go 1.22.3
 

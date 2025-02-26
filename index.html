@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>websocket</title>
+</head>
+<body>
+    <script>
+    
+    let socket=new websocket("ws://localhost:8080/ws")
+    console.log("attending ws conection")
+
+    socket.onopen=()=>{
+        console.log("successfully connect")
+        socket.send("hi from the chat ")
+    }
+
+    socket.onclose=(event)=>{
+        console.log("socket close connectin ",event)
+        // socket.send
+
+    }
+
+    socket.onmessage=(msg)=>{
+        console.log("msg",msg)
+    }
+    socket.onerror=(err)=>{
+        console.log("socket err :",err)
+    }
+
+    </script>
+
+</body>
+</html>
