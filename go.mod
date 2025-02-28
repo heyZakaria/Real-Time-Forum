@@ -1,4 +1,4 @@
-module websocket
+module allo
 
 go 1.22.3
 
