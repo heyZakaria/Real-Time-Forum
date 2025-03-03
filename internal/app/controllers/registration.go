@@ -3,6 +3,7 @@ package controllers
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"regexp"
 	"strings"
@@ -46,7 +47,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 			json.NewEncoder(w).Encode(response)
 			return
 		}
-
+		fmt.Println("weeeeeeeeeee")
 		// checkusername
 		if !Printable(request.Username) || len(request.Username) > 25 || len(request.Username) < 2 || strings.TrimSpace(request.Username) == "" {
 			validusername = false

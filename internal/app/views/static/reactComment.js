@@ -1,10 +1,9 @@
 import { Registred } from "./registred.js"
+import { route } from "./router.js";
 
 export async function reactComment(postsData) {
 
-
     let like_button = document.querySelector(`.comment_like_${postsData.id}`)
-
 
     let dislike_button = document.querySelector(`.comment_dislike_${postsData.id}`)
 
@@ -13,9 +12,8 @@ export async function reactComment(postsData) {
         let userid = await Registred()
 
         if (!userid) {
-            window.location.replace("/login");
+            route("/login", true)
         } else {
-
 
             let bol = false
 
@@ -25,11 +23,8 @@ export async function reactComment(postsData) {
                         bol = true
                         break
                     }
-
                 }
             }
-
-
 
             let isDisliked = false
 
@@ -56,12 +51,9 @@ export async function reactComment(postsData) {
 
                             postsData.dislikers.splice(index, 1);
                         }
-
-
                     }
                     dislike_button.innerHTML = `dislikes ${postsData.dislike}`;
                 }
-
 
                 const result = await updateLikeandDislikeComments(postsData.id, "like", action);
 
@@ -83,9 +75,7 @@ export async function reactComment(postsData) {
 
                             postsData.likers.splice(index, 1);
                         }
-
                     }
-
                     like_button.innerHTML = `Likes ${postsData.like}`;
                 }
             } catch (error) {
@@ -94,16 +84,14 @@ export async function reactComment(postsData) {
         }
     }
 
-
     dislike_button.onclick = async function () {
 
         let userid = await Registred()
 
         if (!userid) {
-            window.location.replace("/login");
+            route("/login", true)
+
         } else {
-
-
 
             let bol = false
 
@@ -113,7 +101,6 @@ export async function reactComment(postsData) {
                         bol = true
                         break
                     }
-
                 }
             }
             let isliked = false
@@ -126,8 +113,6 @@ export async function reactComment(postsData) {
                     }
                 }
             }
-
-
 
             try {
                 const action = !bol ? 'increment' : 'decrement';
@@ -163,8 +148,6 @@ export async function reactComment(postsData) {
 
                             postsData.dislikers.splice(index, 1);
                         }
-
-
                     }
                     dislike_button.innerHTML = `dislikes ${postsData.dislike}`;
                 }
@@ -172,17 +155,8 @@ export async function reactComment(postsData) {
                 console.error('Failed   update  dislikes or indislike:', error);
             }
         }
-
     }
-
-
-
 }
-
-
-
-
-
 
 
 async function updateLikeandDislikeComments(commentId, reaction, action) {
@@ -203,7 +177,6 @@ async function updateLikeandDislikeComments(commentId, reaction, action) {
             if (!response.ok) {
                 throw new Error('Failed  e like');
             }
-
 
             return await response.json();
         } catch (error) {
@@ -234,8 +207,5 @@ async function updateLikeandDislikeComments(commentId, reaction, action) {
             console.error('Error updating dislike:', error);
             throw error;
         }
-
     }
-
-
 }

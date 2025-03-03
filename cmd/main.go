@@ -24,8 +24,8 @@ func main() {
 
 	http.HandleFunc("/", controllers.Home)
 
-	http.HandleFunc("/register", controllers.Registration)
-	http.HandleFunc("/login", controllers.Login)
+	/* http.HandleFunc("/register", controllers.Registration)
+	http.HandleFunc("/login", controllers.Login) */
 
 	http.HandleFunc("/api", api.Codage)
 	http.HandleFunc("/api/registred", controllers.CheckRegistration)

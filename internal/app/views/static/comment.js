@@ -41,7 +41,7 @@ export function comment(postsData) {
                     window.location.replace("/login");
                 } else {
                     let x = comment_input.value.trim();
-                    
+
                     if (x.length != 0) {
 
                         var OBJ = {
@@ -49,7 +49,7 @@ export function comment(postsData) {
                             post_id: `${postsData.id}`,
                             user_id: 5,
                         }
-                        
+
                         fetch("/api/addComment", {
                             method: 'POST',
                             headers: {
@@ -121,7 +121,7 @@ export function comment(postsData) {
 
             for (let i = 0; i < data.length; i++) {
 
-               
+
                 if (data[i].id == postsData.id) {
                     if (data[i].comment != null) {
 
@@ -156,7 +156,7 @@ export function comment(postsData) {
                             comment_react_buttons_wrapper.appendChild(comment_like_button)
                             comment_react_buttons_wrapper.appendChild(comment_dislike_button)
                             Comm.appendChild(comment_react_buttons_wrapper)
-                            
+
 
                             comments_wrapper.appendChild(Comm);
 

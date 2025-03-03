@@ -29,8 +29,6 @@ export async function filter() {
       }
     }
 
-
-
     F(filtered)
   };
 }
@@ -71,7 +69,6 @@ function enetertimentFilter(postsData) {
     }
   }
 
-
   return filtered;
 }
 
@@ -83,11 +80,8 @@ async function likedFilter(postsData) {
   if (!userid) {
     window.location.replace("/login");
   } else {
-
-
     for (let i = 0; i < postsData.length; i++) {
       if (Array.isArray(postsData[i].likers)) {
-
         if (postsData[i].likers.includes(userid)) {
 
           filtered.push(postsData[i]);
@@ -106,17 +100,12 @@ async function createdFilter(postsData) {
   if (!id) {
     window.location.replace("/login");
   } else {
-
-
     for (let i = 0; i < postsData.length; i++) {
-
       if (postsData[i].user_id === id) {
         filtered.push(postsData[i]);
       }
-
     }
   }
-
 
   return filtered;
 }

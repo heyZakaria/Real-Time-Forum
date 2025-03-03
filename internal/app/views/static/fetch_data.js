@@ -3,6 +3,7 @@ import { reacPost } from "./reactPost.js";
 import { comment } from "./comment.js";
 import { Registred } from "./registred.js";
 import { filter } from "./filter.js";
+import { route } from "./router.js";
 import { reactComment } from "./reactComment.js";
 
 
@@ -14,16 +15,17 @@ let load_more = document.querySelector(".load_more")
 
 
 submit_post.onclick = async function (event) {
+    console.log("wiiiiiiiiiiiiiiiiiiiii");
 
     event.preventDefault()
+    //route(event, true)
     let userid = await Registred()
     if (!userid) {
-
-        window.location.replace("/login");
-
+        //// This should handled with routing
+        route("/login", true)
+        // window.location.replace("/login");
+        return
     } else {
-
-
 
         let x = document.querySelector(".no_post")
         if (x != null) {
@@ -34,7 +36,6 @@ submit_post.onclick = async function (event) {
 
         for (let i = 0; i < post_category.length; i++) {
 
-
             if (post_category[i].checked && (post_category[i].value === "sport" || post_category[i].value === "science" || post_category[i].value === "entertainment")) {
                 if (!category.includes(post_category[i].value)) {
 
@@ -43,13 +44,11 @@ submit_post.onclick = async function (event) {
             }
         }
 
-
         let z = post_title.value.trim();
         let y = post_content.value.trim();
 
         if (z.length == 0 || y.length == 0) {
             alert("Ensure you input a value in both fields!");
-
 
         } else {
             var OBJ = {
@@ -61,11 +60,7 @@ submit_post.onclick = async function (event) {
                 like: 0,
                 dislike: 0,
                 category,
-
-
-
             }
-
 
             fetch("/api/addPost", {
                 method: 'POST',
@@ -81,27 +76,21 @@ submit_post.onclick = async function (event) {
 
                     if (data.Title != "") {
 
-
-
                         let posts = document.getElementById("posts")
-
 
                         data.like = 0
                         data.dislike = 0
                         let card = InitPost(data)
                         posts.insertBefore(card, posts.firstChild);
 
-
                         reacPost(data)
                         comment(data)
-
 
                     } else {
                         alert("Ensure you input a value in both fields!");
 
                     }
                 })
-
         }
 
     }
@@ -113,15 +102,12 @@ submit_post.onclick = async function (event) {
 
         e.checked = false
     }
-
 }
-
 
 export async function Get_Data(url) {
     try {
         const response = await fetch(url);
         const data = await response.json();
-
 
         return data
 
@@ -137,18 +123,16 @@ let max = 5
 let data = ""
 
 let count = -1
-window.onload = function () {
+/* window.onload = function () {
     Get_All_Posts()
-}
-async function Get_All_Posts() {
+} */
+
+export async function Get_All_Posts() {
 
     let x = document.querySelector(".login_button")
 
-
     let cookie = decodeURIComponent(document.cookie.split("=")[1])
     const eqPos = cookie.indexOf('=')
-
-
 
     if (cookie.length > 0) {
         // hide login ----  show logout
@@ -158,7 +142,6 @@ async function Get_All_Posts() {
 
         let register = document.querySelector(".register_button")
         if (register != null) {
-
             register.remove()
         }
 
@@ -167,25 +150,27 @@ async function Get_All_Posts() {
                 // hide logout ----  show login
                 // delete session
                 document.cookie = 'session_id='; 'Max-Age=0'
-
                 login.innerText = "Login"
+                route("/login", true)
             }
         }
-
     }
 
     let postsData = await Get_Data(`/api`)
-
-
-
+    
     if (postsData.posts == null) {
 
-        let load_more_button = document.querySelector(".load_more").remove()
-        let noPost = ADDElement("div", "no_post", "Be the first one!")
-        noPost.style.fontWeight = "bold"
+        let load_more_button = document.querySelector(".load_more")
+        if (load_more_button) {
+            load_more_button.remove()
+        } else {
 
-        let container = document.querySelector(".container").appendChild(noPost)
+            let noPost = ADDElement("div", "no_post", "Be the first one!")
+            noPost.style.fontWeight = "bold"
+            document.querySelector(".container").appendChild(noPost)
+        }
         return
+
     } else {
         let noPost = document.querySelector(".no_post")
         if (noPost != null) {
@@ -196,8 +181,19 @@ async function Get_All_Posts() {
     postsData = postsData.posts;
     data = postsData
     const tour = Math.floor(data.length / 5)
+    ///////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////// HADO //////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////
+    console.log(count);
+    console.log(tour);
+    
+    
     if (tour == count) {
-        let load_more_button = document.querySelector(".load_more").remove()
+
+        let load_more_button = document.querySelector(".load_more")
+            if (load_more_button) {
+                load_more_button.remove()
+            }
         return
     }
     count++
@@ -218,24 +214,15 @@ async function Get_All_Posts() {
                 reacPost(postsData[i])
                 comment(postsData[i])
 
-
             } else {
 
                 break
             }
-
-
         }
         max += 5
 
-    } else {
-
     }
-
-
 }
-Get_All_Posts();
-
 
 load_more.addEventListener("click", Get_All_Posts)
 
@@ -252,20 +239,15 @@ export function ADDElement(elem, classs, content) {
     return x
 }
 
-
 export function F(postsData) {
-
-
 
     let load_more = document.querySelector(".load_more")
     load_more.style.display = 'none'
-
 
     let posts = document.getElementById("posts")
     posts.innerHTML = ''
 
     for (let i = 0; i < postsData.length; i++) {
-
 
         // Initialize Post
         postsData[i].category = postsData[i].categories
@@ -279,8 +261,6 @@ export function F(postsData) {
         comment(postsData[i])
         /////////// Maybe It's not working
         // reactComment(postsData[i])
-
-
     }
 }
 
@@ -332,17 +312,7 @@ export async function updateLikeandDislike(postId, reaction, action) {
             console.error('Error updating dislike:', error);
             throw error;
         }
-
     }
-
-
 }
 
-
 filter()
-
-
-
-
-
-

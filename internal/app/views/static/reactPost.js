@@ -1,5 +1,6 @@
 import { updateLikeandDislike } from "./fetch_data.js"
 import { Registred } from "./registred.js"
+import { route } from "./router.js";
 
 export function reacPost(postsData) {
 
@@ -7,15 +8,12 @@ export function reacPost(postsData) {
 
     let dislike_button = document.querySelector(`.dislike_${postsData.id}`)
 
-
     like_button.onclick = async function (e) {
 
         let userid = await Registred()
         if (!userid) {
-            window.location.replace("/login");
+            route("/login", true)
         } else {
-
-
 
             let bol = false
 
@@ -25,10 +23,8 @@ export function reacPost(postsData) {
                         bol = true
                         break
                     }
-
                 }
             }
-
 
             let isDisliked = false
 
@@ -38,10 +34,7 @@ export function reacPost(postsData) {
                         isDisliked = true
                         break
                     }
-
-
                 }
-
             }
 
             try {
@@ -53,19 +46,14 @@ export function reacPost(postsData) {
                     if (result1.success) {
                         postsData.dislike -= 1;
                         const index = postsData.dislikers.indexOf(userid);
-                       
+
                         if (index > -1) {
 
                             postsData.dislikers.splice(index, 1);
                         }
-
-
-
-
                     }
                     dislike_button.innerHTML = `Dislikes ${postsData.dislike}`;
                 }
-
 
                 const result = await updateLikeandDislike(postsData.id, "like", action);
 
@@ -82,12 +70,11 @@ export function reacPost(postsData) {
                     } else {
                         postsData.like -= 1;
                         const index = postsData.likers.indexOf(userid);
-                     
+
                         if (index > -1) {
 
                             postsData.likers.splice(index, 1);
                         }
-
                     }
 
                     like_button.innerHTML = `Likes ${postsData.like}`;
@@ -103,9 +90,8 @@ export function reacPost(postsData) {
 
         let userid = await Registred()
         if (!userid) {
-            window.location.replace("/login");
+            route("/login", true)
         } else {
-
 
             let bol = false
 
@@ -115,9 +101,9 @@ export function reacPost(postsData) {
                         bol = true
                         break
                     }
-
                 }
             }
+
             let isliked = false
 
             if (postsData.likers != null) {
@@ -129,8 +115,6 @@ export function reacPost(postsData) {
                 }
             }
 
-
-
             try {
                 const action = !bol ? 'increment' : 'decrement';
                 if ((action == 'increment') && (isliked == true)) {
@@ -138,7 +122,7 @@ export function reacPost(postsData) {
                     if (result1.success) {
                         postsData.like -= 1;
                         const index = postsData.likers.indexOf(userid);
-                      
+
                         if (index > -1) {
 
                             postsData.likers.splice(index, 1);
@@ -160,7 +144,7 @@ export function reacPost(postsData) {
 
                         postsData.dislike -= 1;
                         const index = postsData.dislikers.indexOf(userid);
-                       
+
                         if (index > -1) {
 
                             postsData.dislikers.splice(index, 1);
@@ -172,9 +156,5 @@ export function reacPost(postsData) {
                 console.error('Failed   update  dislikes or indislike:', error);
             }
         }
-
     }
-
-
-
 }

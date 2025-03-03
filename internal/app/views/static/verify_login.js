@@ -1,5 +1,5 @@
+import { route } from "./router";
 
-// hadi ana (anouar) lizdtha adrrari
 
 document.querySelector(".login_form").addEventListener("submit", async function (event) {
 
@@ -8,24 +8,18 @@ document.querySelector(".login_form").addEventListener("submit", async function 
   const usernameoremail = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-
-
-
   sendHttpRequest('POST', '/login', {
     emailorusername: usernameoremail,
     password: password,
 
   }).then(responseData => {
-    
+
     if (responseData.isValidData) {
-      window.location.href = "/"
-
-      
+      route("/", true)
     }
-
   })
     .catch(err => {
- 
+
       if (err.errserver) {
         errorDiv.innerHTML = "internal problem try later"
         errorDiv.style.color = "red"
@@ -35,17 +29,9 @@ document.querySelector(".login_form").addEventListener("submit", async function 
         errorDiv.style.color = "red"
         errorDiv.style.margin = "5px"
       }
-
-
-
     });
 
 })
-
-
-
-
-
 
 const sendHttpRequest = (method, url, data) => {
 
@@ -75,14 +61,3 @@ const sendHttpRequest = (method, url, data) => {
   });
   return promise;
 };
-
-
-
-
-
-
-
-
-
-
-

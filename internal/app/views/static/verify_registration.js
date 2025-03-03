@@ -1,6 +1,4 @@
-
-/// hadi ana(anouar) lizdtha 
-
+import { route } from "./router";
 document.querySelector(".regsiter_form").addEventListener("submit", function (event) {
     event.preventDefault();
     const errorDiv = document.getElementById('server_error');
@@ -14,19 +12,18 @@ document.querySelector(".regsiter_form").addEventListener("submit", function (ev
     let validpassword = false
     let validconfpassword = false
 
-
     if (username.length < 25 && username.length >= 2 && UsernameIsValid(username) == true) {
         validusername = true;
-
     }
+
     if (email.length < 60 && email.length >= 8 && EmailIsValid(email) && UsernameIsValid(email) == true) {
         validemail = true;
-
     }
+
     if (password.length < 50 && password.length > 8 && UsernameIsValid(password) == true && checkCharacter(password) == true) {
         validpassword = true;
-
     }
+
     if (password == confpassword) {
         validconfpassword = true;
     }
@@ -35,30 +32,26 @@ document.querySelector(".regsiter_form").addEventListener("submit", function (ev
         let myerror = document.getElementById("error0");
         myerror.innerHTML = "invalid username";
         myerror.style.color = 'red';
-
-
     }
+
     if (!validemail) {
         let myerror = document.getElementById("error1");
         myerror.innerHTML = "invalid email";
         myerror.style.color = 'red';
-
-
     }
+
     if (!validpassword) {
         let myerror = document.getElementById("error2");
         myerror.innerHTML = "invalid password";
         myerror.style.color = 'red';
-
-
     }
+
     if (!validconfpassword) {
         let myerror = document.getElementById("error3");
         myerror.innerHTML = "invalid confpassword";
         myerror.style.color = 'red';
-
-
     }
+
     if (!validconfpassword || !validpassword || !validemail || !validusername) {
         return
     }
@@ -70,7 +63,8 @@ document.querySelector(".regsiter_form").addEventListener("submit", function (ev
     }).then(responseData => {
 
         if (!responseData.emilorusernameexsist) {
-            window.location.href = "/login"
+            route("/login", true)
+
         }
 
     })
@@ -83,23 +77,19 @@ document.querySelector(".regsiter_form").addEventListener("submit", function (ev
                 errorDiv.textContent = "server problem, try later!!!"
                 errorDiv.style.color = `red`
 
-
             } else {
                 errorDiv.textContent = "invaliddata!!"
                 errorDiv.style.color = `red`
-
             }
-
-
         });
 
 });
+
 function EmailIsValid(email) {
     const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return re.test(email);
-
-
 }
+
 function checkCharacter(s) {
     let hasUpper = false;
     let hasLower = false;
@@ -123,7 +113,6 @@ function checkCharacter(s) {
     return hasUpper && hasLower && hasDigit && hasSpecial;
 }
 
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function UsernameIsValid(username) {
     for (let i = 0; i < username.length; i++) {
@@ -133,7 +122,6 @@ function UsernameIsValid(username) {
     }
     return true;
 }
-
 
 const sendHttpRequest = (method, url, data) => {
 

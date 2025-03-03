@@ -1,14 +1,13 @@
 import { ADDElement } from "./fetch_data.js";
+
 export function InitPost(postsData) {
 
-   
     let card = ADDElement("div", `card_${postsData.id}`, "")
     card.style.backgroundColor = "white";
     card.style.padding = "20px";
     card.style.margin = "20px";
    
     card.style.wordWrap = "break-word";
-
 
     let card_username = ADDElement("div", `card_username`, `@${postsData.creator}`)
     card_username.style.padding = "10px"
@@ -20,12 +19,9 @@ export function InitPost(postsData) {
     card_title.style.fontWeight = "bold"
     card_title.style.fontSize = "23px"
 
-
     let card_content = ADDElement("div", "card_content", postsData.content)
     card_content.style.padding = "10px"
     card_content.style.fontSize = "15px"
-
-
 
     let like_button = ADDElement("button", `like_${postsData.id}`, `Likes ${postsData.like} `)
     like_button.style.backgroundColor = "#a00"
@@ -57,12 +53,10 @@ export function InitPost(postsData) {
             categories.style.margin= "10px"
             card.appendChild(categories)
         }
-
     }
-  
 
     let comment_card = ADDElement("div", `comment_card_${postsData.id}`, "")
-    
+
     let show_comment_button = ADDElement("button", `comment_btn_${postsData.id}`, `Show Comments`)
     show_comment_button.style.backgroundColor = "#fff"
     show_comment_button.style.color = "#a00"
@@ -71,15 +65,12 @@ export function InitPost(postsData) {
     show_comment_button.style.width = "110px"
     show_comment_button.style.border = "none"
     
-    let comment_form = document.createElement("form");
-    
+    let comment_form = document.createElement("form");    
     
     let comment_input = ADDElement("input", `comment_input_${postsData.id}`, "")
     comment_input.style.display = 'none'
     comment_input.style.padding = "10px"
     comment_input.style.width = "100%"
-
-    
 
     // submit comment
     let submit_comment = ADDElement("button", `submit_comment_btn_${postsData.id}`, "Reply")
@@ -91,12 +82,10 @@ export function InitPost(postsData) {
     submit_comment.style.width = "80px"
     submit_comment.style.margin= "10px 10px 20px 0px"
     
-
     let comment_alert = ADDElement("div", `comment_alert_${postsData.id}`, "")
     comment_alert.style.display = 'none'
     comment_alert.style.color = "#a00"
     comment_alert.style.fontSize = "15px"
-
 
     card.appendChild(like_button);
     card.appendChild(dislike_button);
@@ -110,5 +99,4 @@ export function InitPost(postsData) {
     card.appendChild(comment_card)
 
     return card
-
 }

@@ -7,6 +7,22 @@
 
 }
 
+.hidden {
+    visibility: hidden;
+    position: absolute;
+}
+
+.clear_cache {
+    width: max-content;
+    height: max-content;
+    margin: 0 15px;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: var(--secondaryColor);
+    font-weight: bold;
+    background-color: var(--primaryColor);
+}
+
 /* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<navbar>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
 body {
     font-family: Arial, sans-serif;
@@ -24,7 +40,7 @@ body {
     background-color: #000;
 }
 
-.button {
+.home_button {
     width: max-content;
     height: max-content;
     margin: 0 15px;
@@ -36,12 +52,11 @@ body {
 }
 
 
-.button:hover {
+.home_button:hover {
     background-color: #000;
 }
 
 /* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<navbar>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
-
 
 .content {
     display: flex;
@@ -320,7 +335,7 @@ fieldset {
 
         margin: 0 10px;
         padding: 5px 10px;
-        
+
 
     }
 
@@ -330,7 +345,7 @@ fieldset {
         height: max-content;
         margin: 0 10px;
         padding: 5px 10px;
-        
+
         color: var(--secondaryColor);
         font-weight: bold;
 
@@ -350,18 +365,13 @@ fieldset {
         background-color: var(--primaryColor);
 
     }
-
-
-
 }
 
 
 
 @media (max-width: 550px) {
 
-
     * {
-
         margin: 0;
         padding: 0;
         --primaryColor: #a00;
@@ -389,7 +399,6 @@ fieldset {
         width: 300px;
     }
 
-
     .filter_form {
         display: block;
         flex-direction: column;
@@ -404,7 +413,6 @@ fieldset {
         border: 2px solid var(--primaryColor);
     }
 
-
     .post_btn {
 
         width: 300px;
@@ -416,7 +424,4 @@ fieldset {
         margin-top: 100px;
         font-weight: bold;
     }
-
-
-
 }
