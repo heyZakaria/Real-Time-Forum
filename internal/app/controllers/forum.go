@@ -10,10 +10,18 @@ import (
 
 func Home(w http.ResponseWriter, r *http.Request) {
 	page := []string{"internal/app/views/templates/forum.html"}
-	/* if r.URL.Path != "/" {
-		utils.MessageError(w, r, http.StatusNotFound, "Page Not Found!!!!")
+	if r.URL.Path == "/register" {
+
+		// utils.MessageError(w, r, http.StatusNotFound, "Page Not Found!!!!")
+		Registration(w, r)
 		return
-	} */
+	}
+
+	if r.URL.Path == "/login" {
+		// utils.MessageError(w, r, http.StatusNotFound, "Page Not Found!!!!")
+		Login(w, r)
+		return
+	}
 
 	if r.Method == "POST" {
 
@@ -54,7 +62,7 @@ func CheckUserInDB(token string) bool {
 	utils.Db1.Db.QueryRow(query, token).Scan(&hold)
 
 	if hold != 0 {
-		return hold !=0
+		return hold != 0
 	}
 
 	return false

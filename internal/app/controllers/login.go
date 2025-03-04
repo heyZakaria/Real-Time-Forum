@@ -43,7 +43,8 @@ func generateSessionID() string {
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	page := []string{"internal/app/views/templates/pages/login.html"}
+	page := []string{"internal/app/views/templates/forum.html"}
+	fmt.Println(r.URL.Path, "HEEERE")
 
 	var G utils.User
 	if r.Method == http.MethodGet {

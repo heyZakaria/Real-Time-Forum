@@ -2,11 +2,11 @@ import { route } from "./router";
 
 
 document.querySelector(".login_form").addEventListener("submit", async function (event) {
-
+  console.log("oooooooooo");
   event.preventDefault()
   const errorDiv = document.getElementById("server_error");
-  const usernameoremail = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+  const usernameoremail = document.getElementById("login_email").value;
+  const password = document.getElementById("login_password").value;
 
   sendHttpRequest('POST', '/login', {
     emailorusername: usernameoremail,

@@ -1,11 +1,15 @@
 import { route } from "./router";
-document.querySelector(".regsiter_form").addEventListener("submit", function (event) {
+
+console.log("wwwwwwwwwwwwww");
+
+document.getElementById("register_button").addEventListener("click", function (event) {
     event.preventDefault();
+    
     const errorDiv = document.getElementById('server_error');
     let username = document.getElementById("username").value;
-    let email = document.getElementById("email").value;
-    let password = document.getElementById("password").value;
-    let confpassword = document.getElementById("password2").value;
+    let email = document.getElementById("register_email").value;
+    let password = document.getElementById("register_password").value;
+    let confpassword = document.getElementById("register_password_2").value;
 
     let validusername = false
     let validemail = false
@@ -55,6 +59,8 @@ document.querySelector(".regsiter_form").addEventListener("submit", function (ev
     if (!validconfpassword || !validpassword || !validemail || !validusername) {
         return
     }
+    console.log("++++++++++++++++++++++++++++++++++++");
+    
 
     sendHttpRequest('POST', '/register', {
         email: email,
@@ -137,7 +143,10 @@ const sendHttpRequest = (method, url, data) => {
 
         xhr.onload = () => {
             if (xhr.status >= 400) {
-                reject(xhr.response);
+                console.log("HEEEEEERE");
+                reject("weeeeeeeeeeeee");
+                // reject(xhr.response);
+                
             } else {
                 resolve(xhr.response);
             }

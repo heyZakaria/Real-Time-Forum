@@ -30,24 +30,27 @@ var (
 
 func Registration(w http.ResponseWriter, r *http.Request) {
 
-	page := []string{"internal/app/views/templates/pages/register.html"}
+	page := []string{"internal/app/views/templates/forum.html"}
 	if r.Method == http.MethodGet {
 		utils.ExecuteTemplate(w, page, nil)
-	} else if r.Method == http.MethodPost {
+
+		} else if r.Method == http.MethodPost {
 
 		request := Request{}
 		response := make(map[string]bool)
 
+		fmt.Println(request)
 		// Décoder le corps de la requête JSON
 		err := json.NewDecoder(r.Body).Decode(&request)
 
 		if err != nil {
+			fmt.Println(err)
 			response["isValidata"] = false
 			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(response)
 			return
 		}
-		fmt.Println("weeeeeeeeeee")
+
 		// checkusername
 		if !Printable(request.Username) || len(request.Username) > 25 || len(request.Username) < 2 || strings.TrimSpace(request.Username) == "" {
 			validusername = false

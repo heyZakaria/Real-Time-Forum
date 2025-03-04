@@ -15,7 +15,6 @@ let load_more = document.querySelector(".load_more")
 
 
 submit_post.onclick = async function (event) {
-    console.log("wiiiiiiiiiiiiiiiiiiiii");
 
     event.preventDefault()
     //route(event, true)

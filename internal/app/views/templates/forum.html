@@ -80,9 +80,10 @@
                 <h2>Login</h2>
                 <form method="post" class="login_form">
                     <label for="email">EMAIL OR USERNAME:</label>
-                    <input type="text" id="email" name="emailorusername" placeholder="Email or Username" required>
-                    <label for="password">PASSWORD:</label>
-                    <input type="password" id="password" name="password" placeholder="Setup your password" required>
+                    <input type="text" id="login_email" name="emailorusername" placeholder="Email or Username" required>
+                    <label for="login_password">PASSWORD:</label>
+                    <input type="password" id="login_password" name="login_password" placeholder="Setup your password"
+                        required>
                     <label class="login_button">Login</label>
                     <input type="submit" value="Login">
                     <span id="server_error"></span>
@@ -101,19 +102,21 @@
                     <input type="text" id="username" name="username" placeholder="Username">
                     <br>
                     <span id="error0"></span>
-                    <label for="email">EMAIL *</label>
-                    <input type="email" id="email" name="email" placeholder="Enter your email here">
+                    <label for="register_email">EMAIL *</label>
+                    <input type="email" id="register_email" name="register_email" placeholder="Enter your email here">
                     <br>
                     <span id="error1"></span>
-                    <label for="password">PASSWORD *</label>
-                    <input type="password" id="password" name="password" placeholder="Setup your password">
+                    <label for="register_password">PASSWORD *</label>
+                    <input type="password" id="register_password" name="register_password"
+                        placeholder="Setup your password">
                     <br>
                     <span id="error2"></span>
-                    <label for="password2">REPEAT YOUR PASSWORD *</label>
-                    <input type="password" id="password2" name="password2" placeholder="Repeat your password">
+                    <label for="register_password_2">REPEAT YOUR PASSWORD *</label>
+                    <input type="password" id="register_password_2" name="register_password_2"
+                        placeholder="Repeat your password">
                     <br>
                     <span id="error3"></span>
-                    <input type="submit" id="submit" value="Register">
+                    <input type="submit" id="register_button" value="Register">
                     <div id="server_error"></div>
                 </form>
             </div>
@@ -139,11 +142,11 @@
     <!--Cache Busting:  By appending ?n=1 (or any other unique value), it makes the browser treat the file as a new request,
    effectively bypassing the cache and ensuring that the latest version of the file is loaded. -->
 
-    <script type="module" src="internal/app/views/static/router.js?n=1"> </script>
+    <script type="module" src="internal/app/views/static/router.js"> </script>
 
-    <script type="module" src="internal/app/views/static/verify_login.js?n=2"></script>
-    <script type="module" src="internal/app/views/static/verify_registration.js?n=3"></script>
-    <script type="module" src="internal/app/views/static/fetch_data.js?n=4"></script>
+    <script type="module" src="internal/app/views/static/verify_login.js"></script>
+    <script type="module" src="internal/app/views/static/verify_registration.js"></script>
+    <script type="module" src="internal/app/views/static/fetch_data.js"></script>
 
 
 </body>
