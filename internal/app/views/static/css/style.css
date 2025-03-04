@@ -125,8 +125,6 @@ input[type="submit"]:hover {
 
 }
 
-
-
 .filter_form {
     display: flex;
     flex-direction: column;

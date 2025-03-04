@@ -1,95 +1,98 @@
-import { route } from "./router";
+import { route } from "./router.js";
 
-console.log("wwwwwwwwwwwwww");
+/* export function Hello() {
+    */
 
-document.getElementById("register_button").addEventListener("click", function (event) {
-    event.preventDefault();
-    
-    const errorDiv = document.getElementById('server_error');
-    let username = document.getElementById("username").value;
-    let email = document.getElementById("register_email").value;
-    let password = document.getElementById("register_password").value;
-    let confpassword = document.getElementById("register_password_2").value;
+    document.getElementById("register_button").addEventListener("click", function (event) {
+        event.preventDefault();
 
-    let validusername = false
-    let validemail = false
-    let validpassword = false
-    let validconfpassword = false
+        const errorDiv = document.getElementById('server_error');
+        let username = document.getElementById("username").value;
+        let email = document.getElementById("register_email").value;
+        let password = document.getElementById("register_password").value;
+        let confpassword = document.getElementById("register_password_2").value;
 
-    if (username.length < 25 && username.length >= 2 && UsernameIsValid(username) == true) {
-        validusername = true;
-    }
+        let validusername = false
+        let validemail = false
+        let validpassword = false
+        let validconfpassword = false
 
-    if (email.length < 60 && email.length >= 8 && EmailIsValid(email) && UsernameIsValid(email) == true) {
-        validemail = true;
-    }
-
-    if (password.length < 50 && password.length > 8 && UsernameIsValid(password) == true && checkCharacter(password) == true) {
-        validpassword = true;
-    }
-
-    if (password == confpassword) {
-        validconfpassword = true;
-    }
-
-    if (!validusername) {
-        let myerror = document.getElementById("error0");
-        myerror.innerHTML = "invalid username";
-        myerror.style.color = 'red';
-    }
-
-    if (!validemail) {
-        let myerror = document.getElementById("error1");
-        myerror.innerHTML = "invalid email";
-        myerror.style.color = 'red';
-    }
-
-    if (!validpassword) {
-        let myerror = document.getElementById("error2");
-        myerror.innerHTML = "invalid password";
-        myerror.style.color = 'red';
-    }
-
-    if (!validconfpassword) {
-        let myerror = document.getElementById("error3");
-        myerror.innerHTML = "invalid confpassword";
-        myerror.style.color = 'red';
-    }
-
-    if (!validconfpassword || !validpassword || !validemail || !validusername) {
-        return
-    }
-    console.log("++++++++++++++++++++++++++++++++++++");
-    
-
-    sendHttpRequest('POST', '/register', {
-        email: email,
-        username: username,
-        password: password,
-    }).then(responseData => {
-
-        if (!responseData.emilorusernameexsist) {
-            route("/login", true)
-
+        if (username.length < 25 && username.length >= 2 && UsernameIsValid(username) == true) {
+            validusername = true;
         }
 
-    })
-        .catch(err => {
-            if (err.emilorusernameexsist) {
-                errorDiv.textContent = " your email or username already exists!!!"
-                errorDiv.style.color = `red`
+        if (email.length < 60 && email.length >= 8 && EmailIsValid(email) && UsernameIsValid(email) == true) {
+            validemail = true;
+        }
 
-            } else if (err.InternalError) {
-                errorDiv.textContent = "server problem, try later!!!"
-                errorDiv.style.color = `red`
+        if (password.length < 50 && password.length > 8 && UsernameIsValid(password) == true && checkCharacter(password) == true) {
+            validpassword = true;
+        }
 
-            } else {
-                errorDiv.textContent = "invaliddata!!"
-                errorDiv.style.color = `red`
+        if (password == confpassword) {
+            validconfpassword = true;
+        }
+
+        if (!validusername) {
+            let myerror = document.getElementById("error0");
+            myerror.innerHTML = "invalid username";
+            myerror.style.color = 'red';
+        }
+
+        if (!validemail) {
+            let myerror = document.getElementById("error1");
+            myerror.innerHTML = "invalid email";
+            myerror.style.color = 'red';
+        }
+
+        if (!validpassword) {
+            let myerror = document.getElementById("error2");
+            myerror.innerHTML = "invalid password";
+            myerror.style.color = 'red';
+        }
+
+        if (!validconfpassword) {
+            let myerror = document.getElementById("error3");
+            myerror.innerHTML = "invalid confpassword";
+            myerror.style.color = 'red';
+        }
+
+        if (!validconfpassword || !validpassword || !validemail || !validusername) {
+            return
+        }
+        console.log("++++++++++++++++++++++++++++++++++++");
+
+
+        sendHttpRequest('POST', '/register', {
+            email: email,
+            username: username,
+            password: password,
+        }).then(responseData => {
+
+            if (!responseData.emilorusernameexsist) {
+                route("/login", true)
+
             }
-        });
 
-});
+        })
+            .catch(err => {
+                if (err.emilorusernameexsist) {
+                    errorDiv.textContent = " your email or username already exists!!!"
+                    errorDiv.style.color = `red`
+
+                } else if (err.InternalError) {
+                    errorDiv.textContent = "server problem, try later!!!"
+                    errorDiv.style.color = `red`
+
+                } else {
+                    errorDiv.textContent = "invaliddata!!"
+                    errorDiv.style.color = `red`
+                }
+            });
+
+    });
+
+
 
 function EmailIsValid(email) {
     const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -146,7 +149,7 @@ const sendHttpRequest = (method, url, data) => {
                 console.log("HEEEEEERE");
                 reject("weeeeeeeeeeeee");
                 // reject(xhr.response);
-                
+
             } else {
                 resolve(xhr.response);
             }

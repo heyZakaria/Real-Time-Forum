@@ -52,6 +52,8 @@ const handleLocation = async () => {
     let register = document.querySelector(".registerCode")
     let error = document.querySelector(".errorCode")
 
+    console.log("path",path, "home",home, "login",login, "register",register, "error",error);
+    
     if (path != "/register" || path != "/login" || path != "/") {
         error.classList.remove("hidden")
 
@@ -90,6 +92,7 @@ const handleLocation = async () => {
         home.classList.add("hidden")
         login.classList.add("hidden")
         error.classList.add("hidden")
+        // Hello()
     }
 }
 

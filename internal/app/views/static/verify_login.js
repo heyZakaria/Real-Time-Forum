@@ -1,4 +1,4 @@
-import { route } from "./router";
+import { route } from "./router.js";
 
 
 document.querySelector(".login_form").addEventListener("submit", async function (event) {
