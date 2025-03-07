@@ -31,6 +31,185 @@
     <div class="content">
 
         <div class="homeCode">
+
+            <div id="online-users">
+                <h3> Online Users</h3>
+                <ul id="user-list"></ul>
+            </div>
+
+
+            <script>
+                function fetchOnlineUsers() {
+
+                    ///need to add this to fetch_data.js
+
+                    fetch('/api/online-users')
+                        .then(response => response.json())
+                        .then(users => {
+                            let userList = document.getElementById('user-list');
+                            userList.innerHTML = ''; //clear last status
+                
+                            users.forEach(user => {
+                                let userDiv = document.createElement('div');
+                                userDiv.classList.add('user');
+                
+                                // make random avatar 
+                                let img = document.createElement('img');
+                                //apii for random acvatr
+                                img.src = `https://api.dicebear.com/7.x/bottts/svg?seed=${user.username}`
+                                img.alt = user.username;
+                
+                                let name = document.createElement('span');
+                                name.textContent = user.username;
+                
+                                // if online do green 
+                                let status = document.createElement('div');
+                                status.classList.add('status', 'online');
+                                //need to add ofline
+                                /////////////
+                                userDiv.appendChild(img);
+                                userDiv.appendChild(name);
+                                userDiv.appendChild(status);
+                                userList.appendChild(userDiv);
+
+                            });
+                        })
+                        .catch(error => console.error('Error fetching online users:', error));
+                }
+                
+                setInterval(fetchOnlineUsers, 5000);
+                fetchOnlineUsers(); 
+                </script>
+                                
+            
+
+                                <div id="chat-container">
+                                    <h3>Chat</h3>
+                                    <div id="chat-box" style="height: 300px; overflow-y: scroll; border: 1px solid #ad6f6f; padding: 10px;"></div>
+                                    <input type="text" id="message-input" placeholder="Enter message" />
+                                    <button onclick="sendMessage()">Send</button>
+                                </div>
+                                
+                                <script>
+                                    // const socket = new WebSocket("ws://localhost:4444/ws");
+                                    let username = prompt("Enter your username:"); // seesion attention 
+                                const socket = new WebSocket(`ws://localhost:4444/ws?username=${username}`);
+
+                                    socket.onopen = function () {
+                                        console.log("Connected to WebSocket server");
+                                    };
+
+
+
+
+                                    socket.onmessage = function (event) {
+    let data = JSON.parse(event.data);
+    console.log("New Message:", data);
+
+     if (data) {
+        console.log("waaaaaaaaaaaaa3")
+        let chatBox = document.getElementById("chat-box");
+
+         let messageElement = document.createElement("p");
+        messageElement.textContent = `${data.sender}: ${data.content}`;
+        
+         chatBox.appendChild(messageElement);
+    }
+};
+
+ 
+                    
+                                    socket.onclose = function () {
+                                        console.log("WebSocket connection closed");
+                                        let chatBox = document.getElementById("chat-box");
+                                        chatBox.innerHTML = ""; // Clear chat box
+
+                                    };
+                                
+                                    socket.onerror = function (error) {
+                                        console.error("WebSocket error:", error);
+                                    };
+ 
+                                
+                                    // Send input of user
+                                    function sendMessage() {
+
+                                        let messageInput = document.getElementById("message-input");
+                                        let message = messageInput.value.trim();
+                                    
+                                    
+
+
+                                        if (message !== "") {
+                                            let sendto = prompt("enter the username of the receiver:");
+                                
+                                            if (sendto) {
+                                                let currentUser      = "dady";  // shold do seession
+                                
+                                                // Send the message
+                                                socket.send(JSON.stringify({
+                                                    type: "message",
+                                                    sender: currentUser,  //     current user session data 
+                                                    content: message,
+                                                    receiver: sendto
+                                                }));
+                                                messageInput.value = ""; 
+                                            } else {
+                                                alert("usernam!");
+                                            }
+                                        }
+                                    }
+
+
+
+                                </script>
+                                
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             <div>
                 <form method="post" class="post_form">
                     <label for="title">Title</label>

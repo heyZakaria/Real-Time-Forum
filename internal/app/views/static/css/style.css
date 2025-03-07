@@ -421,3 +421,78 @@ fieldset {
         font-weight: bold;
     }
 }
+
+
+/* css for online users */
+
+
+
+#online-users {
+    width: 250px;
+    height: auto;
+    background-color: #2f3136;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+#online-users h3 {
+    text-align: center;
+    font-size: 16px;
+    color: #b9bbbe;
+}
+
+#user-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+}
+
+.user {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    background-color: #36393f;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.user:hover {
+    background-color: #40444b;
+}
+
+.user img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.user .status {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #43b581;
+    margin-left: auto;
+}
+
+
+/* 
+
+#chat-box {
+    height: 300px;
+    overflow-y: scroll;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    margin-bottom: 10px;
+} */
+
+
+ 

@@ -72,3 +72,20 @@ CREATE TABLE IF NOT EXISTS react_comments (
     FOREIGN KEY(comment_id) REFERENCES comments(id)
     FOREIGN KEY(user_id) REFERENCES users(id)
 );
+
+
+
+
+
+
+CREATE TABLE IF NOT EXISTS online_users (
+    user_id INTEGER PRIMARY KEY,
+    username TEXT NOT NULL,
+     last_active DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(user_id) REFERENCES users(id)
+    FOREIGN KEY(username) REFERENCES users(username)
+
+);
+
+
+
