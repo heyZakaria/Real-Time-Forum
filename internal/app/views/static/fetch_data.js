@@ -8,15 +8,13 @@ import { reactComment } from "./reactComment.js";
 
 
 let submit_post = document.querySelector(".post_btn")
-let post_title = document.querySelector(".post_title")
-let post_content = document.querySelector(".post_content")
+
 let post_category = document.querySelectorAll(".category")
 let load_more = document.querySelector(".load_more")
 
-
-submit_post.onclick = async function (event) {
-
-    event.preventDefault()
+export async function HandleSubmitPost() {
+    let post_title = document.querySelector(".post_title")
+    let post_content = document.querySelector(".post_content")
     //route(event, true)
     let userid = await Registred()
     if (!userid) {
@@ -45,6 +43,8 @@ submit_post.onclick = async function (event) {
 
         let z = post_title.value.trim();
         let y = post_content.value.trim();
+        console.log(z);
+        console.log(y);
 
         if (z.length == 0 || y.length == 0) {
             alert("Ensure you input a value in both fields!");
@@ -91,7 +91,6 @@ submit_post.onclick = async function (event) {
                     }
                 })
         }
-
     }
 
     post_content.value = ""
@@ -100,9 +99,10 @@ submit_post.onclick = async function (event) {
     for (const e of post_category) {
 
         e.checked = false
-    }
-}
 
+    }
+
+}
 export async function Get_Data(url) {
     try {
         const response = await fetch(url);
@@ -156,7 +156,7 @@ export async function Get_All_Posts() {
     }
 
     let postsData = await Get_Data(`/api`)
-    
+
     if (postsData.posts == null) {
 
         let load_more_button = document.querySelector(".load_more")
@@ -179,51 +179,46 @@ export async function Get_All_Posts() {
     }
     postsData = postsData.posts;
     data = postsData
-    const tour = Math.floor(data.length / 5)
-    ///////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////// HADO //////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////
-    console.log(count);
-    console.log(tour);
+    /* const tour = Math.floor(data.length / 5)
     
-    
-    if (tour == count) {
-
-        let load_more_button = document.querySelector(".load_more")
-            if (load_more_button) {
-                load_more_button.remove()
-            }
-        return
-    }
-    count++
+      if (tour == count) {
+ 
+         let load_more_button = document.querySelector(".load_more")
+         if (load_more_button) {
+             load_more_button.remove()
+         }
+         return
+     }
+     count++ */
 
     if (postsData != null) {
 
-        for (i; i < postsData.length; i++) {
+        for (i = 0; i < postsData.length; i++) {
 
-            if (i < max) {
+            // if (i < max) {
 
-                // Initialize Post
-                postsData[i].category = postsData[i].categories
-                let card = InitPost(postsData[i])
+            // Initialize Post
+            postsData[i].category = postsData[i].categories
+            let card = InitPost(postsData[i])
 
-                let posts = document.getElementById("posts")
+            let posts = document.getElementById("posts")
 
-                posts.appendChild(card);
-                reacPost(postsData[i])
-                comment(postsData[i])
+            posts.appendChild(card);
+            reacPost(postsData[i])
+            comment(postsData[i])
 
-            } else {
+            //     } else {
 
-                break
-            }
+            //         break
+            //     }
         }
-        max += 5
-
+        // max += 5
     }
 }
+// if (load_more) {
 
-load_more.addEventListener("click", Get_All_Posts)
+//     load_more.addEventListener("click", Get_All_Posts)
+// }
 
 export function ADDElement(elem, classs, content) {
     let posts = document.getElementById("posts")
@@ -240,8 +235,8 @@ export function ADDElement(elem, classs, content) {
 
 export function F(postsData) {
 
-    let load_more = document.querySelector(".load_more")
-    load_more.style.display = 'none'
+   /*  let load_more = document.querySelector(".load_more")
+    load_more.style.display = 'none' */
 
     let posts = document.getElementById("posts")
     posts.innerHTML = ''
@@ -313,5 +308,3 @@ export async function updateLikeandDislike(postId, reaction, action) {
         }
     }
 }
-
-filter()

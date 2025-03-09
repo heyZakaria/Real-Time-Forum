@@ -78,9 +78,7 @@ func SelectUser(token string) (int, error) {
 
 			return 0, err
 		}
-
 		return 0, err
-
 	}
 
 	return id_user, nil
@@ -96,7 +94,6 @@ func SelectUsername(id int) (string, error) {
 
 			return "", err
 		}
-
 		return "", err
 	}
 	return P.Creator, nil

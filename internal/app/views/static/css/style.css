@@ -177,7 +177,7 @@ input[type="submit"]:hover {
     /* background-image: url('/internal/app/views/static/images/giphy(1).gif'); */
 }
 
-.load_more {
+/* .load_more {
     background-color: var(--primaryColor);
     color: var(--secondaryColor);
     padding: 5px;
@@ -191,7 +191,7 @@ input[type="submit"]:hover {
     background-color: #000;
 
 }
-
+ */
 .login_button {
 
     width: max-content;
@@ -286,7 +286,6 @@ fieldset {
     }
 
     .content form {
-        width: 520px;
         color: var(--primaryColor);
         margin-left: auto;
         margin-right: auto;
@@ -361,63 +360,64 @@ fieldset {
         background-color: var(--primaryColor);
 
     }
-}
 
 
 
-@media (max-width: 550px) {
 
-    * {
-        margin: 0;
-        padding: 0;
-        --primaryColor: #a00;
-        --secondaryColor: #eee;
-    }
 
-    .container {
-        width: max-content;
-    }
+    @media (max-width: 550px) {
 
-    .navbar {
-        margin-left: auto;
-        margin-right: auto;
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            --primaryColor: #a00;
+            --secondaryColor: #eee;
+        }
 
-    .content form {
-        width: 300px;
-        color: var(--primaryColor);
-        margin-left: auto;
-        margin-right: auto;
-    }
+        .container {
+            width: max-content;
+        }
 
-    #posts div {
+        .navbar {
+            margin-left: auto;
+            margin-right: auto;
+        }
 
-        width: 300px;
-    }
+        .content form {
+            color: var(--primaryColor);
+            margin-left: auto;
+            margin-right: auto;
+        }
 
-    .filter_form {
-        display: block;
-        flex-direction: column;
-        text-align: justify;
-    }
+        #posts div {
 
-    .filter_form select {
-        width: -webkit-fill-available;
-        margin: 1%;
-        padding: 10px;
-        height: 80px;
-        border: 2px solid var(--primaryColor);
-    }
+            width: 300px;
+        }
 
-    .post_btn {
+        .filter_form {
+            display: block;
+            flex-direction: column;
+            text-align: justify;
+        }
 
-        width: 300px;
-    }
+        .filter_form select {
+            width: -webkit-fill-available;
+            margin: 1%;
+            padding: 10px;
+            height: 80px;
+            border: 2px solid var(--primaryColor);
+        }
 
-    .no_post {
-        color: lightgray;
-        font-size: 30px;
-        margin-top: 100px;
-        font-weight: bold;
+        .post_btn {
+
+            width: 300px;
+        }
+
+        .no_post {
+            color: lightgray;
+            font-size: 30px;
+            margin-top: 100px;
+            font-weight: bold;
+        }
     }
 }
