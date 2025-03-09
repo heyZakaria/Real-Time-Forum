@@ -38,7 +38,19 @@
             </div>
 
 
+            <div id="chat-container">
+                <h3>Chat</h3>
+                <div id="chat-box" style="height: 300px; overflow-y: scroll; border: 1px solid #ad6f6f; padding: 10px;"></div>
+                <input type="text" id="message-input" placeholder="Enter message" />
+                <button onclick="sendMessage()">Send</button>
+            </div>
+            
+
             <script>
+                                 let asocket 
+
+                                let sendto
+
                 function fetchOnlineUsers() {
 
                     ///need to add this to fetch_data.js
@@ -61,12 +73,22 @@
                 
                                 let name = document.createElement('span');
                                 name.textContent = user.username;
+
                 
                                 // if online do green 
                                 let status = document.createElement('div');
                                 status.classList.add('status', 'online');
                                 //need to add ofline
                                 /////////////
+
+                                userDiv.addEventListener('click', () => {
+                             console.log('selectdUser:', user.username); 
+                             sendto=user.username 
+                                 });
+
+
+
+                                /////
                                 userDiv.appendChild(img);
                                 userDiv.appendChild(name);
                                 userDiv.appendChild(status);
@@ -76,82 +98,93 @@
                         })
                         .catch(error => console.error('Error fetching online users:', error));
                 }
-                
-                setInterval(fetchOnlineUsers, 5000);
+                 setInterval(fetchOnlineUsers, 5000);
                 fetchOnlineUsers(); 
-                </script>
-                                
-            
 
-                                <div id="chat-container">
-                                    <h3>Chat</h3>
-                                    <div id="chat-box" style="height: 300px; overflow-y: scroll; border: 1px solid #ad6f6f; padding: 10px;"></div>
-                                    <input type="text" id="message-input" placeholder="Enter message" />
-                                    <button onclick="sendMessage()">Send</button>
-                                </div>
-                                
-                                <script>
-                                    // const socket = new WebSocket("ws://localhost:4444/ws");
-                                    let username = prompt("Enter your username:"); // seesion attention 
-                                const socket = new WebSocket(`ws://localhost:4444/ws?username=${username}`);
 
-                                    socket.onopen = function () {
+
+                                     async function connectwebsocket() {
+
+                                        //fetch current api from api endpoint 
+                                        const response=await fetch("/api/current-user")
+                                        if (!response.ok){
+                                            throw new Eror ("not authenticated ");
+                                        }
+                                        //pars json response
+                                        const data =await response.json()
+
+                                        //user the username for websocket conection 
+                                        //map[string]string{"username:"current user }
+
+                                 asocket = new WebSocket(`ws://localhost:4444/ws?username=${data.username}`);
+                                    
+                                try{
+                                    asocket.onopen = function () {
                                         console.log("Connected to WebSocket server");
                                     };
 
 
+                                    asocket.onmessage = function (event) {
+                                    let data = JSON.parse(event.data);
+                                     console.log("New Message:", data);
 
+                                             if (data) {
+                                          console.log("waaaaaaaaaaaaa3")
+                                       let chatBox = document.getElementById("chat-box");
 
-                                    socket.onmessage = function (event) {
-    let data = JSON.parse(event.data);
-    console.log("New Message:", data);
-
-     if (data) {
-        console.log("waaaaaaaaaaaaa3")
-        let chatBox = document.getElementById("chat-box");
-
-         let messageElement = document.createElement("p");
-        messageElement.textContent = `${data.sender}: ${data.content}`;
-        
-         chatBox.appendChild(messageElement);
+                                        let messageElement = document.createElement("p");
+                                        messageElement.textContent = `${data.sender}: ${data.content}`;
+                            
+                                        chatBox.appendChild(messageElement);
     }
 };
 
- 
-                    
-                                    socket.onclose = function () {
+                                asocket.onclose = function () {
                                         console.log("WebSocket connection closed");
                                         let chatBox = document.getElementById("chat-box");
                                         chatBox.innerHTML = ""; // Clear chat box
 
                                     };
-                                
-                                    socket.onerror = function (error) {
-                                        console.error("WebSocket error:", error);
-                                    };
  
-                                
+
+
+                                }catch(error){
+
+                                    console.log("err conct o websocket",error)
+                                }
+                                    
+
+                                    }
+
+
+                                    connectwebsocket()
+
+
+
+
+ 
+                                                                    
                                     // Send input of user
                                     function sendMessage() {
 
                                         let messageInput = document.getElementById("message-input");
                                         let message = messageInput.value.trim();
-                                    
+
                                     
 
 
                                         if (message !== "") {
-                                            let sendto = prompt("enter the username of the receiver:");
+                                            // let sendto = prompt("enter the username of the receiver:");
                                 
                                             if (sendto) {
-                                                let currentUser      = "dady";  // shold do seession
+                                                // let currentUser      = "dady";  // shold do seession
                                 
                                                 // Send the message
-                                                socket.send(JSON.stringify({
+                                                asocket.send(JSON.stringify({
                                                     type: "message",
-                                                    sender: currentUser,  //     current user session data 
+                                                    // sender: currentUser,  //     current user session data 
                                                     content: message,
-                                                    receiver: sendto
+                                                     receiver: sendto
                                                 }));
                                                 messageInput.value = ""; 
                                             } else {

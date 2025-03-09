@@ -36,12 +36,6 @@ func handleConnection(w http.ResponseWriter, r *http.Request) {
 
 	// crieate new client
 
-	// usernname := r.URL.Query().Get("username")
-	// if usernname == "" {
-	// 	fmt.Println("nooooooooooooooo usernme")
-	// 	conn.Close()
-	// 	return
-	// }
 	// it shild be the username so fetch aftes session and extract username from query
  	usernname := r.URL.Query().Get("username")
 
@@ -81,7 +75,8 @@ func main() {
 	*/
 	http.HandleFunc("/api", api.Codage)
 	http.HandleFunc("/api/registred", controllers.CheckRegistration)
-	http.HandleFunc("/api/online-users", controllers.GetOnlineUsers)
+	http.HandleFunc("/api/online-users", controllers.GetOnlineUsersHandler)
+	http.HandleFunc("/api/current-user",controllers.GetCurrentUsername)
 
 	http.HandleFunc("/api/addComment", controllers.AddComment)
 	http.HandleFunc("/api/addPost", controllers.AddPost)

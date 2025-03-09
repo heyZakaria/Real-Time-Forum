@@ -15,6 +15,8 @@ document.querySelector(".login_form").addEventListener("submit", async function 
   }).then(responseData => {
 
     if (responseData.isValidData) {
+      localStorage.setItem("email",email);
+
       route("/", true)
     }
   })
