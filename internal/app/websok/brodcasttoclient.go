@@ -3,6 +3,8 @@ package websok
 import (
 	"fmt"
 	"sync"
+
+	"forum/internal/app/models/utils"
 )
 
 // edea is struct store the websocket (client:keyusrnam) >> shold update on struct like the hup in last commit ...
@@ -56,16 +58,18 @@ func (h *Storeactivewebsocketclient) Run() {
 			///need to add ping pong logic and add it to mt handler
 			fmt.Println(client.Username, " by by close xanel disconnected")
 
-			// case msg := <-h.Messages:
-		// h.mu.Lock()
-		// receiver, exists := h.Clients[msg.Receiver]
-		// h.mu.Unlock()
-		// if exists {
-		// 	receiver.Send <- msg
-		// }
+ 
 
 		case msg := <-h.Messages:
 			fmt.Println("New message received in ChatHub:", msg)
+
+			///////////////////////////////////////////////////////////lets save message to db
+
+			val, err := SaveMessage(utils.Db1.Db, msg.Sender, msg.Receiver, msg.Content)
+			if err != nil {
+				fmt.Println("err save mesage", err)
+			}
+			fmt.Println(val)
 
 			h.mu.Lock()
 			// show cliant
@@ -84,7 +88,6 @@ func (h *Storeactivewebsocketclient) Run() {
 	}
 }
 
- 
 func (h *Storeactivewebsocketclient) GetOnlineUsersnames() []string {
 	h.mu.Lock()
 	defer h.mu.Unlock()
