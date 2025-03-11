@@ -6,6 +6,7 @@ import { HandleSubmitPost } from "./fetch_data.js";
 import { verifyRegistration } from "./verify_registration.js";
 import { verifyLogin } from "./verify_login.js";
 import { filter } from "./filter.js";
+import { handleWS, openSocket } from "./ws.js";
 
 
 let regsiter_form = document.querySelector(".regsiter_form")
@@ -81,10 +82,11 @@ const handleLocation = async () => {
         if (userid) {
 
             Get_All_Posts();
-            lunchListener("post_btn", "filterbutton")
+            lunchListener("post_btn", "filterbutton", "sendMessage")
 
         } else {
             route("/login", true)
+            
         }
     }
 
@@ -122,7 +124,6 @@ function lunchListener(toListenTo, toListenTo1, toListenTo2) {
                 verifyLogin()
                 return
             }
-
         })
     } else {
         // for submit post form
@@ -140,10 +141,25 @@ function lunchListener(toListenTo, toListenTo1, toListenTo2) {
             event.preventDefault()
             filter()
         })
+        openSocket()
+        document.querySelector(`.${toListenTo2}`).addEventListener("submit", async function (event) {
+            event.preventDefault()
+            let msg = document.querySelector(".userMessage")
+            handleWS(msg.value)
+            
+            ////
+            
+            msg.value = ""
+
+        })
 
 
     }
 
 
 
+}
+
+function ww(params) {
+    
 }

@@ -7,6 +7,8 @@ export async function filter() {
   let filterbutton = document.querySelector(".filterbutton");
   filterbutton.onclick = async function (event) {
     event.preventDefault();
+    console.log(location.host);
+    
 
     let postsData = await Get_Data(`/api`);
 

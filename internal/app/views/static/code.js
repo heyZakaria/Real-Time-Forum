@@ -2,6 +2,12 @@
 export const myCode = {
     home: `
     <!--                 HOME                   -->
+    <div class="online_users">
+    <div class="someUser"> Hi I'm Online</div>
+    <form method="post" class="sendMessage">
+    <input type="text" class ="userMessage"placeholder="Say Hi!">
+    </form>
+    </div>
         <div class="homeCode">
             <div>
                 <form method="post" class="post_form">

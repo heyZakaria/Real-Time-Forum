@@ -17,16 +17,17 @@ import (
 
 func main() {
 	db, _ := database.CreateDatabase()
-	
+
 	utils.Db1.Db = db
 
 	http.HandleFunc("/internal/app/views/static/", SetupStaticFilesHandler)
 
 	http.HandleFunc("/", controllers.Home)
+	http.HandleFunc("/ws", controllers.HandleWS)
 
 	/* http.HandleFunc("/register", controllers.Registration)
 	http.HandleFunc("/login", controllers.Login)
- */
+	*/
 	http.HandleFunc("/api", api.Codage)
 	http.HandleFunc("/api/registred", controllers.CheckRegistration)
 

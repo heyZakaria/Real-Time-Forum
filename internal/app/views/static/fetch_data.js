@@ -15,6 +15,9 @@ let load_more = document.querySelector(".load_more")
 export async function HandleSubmitPost() {
     let post_title = document.querySelector(".post_title")
     let post_content = document.querySelector(".post_content")
+    let post_btn = document.querySelector(".post_btn")
+    console.log();
+    
     //route(event, true)
     let userid = await Registred()
     if (!userid) {
@@ -43,8 +46,6 @@ export async function HandleSubmitPost() {
 
         let z = post_title.value.trim();
         let y = post_content.value.trim();
-        console.log(z);
-        console.log(y);
 
         if (z.length == 0 || y.length == 0) {
             alert("Ensure you input a value in both fields!");
