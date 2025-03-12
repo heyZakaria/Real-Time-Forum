@@ -7,13 +7,12 @@ import (
 
 // Message represents a simple message chat
 type Message struct {
-	ID         int64
-	SenderID   string
-	ReceiverID string
-	Content    string
-	CreatedAt  time.Time
+	ID         int64     `json:"id"`
+	SenderID   string    `json:"sender_id"`
+	ReceiverID string    `json:"receiver_id"`
+	Content    string    `json:"message_content"`
+	CreatedAt  time.Time `json:"created_at"`
 }
-
 func SaveMessage(db *sql.DB, senderID, receiverID, content string) (int64, error) {
 	query := `INSERT INTO messages (sender_id, receiver_id, message_content, created_at) VALUES (?, ?, ?, CURRENT_TIMESTAMP)`
 

@@ -69,7 +69,7 @@ func (h *Storeactivewebsocketclient) Run() {
 			if err != nil {
 				fmt.Println("err save mesage", err)
 			}
-			fmt.Println(val)
+			fmt.Println("vaaal last indicat",val)
 
 			h.mu.Lock()
 			// show cliant
