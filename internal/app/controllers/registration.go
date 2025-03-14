@@ -3,6 +3,7 @@ package controllers
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"regexp"
 	"strings"
@@ -15,7 +16,7 @@ import (
 
 type Request struct {
 	Username   string `json:"username"`
-	Age        int    `json:"age"`
+	Age        string `json:"age"`
 	Gender     string `json:"genderIs"`
 	First_name string `json:"first_name"`
 	Last_name  string `json:"last_name"`
@@ -41,11 +42,12 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 
 		request := Request{}
 		response := make(map[string]bool)
-
 		// Décoder le corps de la requête JSON
 		err := json.NewDecoder(r.Body).Decode(&request)
+		fmt.Println(request)
 
 		if err != nil {
+			fmt.Println(err, "Err----1")
 			response["isValidata"] = false
 			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(response)
@@ -81,14 +83,21 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 			return
 
 		} else if err != nil {
+			fmt.Println("-------", err)
 			response["InternalError"] = true
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(response)
 			return
 		} else if !exist {
 			hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(request.Password), bcrypt.DefaultCost)
+			var gender = ""
+			if request.Gender == "F" {
+				gender = "F"
+				}else{
+				gender = "M"
 
-			err0 := inseredata(utils.Db1.Db, request.Email, request.First_name, request.Last_name, request.Gender, request.Username, string(hashedPassword), request.Age)
+			}
+			err0 := inseredata(utils.Db1.Db, request.Email, request.First_name, request.Last_name, gender, request.Username, string(hashedPassword), request.Age)
 			if err0 != nil {
 				response["InternalError"] = true
 				w.WriteHeader(http.StatusInternalServerError)
@@ -155,9 +164,9 @@ func EmailOrUsernameExiste(db *sql.DB, email, username string) (bool, error) {
 	return false, nil
 }
 
-func inseredata(db *sql.DB, email, first_name, last_name, gender, username, password string, age int) error {
-	query := "INSERT INTO users (username,age, gender,first_name,last_name,  email, password_hash) VALUES (?, ?, ?)"
+func inseredata(db *sql.DB, email, first_name, last_name, gender, username, password, age string) error {
+	query := "INSERT INTO users (username,age, gender,first_name,last_name,  email, password_hash) VALUES (?, ?, ?, ?, ?, ?,?)"
 
-	_, err := db.Exec(query, username, age, gender, first_name, last_name, email, username, password)
+	_, err := db.Exec(query, username, age, gender, first_name, last_name, email, password)
 	return err
 }

@@ -128,7 +128,7 @@ export const myCode = {
             <main class="err-main">
                 <div class="err-bg"></div>
                 <div class="err-content">
-                    <h1>ERROOOOOOR</h1>
+                    <h1>Page Not Found !</h1><br>
                     <!-- <form action="/"> -->
                     <button class="go-back-error" onclick="window.history.back()">Go Back</button>
                     <!-- </form> -->

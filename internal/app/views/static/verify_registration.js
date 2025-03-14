@@ -133,7 +133,8 @@ export function verifyRegistration() {
         myerror.style.color = 'red';
         return
     }
-
+    console.log(username, age, genderIs, first_name, last_name, email, password);
+    
 
     sendHttpRequest('POST', '/register', {
         username: username,
@@ -160,6 +161,8 @@ export function verifyRegistration() {
                 errorDiv.style.color = `red`
 
             } else {
+                console.log(err, "ERRR");
+                
                 errorDiv.textContent = "Invalid data!"
                 errorDiv.style.color = `red`
             }
@@ -229,7 +232,8 @@ const sendHttpRequest = (method, url, data) => {
         xhr.onerror = () => {
             reject('Something went wrong!');
         };
-
+        console.log(data);
+        
         xhr.send(JSON.stringify(data));
     });
     return promise;

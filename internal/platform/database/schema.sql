@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE NOT NULL CHECK(LENGTH(username) < 20),
-    age INTEGER NOT NULL ,
+    age TEXT NOT NULL ,
     gender TEXT CHECK(gender IN ('M', 'F')),
     first_name TEXT NOT NULL ,
     last_name TEXT NOT NULL ,

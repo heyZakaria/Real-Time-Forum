@@ -70,7 +70,6 @@ const handleLocation = async () => {
     if (path != "/register" || path != "/login" || path != "/") {
         contentWrapper.innerHTML = ""
         contentWrapper.innerHTML = myCode.errata
-        
         //   lunchListener(backHome)
     }
 
