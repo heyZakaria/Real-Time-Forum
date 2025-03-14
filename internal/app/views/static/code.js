@@ -68,25 +68,55 @@ export const myCode = {
             <div class="form-container">
                 <h2>Register</h2>
                 <form class="regsiter_form" method="post">
-                    <label for="username">USER NAME</label>
-                    <input type="text" id="username" name="username" placeholder="Username">
+                    <label for="username">USER NAME *</label>
+                    <input type="text" id="username" name="username" placeholder="Your Nickname" required>
                     <br>
-                    <span id="error0"></span>
+                    <span id="username_error"></span>
+                    
+                    <label for="age">AGE *</label>
+                    <input type="number" id="age" name="age" placeholder="Age" required>
+                    <br>
+                    <span id="age_error"></span>
+
+                    <label for="gender">GENDER *</label required>
+                    <label for="gender">Male</label>
+                    <input type="radio" value="F" id="gender_M" name="gender" >
+                    <label for="gender">Female</label>
+                    <input type="radio" value="F" id="gender_F" name="gender" >
+                    <br>
+                    <span id="gender_error"></span>
+
+
+                    <label for="first_name">First Name *</label>
+                    <input type="text" id="first_name" name="first_name" placeholder="First name" required>
+                    <br>
+                    <span id="first_name_error"></span>
+
+                     <label for="last_name">Last Name *</label>
+                    <input type="text" id="last_name" name="last_name" placeholder="Last name" required>
+                    <br>
+                    <span id="last_name_error"></span>
+
                     <label for="register_email">EMAIL *</label>
-                    <input type="email" id="register_email" name="register_email" placeholder="Enter your email here">
+                    <input type="email" id="register_email" name="register_email" placeholder="Enter your email here" required>
                     <br>
-                    <span id="error1"></span>
+                    <span id="email_error"></span>
                     <label for="register_password">PASSWORD *</label>
                     <input type="password" id="register_password" name="register_password"
                         placeholder="Setup your password">
                     <br>
-                    <span id="error2"></span>
+                    <span id="password_error"></span>
                     <label for="register_password_2">REPEAT YOUR PASSWORD *</label>
                     <input type="password" id="register_password_2" name="register_password_2"
                         placeholder="Repeat your password">
                     <br>
-                    <span id="error3"></span>
+                    
+                    <span id="confirme_password_error"></span>
+                    <span>* Required<span>
+                    <br>
+                    <br>
                     <input type="submit" id="register_button" value="Register">
+                    <br>
                     <div id="server_error"></div>
                 </form>
             </div>

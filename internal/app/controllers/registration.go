@@ -3,7 +3,6 @@ package controllers
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"regexp"
 	"strings"
@@ -15,9 +14,13 @@ import (
 )
 
 type Request struct {
-	Email    string `json:"email"`
-	Username string `json:"username"`
-	Password string `json:"password"`
+	Username   string `json:"username"`
+	Age        int    `json:"age"`
+	Gender     string `json:"genderIs"`
+	First_name string `json:"first_name"`
+	Last_name  string `json:"last_name"`
+	Email      string `json:"email"`
+	Password   string `json:"password"`
 }
 
 var (
@@ -34,17 +37,15 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		utils.ExecuteTemplate(w, page, nil)
 
-		} else if r.Method == http.MethodPost {
+	} else if r.Method == http.MethodPost {
 
 		request := Request{}
 		response := make(map[string]bool)
 
-		fmt.Println(request)
 		// Décoder le corps de la requête JSON
 		err := json.NewDecoder(r.Body).Decode(&request)
 
 		if err != nil {
-			fmt.Println(err)
 			response["isValidata"] = false
 			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(response)
@@ -87,7 +88,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 		} else if !exist {
 			hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(request.Password), bcrypt.DefaultCost)
 
-			err0 := inseredata(utils.Db1.Db, request.Email, request.Username, string(hashedPassword))
+			err0 := inseredata(utils.Db1.Db, request.Email, request.First_name, request.Last_name, request.Gender, request.Username, string(hashedPassword), request.Age)
 			if err0 != nil {
 				response["InternalError"] = true
 				w.WriteHeader(http.StatusInternalServerError)
@@ -154,9 +155,9 @@ func EmailOrUsernameExiste(db *sql.DB, email, username string) (bool, error) {
 	return false, nil
 }
 
-func inseredata(db *sql.DB, email, username, password string) error {
-	query := "INSERT INTO users (email, username, password_hash) VALUES (?, ?, ?)"
+func inseredata(db *sql.DB, email, first_name, last_name, gender, username, password string, age int) error {
+	query := "INSERT INTO users (username,age, gender,first_name,last_name,  email, password_hash) VALUES (?, ?, ?)"
 
-	_, err := db.Exec(query, email, username, password)
+	_, err := db.Exec(query, username, age, gender, first_name, last_name, email, username, password)
 	return err
 }

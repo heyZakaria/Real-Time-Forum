@@ -40,12 +40,13 @@ export function route(e, bol) {
     if (bol) {
         // This is when you try to post or react but you're not registred
         // you need to go to login
-        window.history.pushState("", null, e)
+        window.history.pushState({e}, null, e)
         handleLocation()
 
     } else {
         e.preventDefault()
 
+        // update the param in the URL
         // we need first param to filter the case in popstate EventListener
         window.history.pushState(e.target.href, null, e.target.href)
         handleLocation()
@@ -53,6 +54,7 @@ export function route(e, bol) {
     window.scrollX = 0
     window.scrollY = 0
 }
+
 
 
 const handleLocation = async () => {
@@ -68,7 +70,7 @@ const handleLocation = async () => {
     if (path != "/register" || path != "/login" || path != "/") {
         contentWrapper.innerHTML = ""
         contentWrapper.innerHTML = myCode.errata
-
+        
         //   lunchListener(backHome)
     }
 
@@ -104,8 +106,11 @@ const handleLocation = async () => {
     }
 }
 
-handleLocation()
+// this handles the browser navigation buttons 
+window.onpopstate = handleLocation()
 
+//this for every URL the user try to open 
+handleLocation()
 
 function lunchListener(toListenTo, toListenTo1, toListenTo2) {
     if (toListenTo != "post_btn") {

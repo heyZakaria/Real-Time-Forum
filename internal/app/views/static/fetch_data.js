@@ -132,6 +132,7 @@ export async function Get_All_Posts() {
 
     let cookie = decodeURIComponent(document.cookie.split("=")[1])
     const eqPos = cookie.indexOf('=')
+    let register = document.querySelector(".register_button")
 
     if (cookie.length > 0) {
         // hide login ----  show logout
@@ -139,9 +140,8 @@ export async function Get_All_Posts() {
         login.innerText = "Logout"
         login.style.backgroundColor = "#a00"
 
-        let register = document.querySelector(".register_button")
         if (register != null) {
-            register.remove()
+            register.classList.add("hidden")
         }
 
         login.onclick = function () {
@@ -150,6 +150,7 @@ export async function Get_All_Posts() {
                 // delete session
                 document.cookie = 'session_id='; 'Max-Age=0'
                 login.innerText = "Login"
+                register.classList.remove("hidden")
                 route("/login", true)
             }
         }
