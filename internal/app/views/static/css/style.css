@@ -473,14 +473,36 @@ fieldset {
     margin-right: 10px;
 }
 
-.user .status {
+/* .user .status {
     width: 10px;
     height: 10px;
     border-radius: 50%;
     background-color: #43b581;
     margin-left: auto;
+} */
+
+
+ .online{
+
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    /* margin-right: ; */
+    background-color: #43b581;
+    margin-left: auto;
+
 }
 
+
+
+.ofline{
+
+width: 10px;
+height: 10px;
+border-radius: 50%;
+background-color: red;
+margin-left: auto;
+}
 
 /* ////////////////////////////////////////////////////chat box ////////////////////////////// */
 
