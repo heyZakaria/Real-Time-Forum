@@ -482,17 +482,125 @@ fieldset {
 }
 
 
-/* 
+/* ////////////////////////////////////////////////////chat box ////////////////////////////// */
 
+
+
+/* Overall chat container styling */
+#chat-container {
+    width: 350px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #d1a0a0;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 450px;
+}
+
+/* Header styling */
+#chat-container h3 {
+    margin-bottom: 15px;
+    color: #4f4f4f;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Chat box styling */
 #chat-box {
-    height: 300px;
-    overflow-y: scroll;
-    border: 1px solid #ccc;
-    padding: 10px;
-    font-family: Arial, sans-serif;
+    height: 100%;
+    overflow-y: auto;
+    border: 1px solid #d1a0a0;
+    padding: 15px;
+    background-color: #f8f8f8;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    display: block; /* Ensure it is shown */
+    flex-grow: 1;
     font-size: 14px;
-    margin-bottom: 10px;
-} */
+}
 
+/* Message styling */
+.message {
+    margin-bottom: 12px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
- 
+/* Message header (Sender name and timestamp) */
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    font-size: 12px;
+    color: #555;
+}
+
+.message-header strong {
+    color: #ad6f6f;
+    font-size: 14px;
+}
+
+/* Timestamp styling */
+.timestamp {
+    color: #888;
+}
+
+/* Message content */
+.message-content {
+    font-size: 14px;
+    color: #333;
+}
+
+/* User message - custom styling for the sender */
+.message.user {
+    background-color: #d1a0a0;
+    color: #fff;
+    text-align: right;
+}
+
+.message.user .message-header strong {
+    color: #fff;
+}
+
+/* Chat input area styling */
+#message-input {
+    width: calc(100% - 20px);
+    padding: 12px;
+    border: 1px solid #d1a0a0;
+    border-radius: 8px;
+    font-size: 16px;
+    margin-bottom: 12px;
+    background-color: #f1f1f1;
+}
+
+/* Focused input styling */
+#message-input:focus {
+    outline: none;
+    border-color: #ad6f6f;
+    background-color: #fff;
+}
+
+/* Send button styling */
+#sendbutton {
+    padding: 12px 20px;
+    background-color: #ad6f6f;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 100%;
+}
+
+#sendbutton:hover {
+    background-color: #9c5c5c;
+    transform: scale(1.05);
+}

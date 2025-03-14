@@ -40,9 +40,9 @@
 
             <div id="chat-container">
                 <h3>Chat</h3>
-                <div id="chat-box" style="height: 300px; overflow-y: scroll; border: 1px solid #ad6f6f; padding: 10px;"></div>
-                <input type="text" id="message-input" placeholder="Enter message" />
-                <button onclick="sendMessage()">Send</button>
+                <div id="chat-box" style="height: 300px; overflow-y: scroll; border: 1px solid #ad6f6f; padding: 10px;display: none;"></div>
+                <input type="text" id="message-input" placeholder="Enter message" style="display: none;" />
+                <button id ="sendbutton" style="display: none;" onclick="sendMessage()">Send</button>
             </div>
             
 
@@ -60,9 +60,20 @@
                         .then(response => response.json())
                         .then(users => {
                             let userList = document.getElementById('user-list');
+                            let chatbox=document.getElementById("chat-box")
+                            let messageinput=document.getElementById("message-input")
+                            let sendbutton=document.getElementById("sendbutton")
                             userList.innerHTML = ''; //clear last status
-                
-                            users.forEach(user => {
+
+                            
+                            // users.forEach(user => {
+                                for (let user  of users) {
+// 
+                                    console.log(user.username,"hada useer")
+                                    if (user.username==currentuser){
+                                        continue
+                                    }
+                     
                                 let userDiv = document.createElement('div');
                                 userDiv.classList.add('user');
                 
@@ -81,8 +92,15 @@
                                 status.classList.add('status', 'online');
                                 //need to add ofline
                                 /////////////
+                            
 
                                 userDiv.addEventListener('click', () => {
+                                    chatbox.style.display="block"
+                                    messageinput.style.display="block"
+                                    sendbutton.style.display="block"
+
+                                    
+                                    
                              console.log('selectdUser:', user.username); 
                              sendto=user.username 
                              fetchConversation(currentuser,sendto)
@@ -99,7 +117,7 @@
                                 userDiv.appendChild(status);
                                 userList.appendChild(userDiv);
 
-                            });
+                            };
                         })
                         .catch(error => console.error('Error fetching online users:', error));
                 }
@@ -136,13 +154,16 @@
                                      console.log("New Message:", data);
 
                                              if (data) {
-                                        let chatBox = document.getElementById("chat-box");
+                                        // let chatBox = document.getElementById("chat-box");
 
-                                        let messageElement = document.createElement("p");
-                                        messageElement.textContent = `${data.sender}: ${data.content}`;
+                                        // let messageElement = document.createElement("p");
+                                        // messageElement.textContent = `${data.sender}: ${data.content}`;
 
                             
-                                        chatBox.appendChild(messageElement);
+                                        // chatBox.appendChild(messageElement);
+                                        // fetchConversation()
+                                        fetchConversation(currentuser,sendto)
+
     }
 };
 
@@ -189,7 +210,11 @@
                                 messageElement.classList.add("message");
                                messageElement.innerHTML = `<strong>${msg.sender_id}:</strong> ${msg.message_content}`;
                                  chatBox.appendChild(messageElement);
+                                 //solve scroll probleme when you add an message 
+                                 chatBox.scrollTop = chatBox.scrollHeight;
+
                                         });
+                                        
                                     
                                 } catch (error) {
                                    console.error("Error fetching conversation:", error);
