@@ -1,5 +1,17 @@
 import { Get_All_Posts } from "./fetch_data.js";
 import { Registred } from "./registred.js";
+import { myCode } from "./code.js"
+import { HandleSubmitPost } from "./fetch_data.js";
+
+import { verifyRegistration } from "./verify_registration.js";
+import { verifyLogin } from "./verify_login.js";
+import { filter } from "./filter.js";
+
+
+let regsiter_form = document.querySelector(".regsiter_form")
+let login_form = document.querySelector(".login_form")
+
+let submit_post = document.querySelector(".post_btn")
 
 
 let home = document.querySelector(".home_button").addEventListener("click", e => {
@@ -28,13 +40,13 @@ export function route(e, bol) {
     if (bol) {
         // This is when you try to post or react but you're not registred
         // you need to go to login
-        console.log("Try To Post Or React");
-        window.history.pushState("", null, e)
+        window.history.pushState({e}, null, e)
         handleLocation()
 
     } else {
         e.preventDefault()
 
+        // update the param in the URL
         // we need first param to filter the case in popstate EventListener
         window.history.pushState(e.target.href, null, e.target.href)
         handleLocation()
@@ -43,7 +55,6 @@ export function route(e, bol) {
     window.scrollY = 0
 }
 
-
 const handleLocation = async () => {
 
     let path = window.location.pathname
@@ -51,27 +62,26 @@ const handleLocation = async () => {
     let login = document.querySelector(".loginCode")
     let register = document.querySelector(".registerCode")
     let error = document.querySelector(".errorCode")
+    let contentWrapper = document.querySelector(".content")
 
-    // console.log("path",path, "home",home, "login",login, "register",register, "error",error);
-    
+
     if (path != "/register" || path != "/login" || path != "/") {
-        error.classList.remove("hidden")
-
-        register.classList.add("hidden")
-        home.classList.add("hidden")
-        login.classList.add("hidden")
+        contentWrapper.innerHTML = ""
+        contentWrapper.innerHTML = myCode.errata
+        //   lunchListener(backHome)
     }
 
     if (path == "/") {
-        home.classList.remove("hidden")
+        contentWrapper.innerHTML = ""
+        contentWrapper.innerHTML = myCode.home
+        //  lunchListener(addPost, filter, loadMore)
 
-        login.classList.add("hidden")
-        register.classList.add("hidden")
-        error.classList.add("hidden")
         let userid = await Registred()
         if (userid) {
 
             Get_All_Posts();
+            lunchListener("post_btn", "filterbutton")
+
         } else {
             route("/login", true)
         }
@@ -79,21 +89,51 @@ const handleLocation = async () => {
 
     if (path == "/login") {
 
-        login.classList.remove("hidden")
-
-        home.classList.add("hidden")
-        register.classList.add("hidden")
-        error.classList.add("hidden")
+        contentWrapper.innerHTML = ""
+        contentWrapper.innerHTML = myCode.login
+        lunchListener("login_form")
     }
 
     if (path == "/register") {
-        register.classList.remove("hidden")
-
-        home.classList.add("hidden")
-        login.classList.add("hidden")
-        error.classList.add("hidden")
-        // Hello()
+        contentWrapper.innerHTML = ""
+        contentWrapper.innerHTML = myCode.register
+        lunchListener("regsiter_form")
     }
 }
 
+// this handles the browser navigation buttons 
+window.onpopstate = handleLocation()
+
+//this for every URL the user try to open 
 handleLocation()
+
+function lunchListener(toListenTo, toListenTo1, toListenTo2) {
+    if (toListenTo != "post_btn") {
+
+        document.querySelector(`.${toListenTo}`).addEventListener("submit", async function (event) {
+            event.preventDefault()
+
+            if (toListenTo == "regsiter_form") {
+                verifyRegistration()
+                return
+            }
+
+            if (toListenTo == "login_form") {
+                verifyLogin()
+                return
+            }
+        })
+    } else {
+        
+        document.querySelector(`.${toListenTo}`).addEventListener("click", async function (event) {
+            event.preventDefault()
+
+            HandleSubmitPost()
+        })
+        //  reactComment()
+        document.querySelector(`.${toListenTo1}`).addEventListener("click", async function (event) {
+            event.preventDefault()
+            filter()
+        })
+    }
+}

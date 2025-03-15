@@ -1,98 +1,168 @@
 import { route } from "./router.js";
 
-/* export function Hello() {
-    */
+export function verifyRegistration() {
 
-    document.getElementById("register_button").addEventListener("click", function (event) {
-        event.preventDefault();
+    const errorDiv = document.getElementById('server_error');
+    let username = document.getElementById("username").value;
 
-        const errorDiv = document.getElementById('server_error');
-        let username = document.getElementById("username").value;
-        let email = document.getElementById("register_email").value;
-        let password = document.getElementById("register_password").value;
-        let confpassword = document.getElementById("register_password_2").value;
+    let age = document.getElementById("age").value;
+    let gender_M = document.getElementById("gender_M");
+    let gender_F = document.getElementById("gender_F");
+    let first_name = document.getElementById("first_name").value;
+    let last_name = document.getElementById("last_name").value;
+    let email = document.getElementById("register_email").value;
+    let password = document.getElementById("register_password").value;
+    let confpassword = document.getElementById("register_password_2").value;
+    let genderIs = ""
 
-        let validusername = false
-        let validemail = false
-        let validpassword = false
-        let validconfpassword = false
+    first_name.trim()
+    last_name.trim()
+    email.trim()
+    password.trim()
+    confpassword.trim()
 
-        if (username.length < 25 && username.length >= 2 && UsernameIsValid(username) == true) {
-            validusername = true;
+    let validusername = false
+    let valid_age = false
+    let valid_gender_F = false
+    let valid_gender_M = false
+    let valid_first_name = false
+    let valid_last_name = false
+    let validemail = false
+    let validpassword = false
+    let validconfpassword = false
+
+
+    if (age > 15) {
+        valid_age = true
+    }
+
+    if (gender_F.checked) {
+        valid_gender_F = true
+        genderIs = gender_F.value
+    }
+
+    if (gender_M.checked) {
+        valid_gender_M = true
+        genderIs = gender_M.value
+    }
+
+    if (first_name.length >= 3 && first_name.length <= 15) {
+
+        valid_first_name = true
+    }
+    if (last_name.length >= 3 && last_name.length <= 15) {
+        valid_last_name = true
+    }
+    if (username.length < 25 && username.length >= 2 && UsernameIsValid(username) == true) {
+        validusername = true;
+    }
+
+    if (email.length < 60 && email.length >= 8 && EmailIsValid(email) && UsernameIsValid(email) == true) {
+        validemail = true;
+    }
+
+    if (password.length < 50 && password.length > 8 && UsernameIsValid(password) == true && checkCharacter(password) == true) {
+        validpassword = true;
+    }
+
+    if (password == confpassword) {
+        validconfpassword = true;
+    }
+
+    if (!validusername) {
+        let myerror = document.getElementById("username_error");
+        myerror.innerHTML = "invalid username";
+        myerror.style.color = 'red';
+        return
+    }
+
+    if (!valid_age) {
+        let myerror = document.getElementById("age_error");
+        myerror.innerHTML = "Invalid age";
+        myerror.style.color = 'red';
+        return
+    }
+
+    if ((!valid_gender_F && !valid_gender_M) || ((valid_gender_F && valid_gender_M))) {
+        let myerror = document.getElementById("gender_error");
+        myerror.innerHTML = "Invalid gender";
+        myerror.style.color = 'red';
+        return
+    } else {
+        if (valid_gender_F) {
+            genderIs = "F"
+        } else {
+            genderIs = "M"
+
         }
+    }
 
-        if (email.length < 60 && email.length >= 8 && EmailIsValid(email) && UsernameIsValid(email) == true) {
-            validemail = true;
+    if (!valid_first_name) {
+        let myerror = document.getElementById("first_name_error");
+        myerror.innerHTML = "Invalid first name";
+        myerror.style.color = 'red';
+        return
+    }
+    if (!valid_last_name) {
+        let myerror = document.getElementById("last_name_error");
+        myerror.innerHTML = "Invalid last name";
+        myerror.style.color = 'red';
+        return
+    }
+
+    if (!validemail) {
+        let myerror = document.getElementById("email_error");
+        myerror.innerHTML = "invalid email";
+        myerror.style.color = 'red';
+        return
+    }
+
+    if (!validpassword) {
+        let myerror = document.getElementById("password_error");
+        myerror.innerHTML = "invalid password";
+        myerror.style.color = 'red';
+        return
+    }
+
+    if (!validconfpassword) {
+        let myerror = document.getElementById("confirme_password_error");
+        myerror.innerHTML = "Invalid confirmation password";
+        myerror.style.color = 'red';
+        return
+    }
+
+    sendHttpRequest('POST', '/register', {
+        username: username,
+        age: age,
+        gender: genderIs,
+        first_name: first_name,
+        last_name: last_name,
+        email: email,
+        password: password,
+    }).then(responseData => {
+
+        if (!responseData.emilorusernameexsist) {
+            route("/login", true)
+
         }
+    })
+        .catch(err => {
+            if (err.emilorusernameexsist) {
+                errorDiv.textContent = " Your email or Username already taken!"
+                errorDiv.style.color = `red`
 
-        if (password.length < 50 && password.length > 8 && UsernameIsValid(password) == true && checkCharacter(password) == true) {
-            validpassword = true;
-        }
+            } else if (err.InternalError) {
+                errorDiv.textContent = "Server problem, try later!"
+                errorDiv.style.color = `red`
 
-        if (password == confpassword) {
-            validconfpassword = true;
-        }
+            } else {
+                console.log(err, "ERRR");
 
-        if (!validusername) {
-            let myerror = document.getElementById("error0");
-            myerror.innerHTML = "invalid username";
-            myerror.style.color = 'red';
-        }
-
-        if (!validemail) {
-            let myerror = document.getElementById("error1");
-            myerror.innerHTML = "invalid email";
-            myerror.style.color = 'red';
-        }
-
-        if (!validpassword) {
-            let myerror = document.getElementById("error2");
-            myerror.innerHTML = "invalid password";
-            myerror.style.color = 'red';
-        }
-
-        if (!validconfpassword) {
-            let myerror = document.getElementById("error3");
-            myerror.innerHTML = "invalid confpassword";
-            myerror.style.color = 'red';
-        }
-
-        if (!validconfpassword || !validpassword || !validemail || !validusername) {
-            return
-        }
-        console.log("++++++++++++++++++++++++++++++++++++");
-
-
-        sendHttpRequest('POST', '/register', {
-            email: email,
-            username: username,
-            password: password,
-        }).then(responseData => {
-
-            if (!responseData.emilorusernameexsist) {
-                route("/login", true)
-
+                errorDiv.textContent = "Invalid data!"
+                errorDiv.style.color = `red`
             }
-
-        })
-            .catch(err => {
-                if (err.emilorusernameexsist) {
-                    errorDiv.textContent = " your email or username already exists!!!"
-                    errorDiv.style.color = `red`
-
-                } else if (err.InternalError) {
-                    errorDiv.textContent = "server problem, try later!!!"
-                    errorDiv.style.color = `red`
-
-                } else {
-                    errorDiv.textContent = "invaliddata!!"
-                    errorDiv.style.color = `red`
-                }
-            });
-
-    });
-
-
+        });
+}
 
 function EmailIsValid(email) {
     const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -146,9 +216,7 @@ const sendHttpRequest = (method, url, data) => {
 
         xhr.onload = () => {
             if (xhr.status >= 400) {
-                console.log("HEEEEEERE");
-                reject("weeeeeeeeeeeee");
-                // reject(xhr.response);
+                reject(xhr.response);
 
             } else {
                 resolve(xhr.response);
@@ -158,6 +226,7 @@ const sendHttpRequest = (method, url, data) => {
         xhr.onerror = () => {
             reject('Something went wrong!');
         };
+        console.log(data);
 
         xhr.send(JSON.stringify(data));
     });

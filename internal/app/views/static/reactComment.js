@@ -7,6 +7,9 @@ export async function reactComment(postsData) {
 
     let dislike_button = document.querySelector(`.comment_dislike_${postsData.id}`)
 
+    if (!like_button || !dislike_button) {
+        return   
+    }
     like_button.onclick = async function () {
 
         let userid = await Registred()

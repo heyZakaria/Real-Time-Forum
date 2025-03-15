@@ -130,31 +130,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 				}
 
 				http.SetCookie(w, cookie)
-			
-
-				// add user online statu 
-
-				// err1 :=AddUserToOnlineUsers(utils.Db1.Db,G.ID,G.Username)
-				// if err1 != nil {
-				// 	utils.MessageError(w, r, http.StatusInternalServerError, "Error update online statu")
-				// 	return
-				// }
-			
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-				////////////////////////
 
 				err := AddUserToDatabase(sessionID, G.ID, utils.Db1.Db)
 				if err != nil {
@@ -257,18 +232,3 @@ func authenticateUser(db *sql.DB, EmailOrUsername, enteredPassword string) (bool
 		return false, fmt.Errorf("invalid password")
 	}
 }
-
-
-
-// func AddUserToOnlineUsers(db *sql.DB, userID int,username string) error {
-// 	//need to add ON CONFLICT(user_id) DO UPDATE SET last_active = ? 
-
-
-
-// 	_, err := db.Exec("INSERT INTO online_users (user_id, last_active,username) VALUES (?, ?,?) ", userID,time.Now(),username)
-// 	if err != nil {
-// 		fmt.Println("err add user on online users :", err)
-// 		return err
-// 	}
-// 	return nil
-// }

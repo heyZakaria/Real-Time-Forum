@@ -41,11 +41,4 @@ func GetCurrentUsername(w http.ResponseWriter ,r *http.Request){
 
     // json.NewEncoder(w),Encode(map string{{"usernameusername": username}})
 
-
-
-
-
 }
-
-
-

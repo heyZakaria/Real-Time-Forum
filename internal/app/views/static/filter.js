@@ -1,9 +1,10 @@
 import { Registred } from "./registred.js";
 import { Get_Data } from "./fetch_data.js";
 import { F } from "./fetch_data.js";
-export async function filter() {
-  let filterbutton = document.querySelector(".filterbutton");
 
+export async function filter() {
+  
+  let filterbutton = document.querySelector(".filterbutton");
   filterbutton.onclick = async function (event) {
     event.preventDefault();
 
@@ -11,7 +12,7 @@ export async function filter() {
 
     postsData = postsData.posts;
     let filtered = postsData;
-
+    
     let selectFilter = document.querySelector(".selectfilter");
 
     for (const e of selectFilter.selectedOptions) {

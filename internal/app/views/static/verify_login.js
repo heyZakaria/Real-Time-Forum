@@ -1,9 +1,7 @@
 import { route } from "./router.js";
 
+export async function verifyLogin() {
 
-document.querySelector(".login_form").addEventListener("submit", async function (event) {
-  console.log("oooooooooo");
-  event.preventDefault()
   const errorDiv = document.getElementById("server_error");
   const usernameoremail = document.getElementById("login_email").value;
   const password = document.getElementById("login_password").value;
@@ -15,8 +13,6 @@ document.querySelector(".login_form").addEventListener("submit", async function 
   }).then(responseData => {
 
     if (responseData.isValidData) {
-      localStorage.setItem("email",email);
-
       route("/", true)
     }
   })
@@ -33,7 +29,7 @@ document.querySelector(".login_form").addEventListener("submit", async function 
       }
     });
 
-})
+}
 
 const sendHttpRequest = (method, url, data) => {
 

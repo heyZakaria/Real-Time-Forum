@@ -10,15 +10,17 @@ import (
 
 func Home(w http.ResponseWriter, r *http.Request) {
 	page := []string{"internal/app/views/templates/forum.html"}
+	if r.URL.Path != "/register" && r.URL.Path != "/login" && r.URL.Path != "/" {
+		utils.MessageError(w, r, http.StatusNotFound, "Page Not Found!!!")
+		return
+	}
 	if r.URL.Path == "/register" {
 
-		// utils.MessageError(w, r, http.StatusNotFound, "Page Not Found!!!!")
 		Registration(w, r)
 		return
 	}
 
 	if r.URL.Path == "/login" {
-		// utils.MessageError(w, r, http.StatusNotFound, "Page Not Found!!!!")
 		Login(w, r)
 		return
 	}
@@ -78,9 +80,7 @@ func SelectUser(token string) (int, error) {
 
 			return 0, err
 		}
-
 		return 0, err
-
 	}
 
 	return id_user, nil
@@ -96,7 +96,6 @@ func SelectUsername(id int) (string, error) {
 
 			return "", err
 		}
-
 		return "", err
 	}
 	return P.Creator, nil

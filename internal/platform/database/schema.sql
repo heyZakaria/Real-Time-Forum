@@ -1,8 +1,12 @@
 -- Création de la table users
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    email TEXT UNIQUE NOT NULL CHECK(LENGTH(email) < 70),
     username TEXT UNIQUE NOT NULL CHECK(LENGTH(username) < 20),
+    age TEXT NOT NULL ,
+    gender TEXT CHECK(gender IN ('M', 'F')),
+    first_name TEXT NOT NULL ,
+    last_name TEXT NOT NULL ,
+    email TEXT UNIQUE NOT NULL CHECK(LENGTH(email) < 70),
     password_hash TEXT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
@@ -55,6 +59,7 @@ CREATE TABLE IF NOT EXISTS likes_dislikes (
     FOREIGN KEY(post_id) REFERENCES posts(id),
     FOREIGN KEY(user_id) REFERENCES users(id)
 );
+
 -- Creation de la table session
 CREATE TABLE IF NOT EXISTS session (
 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -71,20 +76,6 @@ CREATE TABLE IF NOT EXISTS react_comments (
     thetype TEXT CHECK(thetype IN ('LIKE', 'DISLIKE')),
     FOREIGN KEY(comment_id) REFERENCES comments(id)
     FOREIGN KEY(user_id) REFERENCES users(id)
-);
-
-
-
-
-
-
-CREATE TABLE IF NOT EXISTS online_users (
-    user_id INTEGER PRIMARY KEY,
-    username TEXT NOT NULL,
-     last_active DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY(user_id) REFERENCES users(id)
-    FOREIGN KEY(username) REFERENCES users(username)
-
 );
 
 
