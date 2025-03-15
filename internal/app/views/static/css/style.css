@@ -450,7 +450,7 @@ fieldset {
     display: flex;
     align-items: center;
     padding: 8px;
-    background-color: #36393f;
+    background-color: var(--secondaryColor);
     border-radius: 5px;
     cursor: pointer;
     transition: background 0.3s;
@@ -494,7 +494,7 @@ fieldset {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background-color: red;
+    background-color: var(--primaryColor);
     margin-left: auto;
 }
 
@@ -633,7 +633,7 @@ fieldset {
 /* Send button styling */
 #sendbutton {
     padding: 12px 20px;
-    background-color: #ad6f6f;
+    background-color: var(--primaryColor);
     color: #fff;
     border: none;
     border-radius: 8px;

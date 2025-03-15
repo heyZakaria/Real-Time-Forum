@@ -10,33 +10,33 @@ import (
 	"forum/internal/app/websok"
 )
 
-func GetOflineUsersHandler(w http.ResponseWriter, r *http.Request) {
-	var oflineusers []string
+func GetOfflineUsersHandler(w http.ResponseWriter, r *http.Request) {
+	var offlineUsers []string
 	onlinusernames := websok.ChatHub.GetOnlineUsersnames()
-	allusers, err := allusers(utils.Db1.Db)
+	allUsers, err := allUsers(utils.Db1.Db)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	oflineusers = offlinepeaple(onlinusernames, allusers)
+	offlineUsers = offlinepeaple(onlinusernames, allUsers)
 
 	type UserResponse struct {
 		Username string `json:"username"`
 	}
-	response := make([]UserResponse, len(oflineusers))
+	response := make([]UserResponse, len(offlineUsers))
 
-	for i, username := range oflineusers {
+	for i, username := range offlineUsers {
 		response[i] = UserResponse{
 			Username: username,
 		}
 	}
 
-	fmt.Println("XXX", oflineusers)
+	//fmt.Println("XXX", offlineUsers)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }
 
-func allusers(db *sql.DB) ([]string, error) {
+func allUsers(db *sql.DB) ([]string, error) {
 	query := `SELECT username FROM users`
 	rows, err := db.Query(query)
 	if err != nil {
@@ -57,18 +57,18 @@ func allusers(db *sql.DB) ([]string, error) {
 	return users, nil
 }
 
-func offlinepeaple(online []string, allusers []string) []string {
-	var ofline []string
-	for _, y := range allusers {
-		if notcontains(online, y) {
-			ofline = append(ofline, y)
+func offlinepeaple(online []string, allUsers []string) []string {
+	var offline []string
+	for _, y := range allUsers {
+		if notContains(online, y) {
+			offline = append(offline, y)
 		}
 	}
 
-	return ofline
+	return offline
 }
 
-func notcontains(s []string, str string) bool {
+func notContains(s []string, str string) bool {
 	for _, v := range s {
 		if v == str {
 			return false

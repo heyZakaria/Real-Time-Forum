@@ -9,10 +9,10 @@ import { filter } from "./filter.js";
 import { startws } from "./ws.js";
 
 
-let regsiter_form = document.querySelector(".regsiter_form")
-let login_form = document.querySelector(".login_form")
+// let regsiter_form = document.querySelector(".regsiter_form")
+// let login_form = document.querySelector(".login_form")
 
-let submit_post = document.querySelector(".post_btn")
+// let submit_post = document.querySelector(".post_btn")
 
 
 let home = document.querySelector(".home_button").addEventListener("click", e => {
@@ -95,11 +95,9 @@ const handleLocation = async () => {
         contentWrapper.innerHTML = myCode.login
         lunchListener("login_form")
     }
-    console.log(location.host, "---------");
     
     
     if (path == "/register") {
-        console.log(location.host, "weeeeeeeeeee");
         contentWrapper.innerHTML = ""
         contentWrapper.innerHTML = myCode.register
         lunchListener("regsiter_form")

@@ -13,56 +13,15 @@ import (
 	"forum/internal/app/websok"
 	"forum/internal/platform/database"
 
-	"github.com/gorilla/websocket"
 	_ "github.com/mattn/go-sqlite3"
 )
-
-// same struct websocket upgrader + handleconnec + gochatconnection
-
-// websocket upgrader
-var upgrader = websocket.Upgrader{
-	CheckOrigin: func(r *http.Request) bool { return true },
-}
-
-// hanle websocketconnection
-func handleConnection(w http.ResponseWriter, r *http.Request) {
-	conn, err := upgrader.Upgrade(w, r, nil)
-	if err != nil {
-		fmt.Println("err upgrading websocket ", err)
-		return
-	}
-
-	/// i shold extract username from query
-
-	// crieate new client
-
-	// it shild be the username so fetch aftes session and extract username from query
- 	usernname := r.URL.Query().Get("username")
-
-	client := &websok.Client{
-		Conn:     conn,
-		Username: usernname, // Extract username from query
-		Send:     make(chan websok.Privatemessagestruct),
-	}
-
-	///regester client use this for ping pong
-
-	websok.ChatHub.Regester <- client
-
-	// ChatHub.regester<-Client
-
-	// start reading and writing message  go
-
-	go client.ReadMessages()
-	go client.Writemessages()
-}
 
 func main() {
 	db, _ := database.CreateDatabase()
 
 	go websok.ChatHub.Run()
 
-	http.HandleFunc("/ws", handleConnection)
+	http.HandleFunc("/ws", controllers.HandleConnection)
 
 	utils.Db1.Db = db
 
@@ -75,11 +34,11 @@ func main() {
 	*/
 	http.HandleFunc("/api", api.Codage)
 	http.HandleFunc("/api/registred", controllers.CheckRegistration)
+	
 	http.HandleFunc("/api/online-users", controllers.GetOnlineUsersHandler)
-	http.HandleFunc("/api/offline-users",controllers.GetOflineUsersHandler)
-	http.HandleFunc("/api/message-history",controllers.SendMessageHistory)
-	http.HandleFunc("/api/current-user",controllers.GetCurrentUsername)
-
+	http.HandleFunc("/api/offline-users", controllers.GetOfflineUsersHandler)
+	http.HandleFunc("/api/message-history", controllers.SendMessageHistory)
+	http.HandleFunc("/api/current-user", controllers.GetCurrentUsername)
 
 	http.HandleFunc("/api/addComment", controllers.AddComment)
 	http.HandleFunc("/api/addPost", controllers.AddPost)

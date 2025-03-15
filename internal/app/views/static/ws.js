@@ -3,82 +3,66 @@ let asocket
 let sendto
 let currentuser
 
-export function startws(){
-    console.log("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
+export function startws() {
     connectwebsocket()
 
     setInterval(fetchOnlineUsers, 1000);
-     setInterval(fetchoflineusers,10000);
+    setInterval(fetchOfflineUsers, 1000);
 
-        const sendButton = document.getElementById('sendbutton')
-        sendButton.addEventListener('click', sendMessage)
-          
-
+    const sendButton = document.getElementById('sendbutton')
+    sendButton.addEventListener('click', sendMessage)
 
 }
-
-
 
 function fetchOnlineUsers() {
 
     ///need to add this to fetch_data.jsConnected
 
+    fetch('/api/online-users')
+        .then(response => response.json())
+        .then(users => {
+            let userList = document.getElementById('online-list');
+            let chatbox = document.getElementById("chat-box")
+            let messageinput = document.getElementById("message-input")
+            let sendbutton = document.getElementById("sendbutton")
+            if (userList != null) {
+                userList.innerHTML = ''; //clear last status
+            }
+
+            // users.forEach(user => {
+            for (let user of users) {
+
+                // console.log(user.username,"hada useer")
+                if (user.username == currentuser) {
+                    continue
+                }
+
+                let userDiv = document.createElement('div');
+                userDiv.classList.add('user');
+
+                // make random avatar 
+                let img = document.createElement('img');
+                //apii for random acvatr
+                img.src = `https://api.dicebear.com/7.x/bottts/svg?seed=${user.username}`
+                img.alt = user.username;
+
+                let name = document.createElement('span');
+                name.textContent = user.username;
 
 
-    console.log("@@@@@@@@@@@@@@@@@@@@@@@")
-
-            fetch('/api/online-users')
-                .then(response => response.json())
-                .then(users => {
-                    let userList = document.getElementById('online-list');
-                    let chatbox=document.getElementById("chat-box")
-                    let messageinput=document.getElementById("message-input")
-                    let sendbutton=document.getElementById("sendbutton")
-                    if (userList!=null){
-                    userList.innerHTML = ''; //clear last status
-
-                    }
-
- 
-
-                    
-                    // users.forEach(user => {
-                        for (let user  of users) {
-// 
-                            console.log(user.username,"hada useer")
-                            if (user.username==currentuser){
-                                continue
-                            }
-             
-                        let userDiv = document.createElement('div');
-                        userDiv.classList.add('user');
-        
-                        // make random avatar 
-                        let img = document.createElement('img');
-                        //apii for random acvatr
-                        img.src = `https://api.dicebear.com/7.x/bottts/svg?seed=${user.username}`
-                        img.alt = user.username;
-        
-                        let name = document.createElement('span');
-                        name.textContent = user.username;
-
-        
-                        // if online do green 
-                        let status = document.createElement('div');
-                        status.classList.add('online');
-                        //need to add ofline
-                        /////////////
-                    
+                // if online do green 
+                let status = document.createElement('div');
+                status.classList.add('online');
+                //need to add ofline
 
                 userDiv.addEventListener('click', () => {
                     chatbox.style.display = "block"
                     messageinput.style.display = "block"
                     sendbutton.style.display = "block"
 
-                    console.log('selectdUser:', user.username);
+                    // console.log('selectdUser:', user.username);
                     sendto = user.username
                     fetchConversation(currentuser, sendto)
-                    //  console.log("cccccccccccccccccccc",currentuser)
                     //  getchatconversation()
 
                 });
@@ -86,9 +70,8 @@ function fetchOnlineUsers() {
                 userDiv.appendChild(img);
                 userDiv.appendChild(name);
                 userDiv.appendChild(status);
-                 userList.appendChild(userDiv);
+                userList.appendChild(userDiv);
 
- 
             };
         })
         .catch(error => console.error('Error fetching online users:', error));
@@ -96,38 +79,34 @@ function fetchOnlineUsers() {
 // setInterval(fetchOnlineUsers, 1000);
 // fetchOnlineUsers();
 
-        function fetchoflineusers(){
-            fetch('/api/offline-users')
-                .then(response => response.json())
-                .then(users => {
-                    let userList = document.getElementById('ofline-list');
-                
-                    userList.innerHTML = ''; //clear last status
+function fetchOfflineUsers() {
+    fetch('/api/offline-users')
+        .then(response => response.json())
+        .then(users => {
+            let userList = document.getElementById('ofline-list');
+            userList.innerHTML = ''; //clear last status
 
-                    
-                        for (let user  of users) {
-// 
-                            console.log(user.username,"hada useer")
-                            if (user.username==currentuser){
-                                continue
-                            }
-             
-                        let userDiv = document.createElement('div');
-                        userDiv.classList.add('user');
-        
-                        // make random avatar 
-                        let img = document.createElement('img');
-                        //apii for random acvatr
-                        img.src = `https://api.dicebear.com/7.x/bottts/svg?seed=${user.username}`
-                        img.alt = user.username;
-        
-                        let name = document.createElement('span');
-                        name.textContent = user.username;
+            for (let user of users) {
 
-        
-                        // if online do green 
-                        let status = document.createElement('div');
-                        status.classList.add('ofline');
+                if (user.username == currentuser) {
+                    continue
+                }
+
+                let userDiv = document.createElement('div');
+                userDiv.classList.add('user');
+
+                // make random avatar 
+                let img = document.createElement('img');
+                //apii for random acvatr
+                img.src = `https://api.dicebear.com/7.x/bottts/svg?seed=${user.username}`
+                img.alt = user.username;
+
+                let name = document.createElement('span');
+                name.textContent = user.username;
+
+                // if online do green 
+                let status = document.createElement('div');
+                status.classList.add('ofline');
 
                 userDiv.appendChild(img);
                 userDiv.appendChild(name);
@@ -137,7 +116,6 @@ function fetchOnlineUsers() {
             };
         })
         .catch(error => console.error('Error fetching ofline users:', error));
-
 }
 
 // setInterval(fetchoflineusers,10000);
@@ -161,14 +139,18 @@ async function connectwebsocket() {
     // `4
     try {
         asocket.onopen = function () {
-            console.log("Connected to WebSocket server");
+            // console.log("Connected to WebSocket server");
+
         };
 
         asocket.onmessage = function (event) {
             let data = JSON.parse(event.data);
-            console.log("New Message:", data);
-
+            // console.log("New Message:", data);
+            console.log(data, "OUTSIDE IF");
+            
             if (data) {
+                console.log(data, "INSIDE IF");
+
                 // let chatBox = document.getElementById("chat-box");
 
                 // let messageElement = document.createElement("p");
@@ -182,7 +164,7 @@ async function connectwebsocket() {
         };
 
         asocket.onclose = function () {
-            console.log("WebSocket connection closed");
+            // console.log("WebSocket connection closed");
             let chatBox = document.getElementById("chat-box");
             chatBox.innerHTML = ""; // Clear chat box
 
@@ -203,12 +185,13 @@ async function fetchConversation(user1, user2) {
         }
 
         const messages = await response.json();
-        console.log("Conversation History:", messages);
+        // console.log("Conversation History:", messages);
 
         const chatBox = document.getElementById("chat-box");
         chatBox.textContent = "";
 
         messages.forEach(msg => {
+            
             const messageElement = document.createElement("div");
             messageElement.classList.add("message");
             messageElement.innerHTML = `<strong>${msg.sender_id}:</strong> ${msg.message_content} <span>${formatDate(msg.created_at)}</span>`;
@@ -228,41 +211,14 @@ function formatDate(dateString) {
     const options = { hour: '2-digit', minute: '2-digit', hour12: true };
     return date.toLocaleTimeString('en-US', options);
 }
- 
-
- 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
 function sendMessage() {
-
 
     let messageInput = document.getElementById("message-input");
     let message = messageInput.value.trim();
 
     if (message !== "") {
-        // let sendto = prompt("enter the username of the receiver:");
 
         if (sendto) {
             // let currentUser      = "dady";  // shold do seession
@@ -276,7 +232,7 @@ function sendMessage() {
             }));
             messageInput.value = "";
         } else {
-            alert("usernam!");
+            alert("Ta Select an Online user!");
         }
     }
     fetchConversation(currentuser, sendto)

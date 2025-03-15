@@ -3,7 +3,6 @@ package controllers
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"regexp"
 	"strings"
@@ -44,10 +43,8 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 		response := make(map[string]bool)
 		// Décoder le corps de la requête JSON
 		err := json.NewDecoder(r.Body).Decode(&request)
-		fmt.Println(request)
 
 		if err != nil {
-			fmt.Println(err, "Err----1")
 			response["isValidata"] = false
 			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(response)
@@ -83,7 +80,6 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 			return
 
 		} else if err != nil {
-			fmt.Println("-------", err)
 			response["InternalError"] = true
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(response)
@@ -93,7 +89,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 			var gender = ""
 			if request.Gender == "F" {
 				gender = "F"
-				}else{
+			} else {
 				gender = "M"
 
 			}

@@ -35,12 +35,12 @@ type Privatemessagestruct struct {
 
 func (h *Storeactivewebsocketclient) Run() {
 	for {
-		// fmt.Println(h.Clients[client.username],"all my clients")
+		// fmt.Println(h.Clients, "all my clients")
 		// /	Clients:    make(map[string]*Client),
 
-		for ky := range h.Clients {
-			fmt.Println("add to on_line user ", ky)
-		}
+		// for username := range h.Clients {
+		// 	fmt.Println("add to on_line user ", username)
+		// }
 
 		select {
 		case client := <-h.Regester:
@@ -58,8 +58,6 @@ func (h *Storeactivewebsocketclient) Run() {
 			///need to add ping pong logic and add it to mt handler
 			fmt.Println(client.Username, " by by close xanel disconnected")
 
- 
-
 		case msg := <-h.Messages:
 			fmt.Println("New message received in ChatHub:", msg)
 
@@ -69,7 +67,7 @@ func (h *Storeactivewebsocketclient) Run() {
 			if err != nil {
 				fmt.Println("err save mesage", err)
 			}
-			fmt.Println("vaaal last indicat",val)
+			fmt.Println("vaaal last indicat", val)
 
 			h.mu.Lock()
 			// show cliant
