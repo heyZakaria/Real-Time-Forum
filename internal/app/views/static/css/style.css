@@ -429,12 +429,22 @@ fieldset {
     color: #b9bbbe;
 }
 
-#user-list {
+
+
+
+
+
+#online-list  {
     display: flex;
     flex-direction: column;
     gap: 8px;
     overflow-y: auto;
 }
+
+ 
+
+ 
+
 
 .user {
     display: flex;

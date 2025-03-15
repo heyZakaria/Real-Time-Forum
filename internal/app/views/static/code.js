@@ -1,21 +1,51 @@
 
+
+
 export const myCode = {
     home: `
     <!--                 HOME                   -->
+ 
         <div class="homeCode">
-            <div id="online-users">
+            <div id="online-list">
                 <h3> Online Users</h3>
                 <ul id="user-list"></ul>
             </div>
+             <div>
+
+            <div id ="offline-users"></div>
+            <h3>offline-users</h3>
+            <ul id="ofline-list"></ul>
+             
+            </div>   
+ 
 
 
-            <div id="chat-container">
-                <h3>Chat</h3>
-                <div id="chat-box" style="height: 300px; overflow-y: scroll; border: 1px solid #ad6f6f; padding: 10px;">
-                </div>
-                <input type="text" id="message-input" placeholder="Enter message" />
-                <button onclick="sendMessage()">Send</button>
+                        <h3>Chat</h3>
+                <div id="chat-box" style="height: 300px; overflow-y: scroll; border: 1px solid #ad6f6f; padding: 10px;display: none;"></div>
+                <input type="text" id="message-input" placeholder="Enter message" style="display: none;" />
+                <button id ="sendbutton" style="display: none;">Send</button>
             </div>
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             <div>
                 <form method="post" class="post_form">
                     <label for="title">Title</label>

@@ -5,6 +5,7 @@ import { Registred } from "./registred.js";
 import { filter } from "./filter.js";
 import { route } from "./router.js";
 import { reactComment } from "./reactComment.js";
+ import { startws } from "./ws.js";
 
 
 let submit_post = document.querySelector(".post_btn")
@@ -128,7 +129,7 @@ let count = -1
 
 export async function Get_All_Posts() {
 
-    let x = document.querySelector(".login_button")
+     let x = document.querySelector(".login_button")
 
     let cookie = decodeURIComponent(document.cookie.split("=")[1])
     const eqPos = cookie.indexOf('=')

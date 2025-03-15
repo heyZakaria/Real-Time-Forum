@@ -6,6 +6,7 @@ import { HandleSubmitPost } from "./fetch_data.js";
 import { verifyRegistration } from "./verify_registration.js";
 import { verifyLogin } from "./verify_login.js";
 import { filter } from "./filter.js";
+import { startws } from "./ws.js";
 
 
 let regsiter_form = document.querySelector(".regsiter_form")
@@ -78,9 +79,10 @@ const handleLocation = async () => {
 
         let userid = await Registred()
         if (userid) {
-
             Get_All_Posts();
             lunchListener("post_btn", "filterbutton")
+            startws()
+ 
 
         } else {
             route("/login", true)
@@ -93,8 +95,11 @@ const handleLocation = async () => {
         contentWrapper.innerHTML = myCode.login
         lunchListener("login_form")
     }
-
+    console.log(location.host, "---------");
+    
+    
     if (path == "/register") {
+        console.log(location.host, "weeeeeeeeeee");
         contentWrapper.innerHTML = ""
         contentWrapper.innerHTML = myCode.register
         lunchListener("regsiter_form")
