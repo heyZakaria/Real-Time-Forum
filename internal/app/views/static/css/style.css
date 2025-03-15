@@ -458,6 +458,7 @@ fieldset {
 }
 
 /* .user .status {
+/* .user .status {
     width: 10px;
     height: 10px;
     border-radius: 50%;
@@ -534,6 +535,32 @@ fieldset {
 .message {
     margin-bottom: 12px;
     padding: 10px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Message header (Sender name and timestamp) */
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    font-size: 12px;
+    color: #555;
+}
+
+.message-header strong {
+    color: #ad6f6f;
+    font-size: 14px;
+}
+
+/* Timestamp styling */
+.timestamp {
+    color: #888;
+}
+
+/* Message content */
+.message-content {
     border-radius: 8px;
     background-color: #ffffff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
