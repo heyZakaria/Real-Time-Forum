@@ -10,9 +10,7 @@ func GetCurrentUsername(w http.ResponseWriter, r *http.Request) {
 	// we already made selecuser and selectusername
 
 	cookie, err := r.Cookie("session_id")
-
 	if err != nil {
-
 		http.Error(w, "not authenticated", http.StatusUnauthorized)
 		return
 	}
@@ -21,13 +19,10 @@ func GetCurrentUsername(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, "user not found", http.StatusUnauthorized)
 		return
-
 	}
 
 	//grt username
-
 	username, err := SelectUsername(user_id)
-
 	if err != nil {
 		http.Error(w, "username not fund", http.StatusInternalServerError)
 		return

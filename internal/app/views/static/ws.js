@@ -27,6 +27,8 @@ function fetchOnlineUsers() {
             let sendbutton = document.getElementById("sendbutton")
             if (userList != null) {
                 userList.innerHTML = ''; //clear last status
+            } else {
+                return
             }
 
             // users.forEach(user => {
@@ -42,7 +44,7 @@ function fetchOnlineUsers() {
 
                 // make random avatar 
                 let img = document.createElement('img');
-                //apii for random acvatr
+                //apii for random acvat
                 img.src = `https://api.dicebear.com/7.x/bottts/svg?seed=${user.username}`
                 img.alt = user.username;
 
@@ -146,10 +148,8 @@ async function connectwebsocket() {
         asocket.onmessage = function (event) {
             let data = JSON.parse(event.data);
             // console.log("New Message:", data);
-            console.log(data, "OUTSIDE IF");
-            
+
             if (data) {
-                console.log(data, "INSIDE IF");
 
                 // let chatBox = document.getElementById("chat-box");
 
@@ -191,10 +191,13 @@ async function fetchConversation(user1, user2) {
         chatBox.textContent = "";
 
         messages.forEach(msg => {
-            
+
             const messageElement = document.createElement("div");
             messageElement.classList.add("message");
-            messageElement.innerHTML = `<strong>${msg.sender_id}:</strong> ${msg.message_content} <span>${formatDate(msg.created_at)}</span>`;
+            let x = msg.sender_id + ":"
+            let y = msg.message_content
+            let z = formatDate(msg.created_at)
+            messageElement.innerText = x + " " + y + " " + z;
             chatBox.appendChild(messageElement);
             //solve scroll probleme when you add an message 
             chatBox.scrollTop = chatBox.scrollHeight;

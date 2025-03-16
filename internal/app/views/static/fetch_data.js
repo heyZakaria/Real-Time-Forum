@@ -2,10 +2,7 @@ import { InitPost } from "./post.js";
 import { reacPost } from "./reactPost.js";
 import { comment } from "./comment.js";
 import { Registred } from "./registred.js";
-import { filter } from "./filter.js";
 import { route } from "./router.js";
-import { reactComment } from "./reactComment.js";
- import { startws } from "./ws.js";
 
 
 let submit_post = document.querySelector(".post_btn")

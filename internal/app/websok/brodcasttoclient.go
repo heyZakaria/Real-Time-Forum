@@ -87,8 +87,8 @@ func (h *Storeactivewebsocketclient) Run() {
 }
 
 func (h *Storeactivewebsocketclient) GetOnlineUsersnames() []string {
-	h.mu.Lock()
-	defer h.mu.Unlock()
+	// h.mu.Lock()
+	// defer h.mu.Unlock()
 	usernames := make([]string, 0, len(h.Clients))
 	for username := range h.Clients {
 		usernames = append(usernames, username)

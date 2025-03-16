@@ -10,49 +10,27 @@ export const myCode = {
                 <h3> Online Users</h3>
                 <ul id="user-list"></ul>
             </div>
-             <div>
 
+            <div>
             <div id ="offline-users"></div>
             <h3>offline-users</h3>
             <ul id="ofline-list"></ul>
-             
-            </div>   
- 
-
-
-                        <h3>Chat</h3>
+            </div>
+            
+            <div>
+                <h3>Chat</h3>
                 <div id="chat-box" style="height: 300px; overflow-y: scroll; border: 1px solid #ad6f6f; padding: 10px;display: none;"></div>
                 <input type="text" id="message-input" placeholder="Enter message" style="display: none;" />
                 <button id ="sendbutton" style="display: none;">Send</button>
             </div>
             
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             <div>
                 <form method="post" class="post_form">
                     <label for="title">Title</label>
                     <input class="post_title" name="title" type="text" placeholder="Name it" maxlength="100">
                     <label for="content">Content</label>
                     <input class="post_content" name="content" type="text" placeholder="Speak your mind soldier"
-                        maxlength="1000">
+                    maxlength="1000">
                     <fieldset>
                         <legend>Select an appropriate category</legend>
                         <label for="sport">Sport</label>
@@ -61,10 +39,11 @@ export const myCode = {
                         <input class="category" type="checkbox" id="science" name="category" value="science">
                         <label for="entertainment">Entertainment</label>
                         <input class="category" type="checkbox" id="entertainment" name="category"
-                            value="entertainment">
+                        value="entertainment">
                     </fieldset>
                     <button class="post_btn" type="button">Post</button>
                 </form>
+            
                 <div class="filter_form">
                     <form action="">
                         <select class="selectfilter" name="filter" multiple>
@@ -77,6 +56,7 @@ export const myCode = {
                         <input class="filterbutton" type="button" value="Filter">
                     </form>
                 </div>
+
                 <div class="container">
                     <div id="posts">
                     </div>
@@ -97,7 +77,7 @@ export const myCode = {
                     <input type="text" id="login_email" name="emailorusername" placeholder="Email or Username" required>
                     <label for="login_password">PASSWORD:</label>
                     <input type="password" id="login_password" name="login_password" placeholder="Setup your password"
-                        required>
+                    required>
                     <label></label>
                     <input type="submit" value="Login">
                     <span id="server_error"></span>
@@ -115,12 +95,10 @@ export const myCode = {
                     <input type="text" id="username" name="username" placeholder="Your Nickname" required>
                     <br>
                     <span id="username_error"></span>
-                    
                     <label for="age">AGE *</label>
                     <input type="number" id="age" name="age" placeholder="Age" required>
                     <br>
                     <span id="age_error"></span>
-
                     <label for="gender">GENDER *</label required>
                     <label for="gender">Male</label>
                     <input type="radio" value="F" id="gender_M" name="gender" >
@@ -128,7 +106,6 @@ export const myCode = {
                     <input type="radio" value="F" id="gender_F" name="gender" >
                     <br>
                     <span id="gender_error"></span>
-
 
                     <label for="first_name">First Name *</label>
                     <input type="text" id="first_name" name="first_name" placeholder="First name" required>
@@ -146,8 +123,9 @@ export const myCode = {
                     <span id="email_error"></span>
                     <label for="register_password">PASSWORD *</label>
                     <input type="password" id="register_password" name="register_password"
-                        placeholder="Setup your password">
+                    placeholder="Setup your password">
                     <br>
+                    
                     <span id="password_error"></span>
                     <label for="register_password_2">REPEAT YOUR PASSWORD *</label>
                     <input type="password" id="register_password_2" name="register_password_2"

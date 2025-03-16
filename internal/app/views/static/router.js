@@ -2,7 +2,6 @@ import { Get_All_Posts } from "./fetch_data.js";
 import { Registred } from "./registred.js";
 import { myCode } from "./code.js"
 import { HandleSubmitPost } from "./fetch_data.js";
-
 import { verifyRegistration } from "./verify_registration.js";
 import { verifyLogin } from "./verify_login.js";
 import { filter } from "./filter.js";
@@ -82,7 +81,6 @@ const handleLocation = async () => {
             Get_All_Posts();
             lunchListener("post_btn", "filterbutton")
             startws()
- 
 
         } else {
             route("/login", true)

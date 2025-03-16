@@ -1,9 +1,20 @@
 ## To Do
+## Zakaria Tasks
 Add Notification
-Handle Html Injection
+# Handle Html Injection
 Typing progress 
-Ping Pong
-Show diffrence between sender and reciever in frontend 
-Close Socket when the user click logout
-Throttle or Debounce for every 10 new History messages 
-when a user send a message why all message (Divs) get updated (we can just append the new message (div)) OR Update the whole list but just when someone new is added to the list
+<!-- Ping Pong -->
+Close Socket when the user click logout and remove message section
+One users list just update the status 
+
+
+
+## Soufiyane Tasks
+Throttle or Debounce for every 10 new History messages (Without Limit) 
+
+when a user send a message why all message (Divs) get updated (we can just append the new message (div)) 
+
+Show diffrence between sender and reciever in frontend 2
+
+
+## More

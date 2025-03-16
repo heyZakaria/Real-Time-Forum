@@ -24,7 +24,9 @@ func SendMessageHistory(w http.ResponseWriter, r *http.Request) {
 	user2 := r.URL.Query().Get("user2")
 
 	if user1 == "" || user2 == "" {
+		/// Bad request
 		fmt.Println("no user found")
+		return
 	}
 
 	conversation, err := websok.GetConversationHistory(utils.Db1.Db, user1, user2, 100)
