@@ -1,3 +1,4 @@
+ 
 let asocket
 
 let sendto
@@ -25,6 +26,8 @@ function fetchOnlineUsers() {
             let chatbox = document.getElementById("chat-box")
             let messageinput = document.getElementById("message-input")
             let sendbutton = document.getElementById("sendbutton")
+            let talkingto=document.getElementById("talkingto")
+
             if (userList != null) {
                 userList.innerHTML = ''; //clear last status
             } else {
@@ -61,9 +64,12 @@ function fetchOnlineUsers() {
                     chatbox.style.display = "block"
                     messageinput.style.display = "block"
                     sendbutton.style.display = "block"
+                    talkingto.style.display="block"
 
                     // console.log('selectdUser:', user.username);
                     sendto = user.username
+                    talkingto.innerHTML=""
+                    talkingto.innerHTML="you talk whit :"+sendto
                     fetchConversation(currentuser, sendto)
                     //  getchatconversation()
 
@@ -220,8 +226,24 @@ function sendMessage() {
 
     let messageInput = document.getElementById("message-input");
     let message = messageInput.value.trim();
+    // let currenttime=new Date().toTimeString().split(' ')[0];   
+    // let currenttime=new Date().toTimeString()
+    let currenttime=formatDate(new Date())
+    
+    
+    console.log(formatDate(currenttime),"s")
+
 
     if (message !== "") {
+        let chatBox = document.getElementById("chat-box");
+
+        let messageElement = document.createElement("p");
+        messageElement.classList.add("message")
+        messageElement.textContent = `${currentuser}: ${message} ${currenttime} `;
+
+
+        chatBox.appendChild(messageElement);
+        chatBox.scrollTop = chatBox.scrollHeight;
 
         if (sendto) {
             // let currentUser      = "dady";  // shold do seession
@@ -238,5 +260,8 @@ function sendMessage() {
             alert("Ta Select an Online user!");
         }
     }
-    fetchConversation(currentuser, sendto)
+    // fetchConversation(currentuser, sendto)
+
+                 
+
 }

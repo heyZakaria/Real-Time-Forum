@@ -9,12 +9,12 @@ One users list just update the status
 
 
 
-## Soufiyane Tasks
+## Soufyane Tasks
 Throttle or Debounce for every 10 new History messages (Without Limit) 
 
-when a user send a message why all message (Divs) get updated (we can just append the new message (div)) 
+## when a user send a message why all message (Divs) get updated (we can just append the new message (div)) 
 
-Show diffrence between sender and reciever in frontend 2
+## Show diffrence between sender and reciever in frontend 2
 
 
 ## More
