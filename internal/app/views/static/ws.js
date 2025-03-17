@@ -4,9 +4,8 @@ let asocket
 let sendto
 let currentuser
 
-// let isLoading=false
-
-let isLoading=false
+ 
+let fetching=false
 let messageloaded =0
  
 export function startws() {
@@ -197,15 +196,15 @@ async function connectwebsocket() {
 
 
 
-async function fetchConversation(user1,user2,loadMore=false) {
+async function fetchConversation(user1,user2,fetchmore=false) {
    console.log(messageloaded,"messageload")
-    if (isLoading)return
+    if (fetching)return
     try{
 
-        isLoading=true
+        fetching=true
         const chatBox=document.getElementById("chat-box")
 
-        if(!loadMore){
+        if(!fetchmore){
 
             chatBox.textContent=""
             messageloaded=0;
@@ -237,7 +236,7 @@ async function fetchConversation(user1,user2,loadMore=false) {
         let z=formatDate(msg.created_at)
         messageElement.innerText=x+ " "+ y+" "+z 
 
-        if (loadMore){
+        if (fetchmore){
             chatBox.prepend(messageElement)
         }else{
             chatBox.appendChild(messageElement)
@@ -250,11 +249,11 @@ async function fetchConversation(user1,user2,loadMore=false) {
 
 
 );
-
+//messages.length=10
 
 messageloaded+=messages.length
  
-if (loadMore) {
+if (fetchmore) {
     chatBox.scrollTop = chatBox.scrollHeight - scrollHeight + scrollPosition;
 } else {
     chatBox.scrollTop = chatBox.scrollHeight;
@@ -267,7 +266,7 @@ if (loadMore) {
         console.log("err fetching conv",error)
 
     }finally{
-        isLoading=false
+        fetching=false
     }
     
 }
@@ -375,7 +374,7 @@ function initialisechat(user1,user2){
     const chatBox=document.getElementById("chat-box")
 
     const handleScroll=throttle(()=>{
-        if (chatBox.scrollTop<30 && !isLoading){
+        if (chatBox.scrollTop<30 && !fetching){
             fetchConversation(user1,user2,true)
         }
 
