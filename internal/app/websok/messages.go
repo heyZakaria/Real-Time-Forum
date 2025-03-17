@@ -23,15 +23,15 @@ func SaveMessage(db *sql.DB, senderID, receiverID, content string) (int64, error
 	return result.LastInsertId()
 }
 
-func GetConversationHistory(db *sql.DB, userID1, userID2 string, limit int) ([]Message, error) {
+func GetConversationHistory(db *sql.DB, userID1, userID2 string, limit int,offset int) ([]Message, error) {
 	query := `
 	SELECT id, sender_id, receiver_id, message_content, created_at
 	FROM messages
 	WHERE (sender_id = ? AND receiver_id = ?) OR (sender_id = ? AND receiver_id = ?)
 	ORDER BY created_at ASC
-	LIMIT ?`
+	LIMIT ? OFFSET ?`
 
-	rows, err := db.Query(query, userID1, userID2, userID2, userID1, limit)
+	rows, err := db.Query(query, userID1, userID2, userID2, userID1, limit, offset)
 	if err != nil {
 		return nil, err
 	}

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"forum/internal/app/models/utils"
@@ -22,6 +23,7 @@ func SendMessageHistory(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	user1 := r.URL.Query().Get("user1")
 	user2 := r.URL.Query().Get("user2")
+	fmt.Println("Query params:", r.URL.Query())
 
 	if user1 == "" || user2 == "" {
 		/// Bad request
@@ -29,14 +31,39 @@ func SendMessageHistory(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	conversation, err := websok.GetConversationHistory(utils.Db1.Db, user1, user2, 100)
+	limit := 10
+	if strlimit := r.URL.Query().Get("limit"); strlimit != "" {
+		ParsedLimit, err := strconv.Atoi(strlimit)
+		if err == nil && ParsedLimit > 0 {
+			limit = ParsedLimit
+		} else {
+			fmt.Println(err)
+		}
+	}
+
+	// Parse offset parameter with default value of 0
+	offset := 0
+	if stroffset := r.URL.Query().Get("offset"); stroffset != "" {
+		ParsedOffset, err := strconv.Atoi(stroffset)
+		if err == nil && ParsedOffset >= 0 {
+			offset = ParsedOffset
+		} else {
+			fmt.Println(err)
+		}
+	}
+
+	conversation, err := websok.GetConversationHistory(utils.Db1.Db, user1, user2, limit, offset)
 	if err != nil {
-		fmt.Println("err getting convertation")
+		http.Error(w, "Failed to get conversation", http.StatusInternalServerError)
+
+		// fmt.Println("err getting convertation")
 		return
 	}
 	err = json.NewEncoder(w).Encode(conversation)
 	if err != nil {
-		fmt.Println("cant encode response convertation")
+		http.Error(w, "cant encode response convertation", http.StatusInternalServerError)
+
+		// fmt.Println("cant encode response convertation")
 		return
 	}
 }
