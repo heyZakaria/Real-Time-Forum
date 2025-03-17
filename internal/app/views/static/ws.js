@@ -96,6 +96,9 @@ function fetchOfflineUsers() {
         .then(response => response.json())
         .then(users => {
             let userList = document.getElementById('ofline-list');
+            if (userList==null){
+                return
+            }
             userList.innerHTML = ''; //clear last status
 
             for (let user of users) {
@@ -225,7 +228,7 @@ async function fetchConversation(user1,user2,fetchmore=false) {
 
     const scrollHeight=chatBox.scrollHeight
     const scrollPosition=chatBox.scrollTop
-
+ 
 
     messages.forEach(msg => {
 
@@ -312,6 +315,7 @@ function sendMessage() {
     let message = messageInput.value.trim();
     // let currenttime=new Date().toTimeString().split(' ')[0];   
     // let currenttime=new Date().toTimeString()
+    let currenttime=new Date()
      
     
  
@@ -321,7 +325,7 @@ function sendMessage() {
 
         let messageElement = document.createElement("p");
         messageElement.classList.add("message")
-        messageElement.textContent = `${currentuser}: ${message} ${currenttime} `;
+        messageElement.textContent = `${currentuser}: ${message} ${formatDate(currenttime)} `;
 
 
         chatBox.appendChild(messageElement);
