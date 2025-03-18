@@ -41,6 +41,7 @@ func (c *Client) Writemessages() {
 	for msg := range c.Send {
 
 		msgjson, _ := json.Marshal(msg)
+		fmt.Println(string(msgjson), "waaaaaaaa")
 		err := c.Conn.WriteMessage(websocket.TextMessage, msgjson)
 		if err != nil {
 			fmt.Println("err writng the message mfk", err)

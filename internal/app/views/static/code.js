@@ -14,12 +14,20 @@ export const myCode = {
             <ul id="friends-list"></ul>
             </div>
             
-            <div id="chat_section">
-                <h3 id="chat-title" style="display:none"> Chat </h3> <br>
-                <h4 id ="talkingto" style="display:none" > </h4><br>
-                <div id="chat-box" style="height: 300px; overflow-y: scroll; border: 1px solid #ad6f6f; padding: 10px;display: none;"></div>
-                <input type="text" id="message-input" placeholder="Enter message" style="display: none;" />
-                <button id ="sendbutton" style="display: none;">Send</button><br>
+            <div id="chat_section" style="display:none">
+                <h3 id="chat-title" > Chat </h3> <br>
+                
+                <h4 id ="talkingto" > </h4><br>
+               
+               
+                <div id="chat-box" style="height: 300px; overflow-y: scroll; border: 1px solid #ad6f6f; padding: 10px;"></div>
+                 <div class="typing_indicator">
+                    <div id="dot"></div>
+                    <div id="dot"></div>
+                    <div id="dot"></div>
+                </div>
+                <input type="text" id="message-input" placeholder="Enter message"  />
+                <button id ="sendbutton" >Send</button><br>
             </div>
             
             <div>

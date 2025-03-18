@@ -434,16 +434,16 @@ fieldset {
 
 
 
-#online-list  {
+#online-list {
     display: flex;
     flex-direction: column;
     gap: 8px;
     overflow-y: auto;
 }
 
- 
 
- 
+
+
 
 
 .user {
@@ -646,4 +646,41 @@ fieldset {
 #sendbutton:hover {
     background-color: #9c5c5c;
     transform: scale(1.05);
+}
+
+
+.dot {
+    border-radius: 9999px;
+    height: 0.5rem;
+    width: 0.5rem;
+
+    background: var(--primaryColor);
+    opacity: 0;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 1;
+    }
+}
+
+.typing_indicator {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    gap: 0.25rem;
+    padding: 5px;
+}
+
+.dot:nth-child(1) {
+    animation-delay: 0.3333s;
+}
+
+.dot:nth-child(2) {
+    animation-delay: 0.6666s;
+}
+
+.dot:nth-child(3) {
+    animation-delay: 0.9999s;
 }

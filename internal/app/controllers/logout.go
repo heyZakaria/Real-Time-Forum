@@ -3,7 +3,6 @@ package controllers
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"forum/internal/app/models/utils"
 	"net/http"
 )
@@ -18,8 +17,7 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 
 	RemoveSessionFromDB(utils.Db1.Db, token)
 	clearSession(w)
-	
-	fmt.Println("REMOEV")
+
 	//delete(h.Clients, c.Username)
 	// c.Conn.Close()
 

@@ -23,7 +23,6 @@ func SendMessageHistory(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	user1 := r.URL.Query().Get("user1")
 	user2 := r.URL.Query().Get("user2")
-	fmt.Println("Query params:", r.URL.Query())
 
 	if user1 == "" || user2 == "" {
 		/// Bad request
@@ -56,14 +55,12 @@ func SendMessageHistory(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, "Failed to get conversation", http.StatusInternalServerError)
 
-		// fmt.Println("err getting convertation")
 		return
 	}
 	err = json.NewEncoder(w).Encode(conversation)
 	if err != nil {
 		http.Error(w, "cant encode response convertation", http.StatusInternalServerError)
 
-		// fmt.Println("cant encode response convertation")
 		return
 	}
 }

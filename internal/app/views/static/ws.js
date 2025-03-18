@@ -11,13 +11,13 @@ let messageloaded = 0
 export function startws() {
     connectWebsocket()
 
-    // setInterval(fetchOnlineUsers, 1000);
     setInterval(fetchOfflineUsers, 2000);
 
     const sendButton = document.getElementById('sendbutton')
     sendButton.addEventListener('click', sendMessage)
 
 }
+let messageinput
 
 function fetchOfflineUsers() {
     fetch('/api/friends-list')
@@ -58,11 +58,8 @@ function fetchOfflineUsers() {
                 userList.appendChild(userDiv);
 
             };
-            let chat_title = document.getElementById("chat-title")
-            let chatbox = document.getElementById("chat-box")
-            let messageinput = document.getElementById("message-input")
-            let sendbutton = document.getElementById("sendbutton")
-            let talkingto = document.getElementById("talkingto")
+            let chat_section = document.getElementById("chat_section")
+
             ///////////////////////////////// ONLINE /////////////////////////////////////
             for (const [key, val] of Object.entries(users.online)) {
 
@@ -83,7 +80,6 @@ function fetchOfflineUsers() {
                 let name = document.createElement('span');
                 name.textContent = val;
 
-
                 // if online do green 
                 let status = document.createElement('div');
                 status.classList.add('online');
@@ -94,35 +90,19 @@ function fetchOfflineUsers() {
 
                     if (!showChat.val) {
 
-                        chat_title.style.display = "block"
-                        chatbox.style.display = "block"
-                        messageinput.style.display = "block"
-                        messageinput.addEventListener('keydown', (e) => {
-                            console.log("siiiiir", e);
-
-                        })
-                        messageinput.addEventListener('keyup', () => {
-                            console.log("7baassssssssss");
-
-                        })
-                        sendbutton.style.display = "block"
-                        talkingto.style.display = "block"
+                        chat_section.style.display = "block"
                         sendto = val
                         talkingto.innerHTML = ""
                         talkingto.innerHTML = "Your'e talking white :" + sendto
                         initializeChat(currentuser, sendto)
                         showChat.val = true
                     } else {
-                        chat_title.style.display = "none"
-                        chatbox.style.display = "none"
-                        messageinput.style.display = "none"
-                        sendbutton.style.display = "none"
-                        talkingto.style.display = "none"
+                        chat_section.style.display = "none"
+
                         talkingto.innerHTML = ""
                         showChat.val = false
+                        sendto = ""
                     }
-                    //  getchatconversation()
-
                 });
 
                 userDiv.appendChild(img);
@@ -133,10 +113,10 @@ function fetchOfflineUsers() {
             };
         })
         .catch(error => console.error('Error fetching ofline users:', error));
+
+
 }
 
-// setInterval(fetchoflineusers,10000);
-// fetchoflineusers()
 
 async function connectWebsocket() {
 
@@ -205,7 +185,6 @@ async function fetchConversation(user1, user2, fetchMore = false) {
 
         const messages = await response.json();
         if (messages == null) {
-            console.log("finisyo")
             return
         }
 
@@ -243,9 +222,7 @@ async function fetchConversation(user1, user2, fetchMore = false) {
     } finally {
         fetching = false
     }
-
 }
-
 
 function formatDate(dateString) {
     const date = new Date(dateString);
@@ -253,26 +230,26 @@ function formatDate(dateString) {
     return date.toLocaleTimeString('en-US', options);
 }
 
-
 function sendMessage() {
 
     let messageInput = document.getElementById("message-input");
     let message = messageInput.value.trim();
 
-    let currenttime = new Date()
+    let currentTime = new Date()
 
     if (message !== "") {
         let chatBox = document.getElementById("chat-box");
 
         let messageElement = document.createElement("p");
         messageElement.classList.add("message")
-        messageElement.textContent = `${currentuser}: ${message} ${formatDate(currenttime)} "WEee`;
+        messageElement.textContent = `${currentuser}: ${message} ${formatDate(currentTime)} `;
 
         chatBox.appendChild(messageElement);
         chatBox.scrollTop = chatBox.scrollHeight;
+        console.log(sendto, "--------------");
+        console.log(message, "_______");
 
         if (sendto) {
-            // let currentUser      = "dady";  // shold do seession
 
             // Send the message
             asocket.send(JSON.stringify({
@@ -308,6 +285,26 @@ function initializeChat(user1, user2) {
     fetchConversation(user1, user2)
 
     const chatBox = document.getElementById("chat-box")
+    console.log("Chwiya BChwiya");
+    messageinput = document.getElementById("message-input")
+    if (messageinput) {
+        console.log("Siiiiiiiiiiiir");
+        let dots = document.querySelectorAll("#dot")
+        messageinput.addEventListener('keydown', (e) => {
+            dots.forEach(dot => {
+                dot.classList.add("dot")
+
+            });
+        })
+        messageinput.addEventListener('keyup', () => {
+            setTimeout(() => {
+                dots.forEach(dot => {
+                    dot.classList.remove("dot")
+                });
+            }, "2000");
+
+        })
+    }
 
     const handleScroll = throttle(() => {
         if (chatBox.scrollTop < 30 && !fetching) {

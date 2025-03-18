@@ -20,3 +20,4 @@ Whene someone is online don't give hime access to login or register page
 
 
 ## More
+Limitr message size

@@ -50,19 +50,19 @@ func (h *Storeactivewebsocketclient) Run() {
 
 		case msg := <-h.Messages:
 
-			_, err := SaveMessage(utils.Db1.Db, msg.Sender, msg.Receiver, msg.Content)
-			if err != nil {
-				fmt.Println("err save mesage", err)
-			}
-
 			h.mu.Lock()
 			// show cliant
 			receiver, exists := h.Clients[msg.Receiver]
 			h.mu.Unlock()
 
 			if exists {
-				fmt.Println("snd to:", msg.Receiver)
+				
+				_, err := SaveMessage(utils.Db1.Db, msg.Sender, msg.Receiver, msg.Content)
+				if err != nil {
+					fmt.Println("err save mesage", err)
+				}
 				receiver.Send <- msg
+				
 			} else {
 				fmt.Println("Receiver not found:", msg.Receiver)
 			}
