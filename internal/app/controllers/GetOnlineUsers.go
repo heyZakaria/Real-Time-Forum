@@ -1,14 +1,8 @@
 package controllers
 
-import (
-	"encoding/json"
-	"forum/internal/app/websok"
-	"net/http"
-)
-
 /////// next will go in codage api
 
-func GetOnlineUsersHandler(w http.ResponseWriter, r *http.Request) {
+/* func GetOnlineUsersHandler(w http.ResponseWriter, r *http.Request) {
 	//get onlin users from websocket
 	usernames := websok.ChatHub.GetOnlineUsersnames()
 
@@ -27,4 +21,4 @@ func GetOnlineUsersHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 
-}
+} */

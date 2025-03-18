@@ -5,12 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"forum/internal/app/models/utils"
-	"forum/internal/app/websok"
 	"net/http"
 )
-
-var c websok.Client
-var h websok.Storeactivewebsocketclient
 
 func Logout(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
@@ -22,10 +18,11 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 
 	RemoveSessionFromDB(utils.Db1.Db, token)
 	clearSession(w)
-	fmt.Println( "REMOEV")
+	
+	fmt.Println("REMOEV")
 	//delete(h.Clients, c.Username)
-
 	// c.Conn.Close()
+
 	json.NewEncoder(w).Encode("Success")
 
 }

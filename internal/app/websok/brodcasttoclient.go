@@ -54,7 +54,7 @@ func (h *Storeactivewebsocketclient) Run() {
 			if err != nil {
 				fmt.Println("err save mesage", err)
 			}
- 
+
 			h.mu.Lock()
 			// show cliant
 			receiver, exists := h.Clients[msg.Receiver]
@@ -70,10 +70,11 @@ func (h *Storeactivewebsocketclient) Run() {
 	}
 }
 
-func (h *Storeactivewebsocketclient) GetOnlineUsersnames() []string {
-	usernames := make([]string, 0, len(h.Clients))
+func (h *Storeactivewebsocketclient) GetOnlineUsersnames() map[string]string {
+	var online = make(map[string]string)
+
 	for username := range h.Clients {
-		usernames = append(usernames, username)
+		online[username] = username
 	}
-	return usernames
+	return online
 }

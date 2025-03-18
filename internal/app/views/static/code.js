@@ -6,15 +6,12 @@ export const myCode = {
     <!--                 HOME                   -->
  
         <div class="homeCode">
-            <div id="online-list">
-                <h3> Online Users</h3>
-                <ul id="user-list"></ul>
-            </div>
+        
 
             <div>
             <div id ="offline-users"></div>
-            <h3>offline-users</h3>
-            <ul id="ofline-list"></ul>
+            <h3>Friends</h3>
+            <ul id="friends-list"></ul>
             </div>
             
             <div>

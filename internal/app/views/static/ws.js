@@ -1,25 +1,25 @@
- 
+
 let asocket
 
 let sendto
 let currentuser
 
- 
-let fetching=false
-let messageloaded =0
- 
+
+let fetching = false
+let messageloaded = 0
+
 export function startws() {
     connectwebsocket()
 
-    setInterval(fetchOnlineUsers, 1000);
-    setInterval(fetchOfflineUsers, 1000);
+    // setInterval(fetchOnlineUsers, 1000);
+    setInterval(fetchOfflineUsers, 2000);
 
     const sendButton = document.getElementById('sendbutton')
     sendButton.addEventListener('click', sendMessage)
 
 }
 
-function fetchOnlineUsers() {
+/* function fetchOnlineUsers() {
 
     ///need to add this to fetch_data.jsConnected
 
@@ -30,11 +30,12 @@ function fetchOnlineUsers() {
             let chatbox = document.getElementById("chat-box")
             let messageinput = document.getElementById("message-input")
             let sendbutton = document.getElementById("sendbutton")
-            let talkingto=document.getElementById("talkingto")
+            let talkingto = document.getElementById("talkingto")
 
             if (userList != null) {
                 userList.innerHTML = ''; //clear last status
             } else {
+                
                 return
             }
 
@@ -68,12 +69,12 @@ function fetchOnlineUsers() {
                     chatbox.style.display = "block"
                     messageinput.style.display = "block"
                     sendbutton.style.display = "block"
-                    talkingto.style.display="block"
+                    talkingto.style.display = "block"
 
                     // console.log('selectdUser:', user.username);
                     sendto = user.username
-                    talkingto.innerHTML=""
-                    talkingto.innerHTML="you talk whit :"+sendto
+                    talkingto.innerHTML = ""
+                    talkingto.innerHTML = "you talk whit :" + sendto
                     initialisechat(currentuser, sendto)
                     //  getchatconversation()
 
@@ -87,7 +88,7 @@ function fetchOnlineUsers() {
             };
         })
         .catch(error => console.error('Error fetching online users:', error));
-}
+} */
 // setInterval(fetchOnlineUsers, 1000);
 // fetchOnlineUsers();
 
@@ -95,15 +96,15 @@ function fetchOfflineUsers() {
     fetch('/api/offline-users')
         .then(response => response.json())
         .then(users => {
-            let userList = document.getElementById('ofline-list');
-            if (userList==null){
+            let userList = document.getElementById('friends-list');
+            if (userList == null) {
                 return
             }
             userList.innerHTML = ''; //clear last status
 
-            for (let user of users) {
+            for (const [key, val] of Object.entries(users.offline)) {
 
-                if (user.username == currentuser) {
+                if (val == currentuser) {
                     continue
                 }
 
@@ -113,15 +114,66 @@ function fetchOfflineUsers() {
                 // make random avatar 
                 let img = document.createElement('img');
                 //apii for random acvatr
-                img.src = `https://api.dicebear.com/7.x/bottts/svg?seed=${user.username}`
-                img.alt = user.username;
+                img.src = `https://api.dicebear.com/7.x/bottts/svg?seed=${val}`
+                img.alt = val;
 
                 let name = document.createElement('span');
-                name.textContent = user.username;
+                name.textContent = val;
 
                 // if online do green 
                 let status = document.createElement('div');
-                status.classList.add('ofline');
+                status.classList.add('offline');
+
+                userDiv.appendChild(img);
+                userDiv.appendChild(name);
+                userDiv.appendChild(status);
+                userList.appendChild(userDiv);
+
+            };
+            let chatbox = document.getElementById("chat-box")
+            let messageinput = document.getElementById("message-input")
+            let sendbutton = document.getElementById("sendbutton")
+            let talkingto = document.getElementById("talkingto")
+
+            for (const [key, val] of Object.entries(users.online)) {
+
+                // console.log(user.username,"hada useer")
+                if (val == currentuser) {
+                    continue
+                }
+
+                let userDiv = document.createElement('div');
+                userDiv.classList.add('user');
+
+                // make random avatar 
+                let img = document.createElement('img');
+                //apii for random acvat
+                img.src = `https://api.dicebear.com/7.x/bottts/svg?seed=${val}`
+                img.alt = val;
+
+                let name = document.createElement('span');
+                name.textContent = val;
+
+
+                // if online do green 
+                let status = document.createElement('div');
+                status.classList.add('online');
+                //need to add ofline
+
+                userDiv.addEventListener('click', () => {
+                    chatbox.style.display = "block"
+                    messageinput.style.display = "block"
+                    sendbutton.style.display = "block"
+                    talkingto.style.display = "block" 
+
+                    // console.log('selectdUser:', user.username);
+                    sendto = val
+                    talkingto.innerHTML = ""
+                    talkingto.innerHTML = "Your'e talking white :" + sendto
+                    initialisechat(currentuser, sendto)
+                    //  getchatconversation()
+
+                });
 
                 userDiv.appendChild(img);
                 userDiv.appendChild(name);
@@ -189,7 +241,6 @@ async function connectwebsocket() {
     }
 }
 
- 
 
 
 
@@ -199,79 +250,80 @@ async function connectwebsocket() {
 
 
 
-async function fetchConversation(user1,user2,fetchmore=false) {
-   console.log(messageloaded,"messageload")
-    if (fetching)return
-    try{
 
-        fetching=true
-        const chatBox=document.getElementById("chat-box")
+async function fetchConversation(user1, user2, fetchmore = false) {
+    console.log(messageloaded, "messageload")
+    if (fetching) return
+    try {
 
-        if(!fetchmore){
+        fetching = true
+        const chatBox = document.getElementById("chat-box")
 
-            chatBox.textContent=""
-            messageloaded=0;
+        if (!fetchmore) {
+
+            chatBox.textContent = ""
+            messageloaded = 0;
         }
 
-    const response=await fetch(
-        `/api/message-history?user1=${user1}&user2=${user2}&offset=${messageloaded}&limit=${10}`
-    )
-    if (!response.ok)throw new Error("cant fetch data nnnn from js")
-        
-    const messages=await response.json();
-    if (messages==null){
-        console.log("finisyo")
-        return
-    }
+        const response = await fetch(
+            `/api/message-history?user1=${user1}&user2=${user2}&offset=${messageloaded}&limit=${10}`
+        )
+        if (!response.ok) throw new Error("cant fetch data nnnn from js")
 
-    if (messages.length===0)return
-
-    const scrollHeight=chatBox.scrollHeight
-    const scrollPosition=chatBox.scrollTop
- 
-
-    messages.forEach(msg => {
-
-        const messageElement=document.createElement("div")
-        messageElement.classList.add("message")
-        let x=msg.sender_id+":"
-        let y=msg.message_content
-        let z=formatDate(msg.created_at)
-        messageElement.innerText=x+ " "+ y+" "+z 
-
-        if (fetchmore){
-            chatBox.prepend(messageElement)
-        }else{
-            chatBox.appendChild(messageElement)
+        const messages = await response.json();
+        if (messages == null) {
+            console.log("finisyo")
+            return
         }
 
-    
+        if (messages.length === 0) return
+
+        const scrollHeight = chatBox.scrollHeight
+        const scrollPosition = chatBox.scrollTop
 
 
+        messages.forEach(msg => {
+
+            const messageElement = document.createElement("div")
+            messageElement.classList.add("message")
+            let x = msg.sender_id + ":"
+            let y = msg.message_content
+            let z = formatDate(msg.created_at)
+            messageElement.innerText = x + " " + y + " " + z
+
+            if (fetchmore) {
+                chatBox.prepend(messageElement)
+            } else {
+                chatBox.appendChild(messageElement)
+            }
+
+
+
+
+        }
+
+
+        );
+        //messages.length=10
+
+        messageloaded += messages.length
+
+        if (fetchmore) {
+            chatBox.scrollTop = chatBox.scrollHeight - scrollHeight + scrollPosition;
+        } else {
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+
+
+
+    } catch (error) {
+        console.log("err fetching conv", error)
+
+    } finally {
+        fetching = false
     }
 
-
-);
-//messages.length=10
-
-messageloaded+=messages.length
- 
-if (fetchmore) {
-    chatBox.scrollTop = chatBox.scrollHeight - scrollHeight + scrollPosition;
-} else {
-    chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-
-
-
-    }catch(error){
-        console.log("err fetching conv",error)
-
-    }finally{
-        fetching=false
-    }
-    
 }
 
 
@@ -315,10 +367,10 @@ function sendMessage() {
     let message = messageInput.value.trim();
     // let currenttime=new Date().toTimeString().split(' ')[0];   
     // let currenttime=new Date().toTimeString()
-    let currenttime=new Date()
-     
-    
- 
+    let currenttime = new Date()
+
+
+
 
     if (message !== "") {
         let chatBox = document.getElementById("chat-box");
@@ -348,20 +400,20 @@ function sendMessage() {
     }
     // fetchConversation(currentuser, sendto)
 
-                 
+
 
 }
 
 
-function throttle(func,delay){
+function throttle(func, delay) {
 
-    let lastcall=0
-    return function(...args){
-        const now=Date.now()
-        if (now-lastcall<delay){
+    let lastcall = 0
+    return function (...args) {
+        const now = Date.now()
+        if (now - lastcall < delay) {
             return
         }
-        lastcall=now
+        lastcall = now
         return func(...args)
     }
 
@@ -371,19 +423,19 @@ function throttle(func,delay){
 
 
 
-function initialisechat(user1,user2){
+function initialisechat(user1, user2) {
 
-    fetchConversation(user1,user2)
+    fetchConversation(user1, user2)
 
-    const chatBox=document.getElementById("chat-box")
+    const chatBox = document.getElementById("chat-box")
 
-    const handleScroll=throttle(()=>{
-        if (chatBox.scrollTop<30 && !fetching){
-            fetchConversation(user1,user2,true)
+    const handleScroll = throttle(() => {
+        if (chatBox.scrollTop < 30 && !fetching) {
+            fetchConversation(user1, user2, true)
         }
 
-    },100)
-    chatBox.addEventListener("scroll",handleScroll)
+    }, 100)
+    chatBox.addEventListener("scroll", handleScroll)
 
 
 

@@ -11,25 +11,21 @@ import (
 )
 
 func GetOfflineUsersHandler(w http.ResponseWriter, r *http.Request) {
-	var offlineUsers []string
+
 	onlinusernames := websok.ChatHub.GetOnlineUsersnames()
 	allUsers, err := allUsers(utils.Db1.Db)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	offlineUsers = offlinepeaple(onlinusernames, allUsers)
+	offlineUsers := offlinepeaple(onlinusernames, allUsers)
+	
+	response := make(map[string](map[string]string), len(offlineUsers))
 
-	type UserResponse struct {
-		Username string `json:"username"`
-	}
-	response := make([]UserResponse, len(offlineUsers))
 
-	for i, username := range offlineUsers {
-		response[i] = UserResponse{
-			Username: username,
-		}
-	}
+	response["online"] = onlinusernames
+	response["offline"] = offlineUsers
+
 
 	//fmt.Println("XXX", offlineUsers)
 	w.Header().Set("Content-Type", "application/json")
@@ -57,18 +53,18 @@ func allUsers(db *sql.DB) ([]string, error) {
 	return users, nil
 }
 
-func offlinepeaple(online []string, allUsers []string) []string {
-	var offline []string
-	for _, y := range allUsers {
-		if notContains(online, y) {
-			offline = append(offline, y)
+func offlinepeaple(online map[string]string, allUsers []string) map[string]string {
+	var offline = make(map[string]string)
+	for _, username := range allUsers {
+		if notContains(online, username) {
+			offline[username] = username
 		}
 	}
 
 	return offline
 }
 
-func notContains(s []string, str string) bool {
+func notContains(s map[string]string, str string) bool {
 	for _, v := range s {
 		if v == str {
 			return false
