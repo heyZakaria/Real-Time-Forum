@@ -96,6 +96,28 @@ function fetchOfflineUsers() {
                         talkingto.innerHTML = "Your'e talking white :" + sendto
                         initializeChat(currentuser, sendto)
                         showChat.val = true
+
+                       /*  if (messageinput) {
+                            let dots = document.querySelectorAll("#dot")
+                            messageinput.addEventListener('keydown', (e) => {
+                                dots.forEach(dot => {
+                                    console.log("waaaaaaaaaa");
+                                    asocket.send(
+                                        
+                                        dot.classList.add("dot")
+                                    )
+
+                                });
+                            })
+                            messageinput.addEventListener('keyup', () => {
+                                setTimeout(() => {
+                                    dots.forEach(dot => {
+                                        dot.classList.remove("dot")
+                                    });
+                                }, "3000");
+
+                            })
+                        } */
                     } else {
                         chat_section.style.display = "none"
 
@@ -113,8 +135,6 @@ function fetchOfflineUsers() {
             };
         })
         .catch(error => console.error('Error fetching ofline users:', error));
-
-
 }
 
 
@@ -135,7 +155,7 @@ async function connectWebsocket() {
     asocket = new WebSocket(`ws://localhost:4444/ws?username=${data.username}`);
     try {
         asocket.onopen = function () {
-            // console.log("Connected to WebSocket server");
+            console.log("Connected to WebSocket server");
         };
 
         asocket.onmessage = function (event) {
@@ -150,6 +170,8 @@ async function connectWebsocket() {
                 // chatBox.appendChild(messageElement);
                 // fetchConversation()
                 initializeChat(currentuser, sendto)
+                console.log("wwwww");
+
             }
         };
 
@@ -285,26 +307,7 @@ function initializeChat(user1, user2) {
     fetchConversation(user1, user2)
 
     const chatBox = document.getElementById("chat-box")
-    console.log("Chwiya BChwiya");
     messageinput = document.getElementById("message-input")
-    if (messageinput) {
-        console.log("Siiiiiiiiiiiir");
-        let dots = document.querySelectorAll("#dot")
-        messageinput.addEventListener('keydown', (e) => {
-            dots.forEach(dot => {
-                dot.classList.add("dot")
-
-            });
-        })
-        messageinput.addEventListener('keyup', () => {
-            setTimeout(() => {
-                dots.forEach(dot => {
-                    dot.classList.remove("dot")
-                });
-            }, "2000");
-
-        })
-    }
 
     const handleScroll = throttle(() => {
         if (chatBox.scrollTop < 30 && !fetching) {

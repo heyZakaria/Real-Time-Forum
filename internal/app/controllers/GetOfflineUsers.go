@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"maps"
 	"net/http"
 
 	"forum/internal/app/models/utils"
@@ -19,15 +20,14 @@ func GetOfflineUsersHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	offlineUsers := offlinepeaple(onlinusernames, allUsers)
+
 	
-	response := make(map[string](map[string]string), len(offlineUsers))
-
-	response["online"] = onlinusernames
-	response["offline"] = offlineUsers
-
-	//fmt.Println("XXX", offlineUsers)
+	// This copies all onlineusername to offlineUsers
+	// so we have one object, I need sorting
+	maps.Copy(offlineUsers, onlinusernames)
+	fmt.Println(offlineUsers)
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
+	json.NewEncoder(w).Encode(offlineUsers)
 }
 
 func allUsers(db *sql.DB) ([]string, error) {
@@ -50,19 +50,19 @@ func allUsers(db *sql.DB) ([]string, error) {
 	return users, nil
 }
 
-func offlinepeaple(online map[string]string, allUsers []string) map[string]string {
-	var offline = make(map[string]string)
+func offlinepeaple(online map[string]bool, allUsers []string) map[string]bool {
+	var offline = make(map[string]bool)
 	for _, username := range allUsers {
 		if notContains(online, username) {
-			offline[username] = username
+			offline[username] = false
 		}
 	}
-	
+
 	return offline
 }
 
-func notContains(s map[string]string, str string) bool {
-	for _, v := range s {
+func notContains(s map[string]bool, str string) bool {
+	for v := range s {
 		if v == str {
 			return false
 		}

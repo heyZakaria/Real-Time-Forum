@@ -70,11 +70,11 @@ func (h *Storeactivewebsocketclient) Run() {
 	}
 }
 
-func (h *Storeactivewebsocketclient) GetOnlineUsersnames() map[string]string {
-	var online = make(map[string]string)
+func (h *Storeactivewebsocketclient) GetOnlineUsersnames() map[string]bool {
+	var online = make(map[string]bool)
 
 	for username := range h.Clients {
-		online[username] = username
+		online[username] = true
 	}
 	return online
 }
