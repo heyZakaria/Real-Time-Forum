@@ -40,7 +40,7 @@ export function route(e, bol) {
     if (bol) {
         // This is when you try to post or react but you're not registred
         // you need to go to login
-        window.history.pushState({e}, null, e)
+        window.history.pushState({ e }, null, e)
         handleLocation()
 
     } else {
@@ -65,16 +65,15 @@ const handleLocation = async () => {
     let contentWrapper = document.querySelector(".content")
 
 
-    if (path != "/register" || path != "/login" || path != "/") {
+    if (path != "/register" && path != "/login" && path != "/") {
         contentWrapper.innerHTML = ""
         contentWrapper.innerHTML = myCode.errata
-        //   lunchListener(backHome)
+        return
     }
 
     if (path == "/") {
         contentWrapper.innerHTML = ""
         contentWrapper.innerHTML = myCode.home
-        //  lunchListener(addPost, filter, loadMore)
 
         let userid = await Registred()
         if (userid) {
@@ -85,17 +84,31 @@ const handleLocation = async () => {
         } else {
             route("/login", true)
         }
+        return 
     }
 
     if (path == "/login") {
+        let userid = await Registred()
+        if (userid) {
+            route("/", true)
+            return
+        }
 
         contentWrapper.innerHTML = ""
         contentWrapper.innerHTML = myCode.login
         lunchListener("login_form")
+        return
     }
-    
-    
+
+
     if (path == "/register") {
+
+        let userid = await Registred()
+        if (userid) {
+            route("/", true)
+            return
+        }
+
         contentWrapper.innerHTML = ""
         contentWrapper.innerHTML = myCode.register
         lunchListener("regsiter_form")
@@ -125,7 +138,7 @@ function lunchListener(toListenTo, toListenTo1, toListenTo2) {
             }
         })
     } else {
-        
+
         document.querySelector(`.${toListenTo}`).addEventListener("click", async function (event) {
             event.preventDefault()
 

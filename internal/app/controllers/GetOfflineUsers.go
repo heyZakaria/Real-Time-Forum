@@ -22,10 +22,8 @@ func GetOfflineUsersHandler(w http.ResponseWriter, r *http.Request) {
 	
 	response := make(map[string](map[string]string), len(offlineUsers))
 
-
 	response["online"] = onlinusernames
 	response["offline"] = offlineUsers
-
 
 	//fmt.Println("XXX", offlineUsers)
 	w.Header().Set("Content-Type", "application/json")
@@ -48,7 +46,6 @@ func allUsers(db *sql.DB) ([]string, error) {
 		}
 
 		users = append(users, user)
-
 	}
 	return users, nil
 }
@@ -60,7 +57,7 @@ func offlinepeaple(online map[string]string, allUsers []string) map[string]strin
 			offline[username] = username
 		}
 	}
-
+	
 	return offline
 }
 

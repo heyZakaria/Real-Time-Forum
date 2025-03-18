@@ -9,7 +9,7 @@ let fetching = false
 let messageloaded = 0
 
 export function startws() {
-    connectwebsocket()
+    connectWebsocket()
 
     // setInterval(fetchOnlineUsers, 1000);
     setInterval(fetchOfflineUsers, 2000);
@@ -19,81 +19,8 @@ export function startws() {
 
 }
 
-/* function fetchOnlineUsers() {
-
-    ///need to add this to fetch_data.jsConnected
-
-    fetch('/api/online-users')
-        .then(response => response.json())
-        .then(users => {
-            let userList = document.getElementById('online-list');
-            let chatbox = document.getElementById("chat-box")
-            let messageinput = document.getElementById("message-input")
-            let sendbutton = document.getElementById("sendbutton")
-            let talkingto = document.getElementById("talkingto")
-
-            if (userList != null) {
-                userList.innerHTML = ''; //clear last status
-            } else {
-                
-                return
-            }
-
-            // users.forEach(user => {
-            for (let user of users) {
-
-                // console.log(user.username,"hada useer")
-                if (user.username == currentuser) {
-                    continue
-                }
-
-                let userDiv = document.createElement('div');
-                userDiv.classList.add('user');
-
-                // make random avatar 
-                let img = document.createElement('img');
-                //apii for random acvat
-                img.src = `https://api.dicebear.com/7.x/bottts/svg?seed=${user.username}`
-                img.alt = user.username;
-
-                let name = document.createElement('span');
-                name.textContent = user.username;
-
-
-                // if online do green 
-                let status = document.createElement('div');
-                status.classList.add('online');
-                //need to add ofline
-
-                userDiv.addEventListener('click', () => {
-                    chatbox.style.display = "block"
-                    messageinput.style.display = "block"
-                    sendbutton.style.display = "block"
-                    talkingto.style.display = "block"
-
-                    // console.log('selectdUser:', user.username);
-                    sendto = user.username
-                    talkingto.innerHTML = ""
-                    talkingto.innerHTML = "you talk whit :" + sendto
-                    initialisechat(currentuser, sendto)
-                    //  getchatconversation()
-
-                });
-
-                userDiv.appendChild(img);
-                userDiv.appendChild(name);
-                userDiv.appendChild(status);
-                userList.appendChild(userDiv);
-
-            };
-        })
-        .catch(error => console.error('Error fetching online users:', error));
-} */
-// setInterval(fetchOnlineUsers, 1000);
-// fetchOnlineUsers();
-
 function fetchOfflineUsers() {
-    fetch('/api/offline-users')
+    fetch('/api/friends-list')
         .then(response => response.json())
         .then(users => {
             let userList = document.getElementById('friends-list');
@@ -102,6 +29,7 @@ function fetchOfflineUsers() {
             }
             userList.innerHTML = ''; //clear last status
 
+            ///////////////////////////////// OFFLINE ///////////////////////////////////// 
             for (const [key, val] of Object.entries(users.offline)) {
 
                 if (val == currentuser) {
@@ -130,11 +58,12 @@ function fetchOfflineUsers() {
                 userList.appendChild(userDiv);
 
             };
+            let chat_title = document.getElementById("chat-title")
             let chatbox = document.getElementById("chat-box")
             let messageinput = document.getElementById("message-input")
             let sendbutton = document.getElementById("sendbutton")
             let talkingto = document.getElementById("talkingto")
-
+            ///////////////////////////////// ONLINE /////////////////////////////////////
             for (const [key, val] of Object.entries(users.online)) {
 
                 // console.log(user.username,"hada useer")
@@ -159,18 +88,39 @@ function fetchOfflineUsers() {
                 let status = document.createElement('div');
                 status.classList.add('online');
                 //need to add ofline
-
+                let showChat = {}
+                showChat[val] = false
                 userDiv.addEventListener('click', () => {
-                    chatbox.style.display = "block"
-                    messageinput.style.display = "block"
-                    sendbutton.style.display = "block"
-                    talkingto.style.display = "block" 
 
-                    // console.log('selectdUser:', user.username);
-                    sendto = val
-                    talkingto.innerHTML = ""
-                    talkingto.innerHTML = "Your'e talking white :" + sendto
-                    initialisechat(currentuser, sendto)
+                    if (!showChat.val) {
+
+                        chat_title.style.display = "block"
+                        chatbox.style.display = "block"
+                        messageinput.style.display = "block"
+                        messageinput.addEventListener('keydown', (e) => {
+                            console.log("siiiiir", e);
+
+                        })
+                        messageinput.addEventListener('keyup', () => {
+                            console.log("7baassssssssss");
+
+                        })
+                        sendbutton.style.display = "block"
+                        talkingto.style.display = "block"
+                        sendto = val
+                        talkingto.innerHTML = ""
+                        talkingto.innerHTML = "Your'e talking white :" + sendto
+                        initializeChat(currentuser, sendto)
+                        showChat.val = true
+                    } else {
+                        chat_title.style.display = "none"
+                        chatbox.style.display = "none"
+                        messageinput.style.display = "none"
+                        sendbutton.style.display = "none"
+                        talkingto.style.display = "none"
+                        talkingto.innerHTML = ""
+                        showChat.val = false
+                    }
                     //  getchatconversation()
 
                 });
@@ -188,7 +138,7 @@ function fetchOfflineUsers() {
 // setInterval(fetchoflineusers,10000);
 // fetchoflineusers()
 
-async function connectwebsocket() {
+async function connectWebsocket() {
 
     //fetch current api from api endpoint 
     const response = await fetch("/api/current-user")
@@ -203,28 +153,23 @@ async function connectwebsocket() {
     //map[string]string{"username:"current user }
 
     asocket = new WebSocket(`ws://localhost:4444/ws?username=${data.username}`);
-    // `4
     try {
         asocket.onopen = function () {
             // console.log("Connected to WebSocket server");
-
         };
 
         asocket.onmessage = function (event) {
             let data = JSON.parse(event.data);
-            // console.log("New Message:", data);
 
             if (data) {
-
                 // let chatBox = document.getElementById("chat-box");
 
                 // let messageElement = document.createElement("p");
                 // messageElement.textContent = `${data.sender}: ${data.content}`;
 
-
                 // chatBox.appendChild(messageElement);
                 // fetchConversation()
-                initialisechat(currentuser, sendto)
+                initializeChat(currentuser, sendto)
             }
         };
 
@@ -232,7 +177,6 @@ async function connectwebsocket() {
             // console.log("WebSocket connection closed");
             let chatBox = document.getElementById("chat-box");
             chatBox.innerHTML = ""; // Clear chat box
-
         };
 
     } catch (error) {
@@ -241,25 +185,14 @@ async function connectwebsocket() {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-async function fetchConversation(user1, user2, fetchmore = false) {
-    console.log(messageloaded, "messageload")
+async function fetchConversation(user1, user2, fetchMore = false) {
     if (fetching) return
     try {
 
         fetching = true
         const chatBox = document.getElementById("chat-box")
 
-        if (!fetchmore) {
+        if (!fetchMore) {
 
             chatBox.textContent = ""
             messageloaded = 0;
@@ -281,7 +214,6 @@ async function fetchConversation(user1, user2, fetchmore = false) {
         const scrollHeight = chatBox.scrollHeight
         const scrollPosition = chatBox.scrollTop
 
-
         messages.forEach(msg => {
 
             const messageElement = document.createElement("div")
@@ -291,32 +223,20 @@ async function fetchConversation(user1, user2, fetchmore = false) {
             let z = formatDate(msg.created_at)
             messageElement.innerText = x + " " + y + " " + z
 
-            if (fetchmore) {
+            if (fetchMore) {
                 chatBox.prepend(messageElement)
             } else {
                 chatBox.appendChild(messageElement)
             }
-
-
-
-
-        }
-
-
-        );
-        //messages.length=10
+        });
 
         messageloaded += messages.length
 
-        if (fetchmore) {
+        if (fetchMore) {
             chatBox.scrollTop = chatBox.scrollHeight - scrollHeight + scrollPosition;
         } else {
             chatBox.scrollTop = chatBox.scrollHeight;
         }
-
-
-
-
     } catch (error) {
         console.log("err fetching conv", error)
 
@@ -325,33 +245,6 @@ async function fetchConversation(user1, user2, fetchmore = false) {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-/////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 function formatDate(dateString) {
@@ -365,20 +258,15 @@ function sendMessage() {
 
     let messageInput = document.getElementById("message-input");
     let message = messageInput.value.trim();
-    // let currenttime=new Date().toTimeString().split(' ')[0];   
-    // let currenttime=new Date().toTimeString()
+
     let currenttime = new Date()
-
-
-
 
     if (message !== "") {
         let chatBox = document.getElementById("chat-box");
 
         let messageElement = document.createElement("p");
         messageElement.classList.add("message")
-        messageElement.textContent = `${currentuser}: ${message} ${formatDate(currenttime)} `;
-
+        messageElement.textContent = `${currentuser}: ${message} ${formatDate(currenttime)} "WEee`;
 
         chatBox.appendChild(messageElement);
         chatBox.scrollTop = chatBox.scrollHeight;
@@ -398,12 +286,8 @@ function sendMessage() {
             alert("Ta Select an Online user!");
         }
     }
-    // fetchConversation(currentuser, sendto)
-
-
 
 }
-
 
 function throttle(func, delay) {
 
@@ -419,11 +303,7 @@ function throttle(func, delay) {
 
 }
 
-
-
-
-
-function initialisechat(user1, user2) {
+function initializeChat(user1, user2) {
 
     fetchConversation(user1, user2)
 
@@ -436,7 +316,4 @@ function initialisechat(user1, user2) {
 
     }, 100)
     chatBox.addEventListener("scroll", handleScroll)
-
-
-
 }

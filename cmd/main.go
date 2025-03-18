@@ -36,7 +36,7 @@ func main() {
 	http.HandleFunc("/api/registred", controllers.CheckRegistration)
 	
 	// http.HandleFunc("/api/online-users", controllers.GetOnlineUsersHandler)
-	http.HandleFunc("/api/offline-users", controllers.GetOfflineUsersHandler)
+	http.HandleFunc("/api/friends-list", controllers.GetOfflineUsersHandler)
 	http.HandleFunc("/api/message-history", controllers.SendMessageHistory)
 	http.HandleFunc("/api/current-user", controllers.GetCurrentUsername)
 
