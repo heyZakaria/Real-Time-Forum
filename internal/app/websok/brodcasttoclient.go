@@ -35,19 +35,12 @@ type Privatemessagestruct struct {
 
 func (h *Storeactivewebsocketclient) Run() {
 	for {
-		// fmt.Println(h.Clients, "all my clients")
-		// /	Clients:    make(map[string]*Client),
-
-		// for username := range h.Clients {
-		// 	fmt.Println("add to on_line user ", username)
-		// }
 
 		select {
 		case client := <-h.Regester:
 			h.mu.Lock()
 			h.Clients[client.Username] = client
 			h.mu.Unlock()
-			fmt.Println(client.Username, "was connected.")
 
 		case client := <-h.Unregester:
 			h.mu.Lock()
@@ -55,23 +48,15 @@ func (h *Storeactivewebsocketclient) Run() {
 			h.mu.Unlock()
 			client.Conn.Close()
 
-			///need to add ping pong logic and add it to mt handler
-			fmt.Println(client.Username, " by by close xanel disconnected")
-
 		case msg := <-h.Messages:
-			fmt.Println("New message received in ChatHub:", msg)
 
-			///////////////////////////////////////////////////////////lets save message to db
-
-			val, err := SaveMessage(utils.Db1.Db, msg.Sender, msg.Receiver, msg.Content)
+			_, err := SaveMessage(utils.Db1.Db, msg.Sender, msg.Receiver, msg.Content)
 			if err != nil {
 				fmt.Println("err save mesage", err)
 			}
-			fmt.Println("vaaal last indicat", val)
-
+ 
 			h.mu.Lock()
 			// show cliant
-			fmt.Println("Connected clients:", h.Clients)
 			receiver, exists := h.Clients[msg.Receiver]
 			h.mu.Unlock()
 
@@ -81,14 +66,11 @@ func (h *Storeactivewebsocketclient) Run() {
 			} else {
 				fmt.Println("Receiver not found:", msg.Receiver)
 			}
-
 		}
 	}
 }
 
 func (h *Storeactivewebsocketclient) GetOnlineUsersnames() []string {
-	// h.mu.Lock()
-	// defer h.mu.Unlock()
 	usernames := make([]string, 0, len(h.Clients))
 	for username := range h.Clients {
 		usernames = append(usernames, username)

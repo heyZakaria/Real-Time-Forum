@@ -144,11 +144,20 @@ export async function Get_All_Posts() {
 
         login.onclick = function () {
             if (login.innerText === "Logout") {
+                console.log("Logout")
                 // hide logout ----  show login
                 // delete session
                 document.cookie = 'session_id='; 'Max-Age=0'
                 login.innerText = "Login"
                 register.classList.remove("hidden")
+                fetch("/api/logout", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(),
+    
+                })
                 route("/login", true)
             }
         }

@@ -226,7 +226,6 @@ const sendHttpRequest = (method, url, data) => {
         xhr.onerror = () => {
             reject('Something went wrong!');
         };
-        console.log(data);
 
         xhr.send(JSON.stringify(data));
     });
