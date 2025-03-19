@@ -38,7 +38,7 @@ func main() {
 	// http.HandleFunc("/api/online-users", controllers.GetOnlineUsersHandler)
 	http.HandleFunc("/api/friends-list", controllers.GetOfflineUsersHandler)
 	http.HandleFunc("/api/message-history", controllers.SendMessageHistory)
-	http.HandleFunc("/api/sendnotification",controllers.Sendnotification)
+	//http.HandleFunc("/api/sendnotification",controllers.Sendnotification)
 	// http.HandleFunc("/api/sendnotification",controllers.Sendnotification)
 	http.HandleFunc("/api/current-user", controllers.GetCurrentUsername)
 

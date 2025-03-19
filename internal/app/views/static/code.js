@@ -6,7 +6,7 @@ export const myCode = {
     <!--                 HOME                   -->
  
         <div class="homeCode">
-        
+         <div class="notif"></div>
 
             <div>
             <div id ="offline-users"></div>

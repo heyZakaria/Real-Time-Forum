@@ -1,4 +1,7 @@
 
+
+
+
 let aSocket
 
 let sendTo
@@ -29,8 +32,8 @@ function fetchOfflineUsers() {
                 return
             }
             userList.innerHTML = ''; //clear last status
-           // let s = Object.assign(sortable, talkedWith)
-           // console.log(s, "==========");
+            // let s = Object.assign(sortable, talkedWith)
+            // console.log(s, "==========");
             /* for (const [key, val] of Object.entries(users)) {
                 if (!sortable.keys(key)) {
                     sortable(key) = val
@@ -132,6 +135,23 @@ async function connectWebsocket() {
     try {
         aSocket.onopen = function () {
             console.log("Connected to WebSocket server");
+            /* //if (messageinput) {
+                let dots = document.querySelectorAll("#dot")
+                messageinput.addEventListener('keydown', (e) => {
+                    dots.forEach(dot => {
+                        dot.classList.add("dot")
+    
+                    });
+                })
+                messageinput.addEventListener('keyup', () => {
+                    setTimeout(() => {
+                        dots.forEach(dot => {
+                            dot.classList.remove("dot")
+                        });
+                    }, "2000");
+    
+                })
+          //  } */
         };
 
         aSocket.onmessage = function (event) {
@@ -145,9 +165,16 @@ async function connectWebsocket() {
 
                 // chatBox.appendChild(messageElement);
                 // fetchConversation()
-               
 
-                
+              //  console.log("ONMESSAGE 4", data);
+
+                let notif = document.querySelector(".notif")
+                notif.innerText = "New Message"
+                notif.classList.add("notification")
+                setTimeout(() => {
+                    notif.innerText = ""
+                    notif.classList.remove("notification")
+                }, "3000");
                 initializeChat(currentUser, sendTo)
 
             }
@@ -158,6 +185,7 @@ async function connectWebsocket() {
             let chatBox = document.getElementById("chat-box");
             chatBox.innerHTML = ""; // Clear chat box
         };
+
 
     } catch (error) {
 
@@ -204,10 +232,10 @@ async function fetchConversation(user1, user2, fetchMore = false) {
 
             if (fetchMore) {
                 chatBox.prepend(messageElement)
-                console.log("22222222222",y)
+                //console.log("22222222222",y)
             } else {
                 chatBox.prepend(messageElement)
-                console.log("1111111111111",y)
+                //console.log("1111111111111",y)
 
             }
         });
@@ -251,12 +279,13 @@ function sendMessage() {
         chatBox.scrollTop = chatBox.scrollHeight;
 
         if (sendTo) {
-           /*  talkedWith.push(currentUser, sendTo)
-            console.log("currentUser", currentUser);
-            console.log("sendTo", sendTo);
-            console.log(talkedWith); */
-            
-            
+            /*  talkedWith.push(currentUser, sendTo)
+             console.log("currentUser", currentUser);
+             console.log("sendTo", sendTo);
+             console.log(talkedWith); */
+
+            console.log("SEND 1", message, sendTo);
+
             // Send the message
             aSocket.send(JSON.stringify({
                 type: "message",
@@ -304,11 +333,11 @@ function initializeChat(user1, user2) {
 
 
 
-async function sendnotification(sender,receiver){
- 
+async function sendnotification(sender, receiver) {
 
 
-    const response=await fetch (
+
+    const response = await fetch(
         `/api/sendnotification?sender=${sender}&reciver?=${receiver}`
     )
 

@@ -1,10 +1,6 @@
 package controllers
 
-import "net/http"
-
-
-
-func Sendnotification(w http.ResponseWriter,r *http.Request){
+/* func Sendnotification(w http.ResponseWriter,r *http.Request){
 
 	w.Header().Set("Content-Type", "application/json")
 	sender := r.URL.Query().Get("sender")
@@ -18,4 +14,4 @@ func Sendnotification(w http.ResponseWriter,r *http.Request){
 
 
 
-}
+} */

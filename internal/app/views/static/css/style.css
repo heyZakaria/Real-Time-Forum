@@ -684,3 +684,23 @@ fieldset {
 .dot:nth-child(3) {
     animation-delay: 0.9999s;
 }
+
+@keyframes move {
+    50% {
+        opacity: 1;
+    }
+}
+.notification {
+    position: absolute;
+    width: 200px;
+    height: 50px;
+    background-color: var(--primaryColor);
+    color: var(--secondaryColor);
+    display: flex;
+    justify-content: center;
+    align-items: center; /* align verticaly */
+    font-weight: 600;
+    padding: 5px;
+    opacity: .8;
+
+}
