@@ -6,9 +6,7 @@ import (
 )
 
 func GetCurrentUsername(w http.ResponseWriter, r *http.Request) {
-
 	// we already made selecuser and selectusername
-
 	cookie, err := r.Cookie("session_id")
 	if err != nil {
 		http.Error(w, "not authenticated", http.StatusUnauthorized)
@@ -20,7 +18,6 @@ func GetCurrentUsername(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "user not found", http.StatusUnauthorized)
 		return
 	}
-
 	//grt username
 	username, err := SelectUsername(user_id)
 	if err != nil {
@@ -29,10 +26,6 @@ func GetCurrentUsername(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// return as json
-
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{"username": username})
-
-	// json.NewEncoder(w),Encode(map string{{"usernameusername": username}})
-
 }

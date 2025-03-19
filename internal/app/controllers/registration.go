@@ -29,8 +29,6 @@ var (
 	validpassword = true
 )
 
-// drari hadi ana (anouar) liztha
-
 func Registration(w http.ResponseWriter, r *http.Request) {
 
 	page := []string{"internal/app/views/templates/forum.html"}
@@ -93,8 +91,9 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 				gender = "M"
 
 			}
-			err0 := inseredata(utils.Db1.Db, request.Email, request.First_name, request.Last_name, gender, request.Username, string(hashedPassword), request.Age)
-			if err0 != nil {
+			username := strings.ToLower(request.Username)
+			err := insereData(utils.Db1.Db, request.Email, request.First_name, request.Last_name, gender, username, string(hashedPassword), request.Age)
+			if err != nil {
 				response["InternalError"] = true
 				w.WriteHeader(http.StatusInternalServerError)
 				json.NewEncoder(w).Encode(response)
@@ -160,7 +159,7 @@ func EmailOrUsernameExiste(db *sql.DB, email, username string) (bool, error) {
 	return false, nil
 }
 
-func inseredata(db *sql.DB, email, first_name, last_name, gender, username, password, age string) error {
+func insereData(db *sql.DB, email, first_name, last_name, gender, username, password, age string) error {
 	query := "INSERT INTO users (username,age, gender,first_name,last_name,  email, password_hash) VALUES (?, ?, ?, ?, ?, ?,?)"
 
 	_, err := db.Exec(query, username, age, gender, first_name, last_name, email, password)

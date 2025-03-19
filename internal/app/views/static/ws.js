@@ -1,8 +1,8 @@
 
-let asocket
+let aSocket
 
-let sendto
-let currentuser
+let sendTo
+let currentUser
 
 
 let fetching = false
@@ -18,7 +18,8 @@ export function startws() {
 
 }
 let messageinput
-
+let talkedWith = []
+let sortable = {}
 function fetchOfflineUsers() {
     fetch('/api/friends-list')
         .then(response => response.json())
@@ -28,11 +29,21 @@ function fetchOfflineUsers() {
                 return
             }
             userList.innerHTML = ''; //clear last status
+           // let s = Object.assign(sortable, talkedWith)
+           // console.log(s, "==========");
+            /* for (const [key, val] of Object.entries(users)) {
+                if (!sortable.keys(key)) {
+                    sortable(key) = val
+                }
+            } */
+            //console.log(users, "--------");
 
-            ///////////////////////////////// OFFLINE ///////////////////////////////////// 
-            for (const [key, val] of Object.entries(users.offline)) {
+            ///////////////////////////////// ALL USERS ///////////////////////////////////// 
+            ///////////////////////////////// KEY == USERNAME ///////////////////////////////////// 
+            ///////////////////////////////// VAL == TRUE/FALSE ///////////////////////////////////// 
+            for (const [key, val] of Object.entries(users)) {
 
-                if (val == currentuser) {
+                if (key == currentUser) {
                     continue
                 }
 
@@ -42,15 +53,56 @@ function fetchOfflineUsers() {
                 // make random avatar 
                 let img = document.createElement('img');
                 //apii for random acvatr
-                img.src = `https://api.dicebear.com/7.x/bottts/svg?seed=${val}`
-                img.alt = val;
+                img.src = `https://api.dicebear.com/7.x/bottts/svg?seed=${key}`
+                img.alt = key;
 
                 let name = document.createElement('span');
-                name.textContent = val;
+                name.textContent = key;
 
                 // if online do green 
                 let status = document.createElement('div');
-                status.classList.add('offline');
+                if (val) {
+
+                    status.classList.remove('offline');
+                    status.classList.add('online');
+                    let showChat = {}
+                    showChat[key] = false
+                    userDiv.addEventListener('click', () => {
+
+                        if (!showChat.key) {
+
+                            chat_section.style.display = "block"
+                            sendTo = key
+                            talkingto.innerHTML = ""
+                            talkingto.innerHTML = "Your'e talking with : " + sendTo
+                            initializeChat(currentUser, sendTo)
+                            showChat.key = true
+                        } else {
+                            chat_section.style.display = "none"
+
+                            talkingto.innerHTML = ""
+                            showChat.val = false
+                            sendTo = ""
+                        }
+                    });
+
+                } else {
+                    /* userDiv.addEventListener('click', () => {
+                        if (showChat.key) {
+                            chat_section.style.display = "none"
+
+                            talkingto.innerHTML = ""
+                            showChat.val = false
+                            sendTo = ""
+                        }
+
+
+                    }); */
+                    status.classList.add('offline');
+                    status.classList.remove('online');
+
+                }
+
 
                 userDiv.appendChild(img);
                 userDiv.appendChild(name);
@@ -59,80 +111,6 @@ function fetchOfflineUsers() {
 
             };
             let chat_section = document.getElementById("chat_section")
-
-            ///////////////////////////////// ONLINE /////////////////////////////////////
-            for (const [key, val] of Object.entries(users.online)) {
-
-                // console.log(user.username,"hada useer")
-                if (val == currentuser) {
-                    continue
-                }
-
-                let userDiv = document.createElement('div');
-                userDiv.classList.add('user');
-
-                // make random avatar 
-                let img = document.createElement('img');
-                //apii for random acvat
-                img.src = `https://api.dicebear.com/7.x/bottts/svg?seed=${val}`
-                img.alt = val;
-
-                let name = document.createElement('span');
-                name.textContent = val;
-
-                // if online do green 
-                let status = document.createElement('div');
-                status.classList.add('online');
-                //need to add ofline
-                let showChat = {}
-                showChat[val] = false
-                userDiv.addEventListener('click', () => {
-
-                    if (!showChat.val) {
-
-                        chat_section.style.display = "block"
-                        sendto = val
-                        talkingto.innerHTML = ""
-                        talkingto.innerHTML = "Your'e talking white :" + sendto
-                        initializeChat(currentuser, sendto)
-                        showChat.val = true
-
-                       /*  if (messageinput) {
-                            let dots = document.querySelectorAll("#dot")
-                            messageinput.addEventListener('keydown', (e) => {
-                                dots.forEach(dot => {
-                                    console.log("waaaaaaaaaa");
-                                    asocket.send(
-                                        
-                                        dot.classList.add("dot")
-                                    )
-
-                                });
-                            })
-                            messageinput.addEventListener('keyup', () => {
-                                setTimeout(() => {
-                                    dots.forEach(dot => {
-                                        dot.classList.remove("dot")
-                                    });
-                                }, "3000");
-
-                            })
-                        } */
-                    } else {
-                        chat_section.style.display = "none"
-
-                        talkingto.innerHTML = ""
-                        showChat.val = false
-                        sendto = ""
-                    }
-                });
-
-                userDiv.appendChild(img);
-                userDiv.appendChild(name);
-                userDiv.appendChild(status);
-                userList.appendChild(userDiv);
-
-            };
         })
         .catch(error => console.error('Error fetching ofline users:', error));
 }
@@ -147,18 +125,16 @@ async function connectWebsocket() {
     }
     //pars json response
     const data = await response.json()
-    currentuser = data.username
+    currentUser = data.username
 
-    //user the username for websocket conection 
-    //map[string]string{"username:"current user }
 
-    asocket = new WebSocket(`ws://localhost:4444/ws?username=${data.username}`);
+    aSocket = new WebSocket(`ws://localhost:4444/ws?username=${data.username}`);
     try {
-        asocket.onopen = function () {
+        aSocket.onopen = function () {
             console.log("Connected to WebSocket server");
         };
 
-        asocket.onmessage = function (event) {
+        aSocket.onmessage = function (event) {
             let data = JSON.parse(event.data);
 
             if (data) {
@@ -169,13 +145,15 @@ async function connectWebsocket() {
 
                 // chatBox.appendChild(messageElement);
                 // fetchConversation()
-                initializeChat(currentuser, sendto)
-                console.log("wwwww");
+               
+
+                
+                initializeChat(currentUser, sendTo)
 
             }
         };
 
-        asocket.onclose = function () {
+        aSocket.onclose = function () {
             // console.log("WebSocket connection closed");
             let chatBox = document.getElementById("chat-box");
             chatBox.innerHTML = ""; // Clear chat box
@@ -264,21 +242,24 @@ function sendMessage() {
 
         let messageElement = document.createElement("p");
         messageElement.classList.add("message")
-        messageElement.textContent = `${currentuser}: ${message} ${formatDate(currentTime)} `;
+        messageElement.textContent = `${currentUser}: ${message} ${formatDate(currentTime)} `;
 
         chatBox.appendChild(messageElement);
         chatBox.scrollTop = chatBox.scrollHeight;
-        console.log(sendto, "--------------");
-        console.log(message, "_______");
 
-        if (sendto) {
-
+        if (sendTo) {
+           /*  talkedWith.push(currentUser, sendTo)
+            console.log("currentUser", currentUser);
+            console.log("sendTo", sendTo);
+            console.log(talkedWith); */
+            
+            
             // Send the message
-            asocket.send(JSON.stringify({
+            aSocket.send(JSON.stringify({
                 type: "message",
                 // sender: currentUser,  //     current user session data 
                 content: message,
-                receiver: sendto
+                receiver: sendTo
             }));
             messageInput.value = "";
         } else {

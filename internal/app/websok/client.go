@@ -26,7 +26,7 @@ func (c *Client) ReadMessages() {
 		var msg Privatemessagestruct
 		err := c.Conn.ReadJSON(&msg)
 		if err != nil {
-			fmt.Println("err erading msg mfk", err)
+			fmt.Println("Error reading msg ", err)
 			break
 		}
 		// solve the problem of the sender dammmnit
@@ -41,7 +41,6 @@ func (c *Client) Writemessages() {
 	for msg := range c.Send {
 
 		msgjson, _ := json.Marshal(msg)
-		fmt.Println(string(msgjson), "waaaaaaaa")
 		err := c.Conn.WriteMessage(websocket.TextMessage, msgjson)
 		if err != nil {
 			fmt.Println("err writng the message mfk", err)

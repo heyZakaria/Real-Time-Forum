@@ -23,7 +23,7 @@ export async function verifyLogin() {
         errorDiv.style.color = "red"
 
       } else {
-        errorDiv.innerHTML = "Your password or username is incorrect.!"
+        errorDiv.innerHTML = "Your password or username is incorrect.! OR a char in username is upperCase!"
         errorDiv.style.color = "red"
         errorDiv.style.margin = "5px"
       }

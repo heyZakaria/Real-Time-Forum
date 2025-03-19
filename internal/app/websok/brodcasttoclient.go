@@ -11,11 +11,12 @@ import (
 // i have hup in package websok
 // but GetOnlineUsersHandler() in package controller
 type Storeactivewebsocketclient struct {
-	Clients    map[string]*Client
-	Regester   chan *Client
-	Unregester chan *Client
-	Messages   chan Privatemessagestruct
-	mu         sync.Mutex
+	Clients        map[string]*Client
+	Regester       chan *Client
+	Unregester     chan *Client
+	Messages       chan Privatemessagestruct
+	LastInertedMsg int64
+	mu             sync.Mutex
 }
 
 var ChatHub = &Storeactivewebsocketclient{
@@ -56,13 +57,15 @@ func (h *Storeactivewebsocketclient) Run() {
 			h.mu.Unlock()
 
 			if exists {
-				
-				_, err := SaveMessage(utils.Db1.Db, msg.Sender, msg.Receiver, msg.Content)
+
+				L, err := SaveMessage(utils.Db1.Db, msg.Sender, msg.Receiver, msg.Content)
 				if err != nil {
 					fmt.Println("err save mesage", err)
 				}
+				h.LastInertedMsg = L
+				//fmt.Println("---------------", O)
 				receiver.Send <- msg
-				
+
 			} else {
 				fmt.Println("Receiver not found:", msg.Receiver)
 			}

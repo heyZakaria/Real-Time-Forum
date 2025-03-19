@@ -34,7 +34,7 @@ func main() {
 	*/
 	http.HandleFunc("/api", api.Codage)
 	http.HandleFunc("/api/registred", controllers.CheckRegistration)
-	
+
 	// http.HandleFunc("/api/online-users", controllers.GetOnlineUsersHandler)
 	http.HandleFunc("/api/friends-list", controllers.GetOfflineUsersHandler)
 	http.HandleFunc("/api/message-history", controllers.SendMessageHistory)
