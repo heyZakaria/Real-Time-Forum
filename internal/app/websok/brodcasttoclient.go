@@ -36,14 +36,16 @@ type Privatemessagestruct struct {
 
 func (h *Storeactivewebsocketclient) Run() {
 	for {
-
 		select {
 		case client := <-h.Regester:
+			fmt.Println(<-h.Regester, "ddddd")
+			fmt.Println("!!!!!!!!!!!!!!!!!")
 			h.mu.Lock()
 			h.Clients[client.Username] = client
 			h.mu.Unlock()
 
 		case client := <-h.Unregester:
+			fmt.Println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1", client.Username)
 			h.mu.Lock()
 			delete(h.Clients, client.Username)
 			h.mu.Unlock()
@@ -80,4 +82,20 @@ func (h *Storeactivewebsocketclient) GetOnlineUsersnames() map[string]bool {
 		online[username] = true
 	}
 	return online
+}
+
+func UnregisterClientByUsername(username string) bool {
+	ChatHub.mu.Lock()
+	defer ChatHub.mu.Unlock()
+
+	client, exists := ChatHub.Clients[username]
+	if exists {
+		ChatHub.Unregester <- client
+		return true
+	} else {
+		for v := range ChatHub.Clients {
+			fmt.Println("stay", v)
+		}
+	}
+	return false
 }

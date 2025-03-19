@@ -143,14 +143,41 @@ export async function Get_All_Posts() {
         }
 
         login.onclick = function () {
-            if (login.innerText === "Logout") {
-                console.log("Logout")
+
+            if (login.innerText === "Logout") {  
+                
+                // const response =   fetch(
+                //     `/api/logout?token=${document.cookie}`
+                // )
+                // if (!response.ok) throw new Error("cant send tolken from js")
+            
+
+
+                //                 document.cookie = 'session_id='; 'Max-Age=0'
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+                ///////////////////////////////////////////////////////////////////////////////////
+                // console.log("Logout")
+
                 // hide logout ----  show login
                 // delete session
-                document.cookie = 'session_id='; 'Max-Age=0'
                 login.innerText = "Login"
+                // console.log(document.cookie,"@@@@@ERF")
                 register.classList.remove("hidden")
-                fetch("/api/logout", {
+
+                const response=    fetch(`/api/logout?token=${document.cookie}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -158,7 +185,11 @@ export async function Get_All_Posts() {
                     body: JSON.stringify(),
     
                 })
+                if (!response.ok) throw new Error("cant send tolken from js")
+
+
                 route("/login", true)
+
             }
         }
     }
@@ -316,3 +347,24 @@ export async function updateLikeandDislike(postId, reaction, action) {
         }
     }
 }
+
+
+
+
+//  async function sendtoken(token) {
+
+//     const response = await fetch(
+//         `/api/logout?token=${token}`
+//     )
+//     if (!response.ok) throw new Error("cant send tolken from js")
+
+//     // const messages =  response.json();
+//     // if (messages == null) {
+//     //     console.log("finisyo")
+//     //     return
+//     // }
+    
+// }
+
+
+ 

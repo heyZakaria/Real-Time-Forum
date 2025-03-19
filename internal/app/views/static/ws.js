@@ -204,8 +204,11 @@ async function fetchConversation(user1, user2, fetchMore = false) {
 
             if (fetchMore) {
                 chatBox.prepend(messageElement)
+                console.log("22222222222",y)
             } else {
-                chatBox.appendChild(messageElement)
+                chatBox.prepend(messageElement)
+                console.log("1111111111111",y)
+
             }
         });
 
@@ -297,4 +300,22 @@ function initializeChat(user1, user2) {
 
     }, 100)
     chatBox.addEventListener("scroll", handleScroll)
+}
+
+
+
+async function sendnotification(sender,receiver){
+ 
+
+
+    const response=await fetch (
+        `/api/sendnotification?sender=${sender}&reciver?=${receiver}`
+    )
+
+    if (!response.ok) throw new Error("cant fetx data from js sendnotification")
+
+
+
+
+
 }

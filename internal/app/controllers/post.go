@@ -34,6 +34,7 @@ func AddPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	cookie, err := r.Cookie("session_id")
+	// fmt.Println("#$#$#", cookie)
 	if err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
 		return

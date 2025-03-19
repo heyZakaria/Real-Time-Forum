@@ -13,6 +13,7 @@ type Message struct {
 	Content    string    `json:"message_content"`
 	CreatedAt  time.Time `json:"created_at"`
 }
+
 func SaveMessage(db *sql.DB, senderID, receiverID, content string) (int64, error) {
 	query := `INSERT INTO messages (sender_id, receiver_id, message_content, created_at) VALUES (?, ?, ?, CURRENT_TIMESTAMP)`
 
@@ -23,12 +24,12 @@ func SaveMessage(db *sql.DB, senderID, receiverID, content string) (int64, error
 	return result.LastInsertId()
 }
 
-func GetConversationHistory(db *sql.DB, userID1, userID2 string, limit int,offset int) ([]Message, error) {
+func GetConversationHistory(db *sql.DB, userID1, userID2 string, limit int, offset int) ([]Message, error) {
 	query := `
 	SELECT id, sender_id, receiver_id, message_content, created_at
 	FROM messages
 	WHERE (sender_id = ? AND receiver_id = ?) OR (sender_id = ? AND receiver_id = ?)
-	ORDER BY created_at ASC
+	ORDER BY created_at DESC
 	LIMIT ? OFFSET ?`
 
 	rows, err := db.Query(query, userID1, userID2, userID2, userID1, limit, offset)
