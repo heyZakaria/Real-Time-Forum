@@ -7,7 +7,7 @@ let aSocket
 let sendTo
 let currentUser
 
-
+let allUsers
 let fetching = false
 let messageloaded = 0
 
@@ -40,7 +40,7 @@ function fetchOfflineUsers() {
                 }
             } */
             //console.log(users, "--------");
-
+            allUsers = users
             ///////////////////////////////// ALL USERS ///////////////////////////////////// 
             ///////////////////////////////// KEY == USERNAME ///////////////////////////////////// 
             ///////////////////////////////// VAL == TRUE/FALSE ///////////////////////////////////// 
@@ -77,7 +77,7 @@ function fetchOfflineUsers() {
                             chat_section.style.display = "block"
                             sendTo = key
                             talkingto.innerHTML = ""
-                            talkingto.innerHTML = "Your'e talking with : " + sendTo
+                            talkingto.innerHTML = "Chating with : " + sendTo
                             initializeChat(currentUser, sendTo)
                             showChat.key = true
                         } else {
@@ -166,7 +166,7 @@ async function connectWebsocket() {
                 // chatBox.appendChild(messageElement);
                 // fetchConversation()
 
-              //  console.log("ONMESSAGE 4", data);
+                //  console.log("ONMESSAGE 4", data);
 
                 let notif = document.querySelector(".notif")
                 notif.innerText = "New Message"
@@ -181,9 +181,10 @@ async function connectWebsocket() {
         };
 
         aSocket.onclose = function () {
-            // console.log("WebSocket connection closed");
-            let chatBox = document.getElementById("chat-box");
-            chatBox.innerHTML = ""; // Clear chat box
+            console.log("WebSocket connection closed");
+            document.getElementById("chat-box").innerHTML = ""
+            document.getElementById("chat_section").style.display = "none";
+            sendTo = ""
         };
 
 
@@ -268,7 +269,7 @@ function sendMessage() {
 
     let currentTime = new Date()
 
-    if (message !== "") {
+    if (message !== "" && allUsers[sendTo] == true) {
         let chatBox = document.getElementById("chat-box");
 
         let messageElement = document.createElement("p");
@@ -297,6 +298,12 @@ function sendMessage() {
         } else {
             alert("Ta Select an Online user!");
         }
+    } else {
+        let chat_section = document.getElementById("chat_section")
+        chat_section.style.display = "none"
+        let chatBox = document.getElementById("message-input").innerText = ""
+        console.log("GO BAAAACK");
+
     }
 
 }

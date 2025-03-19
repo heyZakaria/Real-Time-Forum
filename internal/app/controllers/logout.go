@@ -20,9 +20,9 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 	realtoken := r.URL.Query().Get("token")
 	token := realtoken[11:]
 
-	fmt.Println("tooken kamla", token[11:])
+	//fmt.Println("tooken kamla", token[11:])
 
-	fmt.Println("tooken", token)
+	//fmt.Println("tooken", token)
 
 	// token, err := r.Cookie("session_id")
 	// // fmt.Println(token,"@@@@@@@@@@@@@@@@@")
@@ -30,12 +30,12 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 	// 	fmt.Println("11")
 	// }
 	user_id, err := SelectUser(token)
-	fmt.Println("useridlogu", user_id)
+	//fmt.Println("useridlogu", user_id)
 	if err != nil {
 		fmt.Println("22", err)
 	}
 	username, err := SelectUsername(user_id)
-	fmt.Println("usernamelogout:", username)
+	//fmt.Println("usernamelogout:", username)
 
 	if err != nil {
 		fmt.Println("33", err)
@@ -44,7 +44,7 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 	// RemoveSessionFromDB(utils.Db1.Db, token)
 	clearSession(w)
 
-	fmt.Println("REMOEV")
+	//fmt.Println("REMOEV")
 	// delete(h.Clients, c.Username)
 	// c.Conn.Close()
 
