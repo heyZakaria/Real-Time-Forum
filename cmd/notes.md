@@ -1,13 +1,13 @@
 ## To Do
 ## Zakaria Tasks
-Add Notification
+# Add Notification
 # Handle Html Injection
 Typing progress 
 users by order
 <!-- Ping Pong -->
-Close Socket when the user click logout and remove message section
+# Close Socket when the user click logout and remove message section
 # One users list just update the status 
-Whene someone is online don't give hime access to login or register page 
+# Whene someone is online don't give hime access to login or register page 
 
 
 
@@ -20,4 +20,4 @@ Whene someone is online don't give hime access to login or register page
 
 
 ## More
-Limitr message size
+Limite message size

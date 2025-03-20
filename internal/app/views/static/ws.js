@@ -1,7 +1,3 @@
-
-
-
-
 let aSocket
 
 let sendTo
@@ -31,16 +27,28 @@ function fetchOfflineUsers() {
             if (userList == null) {
                 return
             }
-            userList.innerHTML = ''; //clear last status
-            // let s = Object.assign(sortable, talkedWith)
-            // console.log(s, "==========");
-            /* for (const [key, val] of Object.entries(users)) {
-                if (!sortable.keys(key)) {
-                    sortable(key) = val
+          //  console.log(users.lastTalked);
+            //console.log(users.allUsers);
+            let myFriends = []
+            let count = 0
+            console.log(users.talkedWith == 0);
+            
+            
+            for (const [key, val] of Object.entries(users.lastTalked)) {
+                if ((count == val) && key != currentUser ) {
+
+                    myFriends.push(key)
+                    count++
                 }
-            } */
-            //console.log(users, "--------");
+
+            }
+           // console.log("myFriends", myFriends);
+
+            userList.innerHTML = '';
+
             allUsers = users
+
+
             ///////////////////////////////// ALL USERS ///////////////////////////////////// 
             ///////////////////////////////// KEY == USERNAME ///////////////////////////////////// 
             ///////////////////////////////// VAL == TRUE/FALSE ///////////////////////////////////// 
@@ -98,15 +106,11 @@ function fetchOfflineUsers() {
                             showChat.val = false
                             sendTo = ""
                         }
-
-
                     }); */
                     status.classList.add('offline');
                     status.classList.remove('online');
 
                 }
-
-
                 userDiv.appendChild(img);
                 userDiv.appendChild(name);
                 userDiv.appendChild(status);
@@ -158,15 +162,6 @@ async function connectWebsocket() {
             let data = JSON.parse(event.data);
 
             if (data) {
-                // let chatBox = document.getElementById("chat-box");
-
-                // let messageElement = document.createElement("p");
-                // messageElement.textContent = `${data.sender}: ${data.content}`;
-
-                // chatBox.appendChild(messageElement);
-                // fetchConversation()
-
-                //  console.log("ONMESSAGE 4", data);
 
                 let notif = document.querySelector(".notif")
                 notif.innerText = "New Message"
@@ -184,7 +179,7 @@ async function connectWebsocket() {
             console.log("WebSocket connection closed");
             document.getElementById("chat-box").innerHTML = ""
             document.getElementById("chat_section").style.display = "none";
-            sendTo = ""
+            //sendTo = ""
         };
 
 
@@ -338,20 +333,3 @@ function initializeChat(user1, user2) {
     chatBox.addEventListener("scroll", handleScroll)
 }
 
-
-
-async function sendnotification(sender, receiver) {
-
-
-
-    const response = await fetch(
-        `/api/sendnotification?sender=${sender}&reciver?=${receiver}`
-    )
-
-    if (!response.ok) throw new Error("cant fetx data from js sendnotification")
-
-
-
-
-
-}

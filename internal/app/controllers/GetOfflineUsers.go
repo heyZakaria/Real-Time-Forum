@@ -10,8 +10,6 @@ import (
 	"net/http"
 )
 
-type LMS websok.Storeactivewebsocketclient
-
 func GetOfflineUsersHandler(w http.ResponseWriter, r *http.Request) {
 
 	onlinUsernames := websok.ChatHub.GetOnlineUsersnames()
@@ -20,7 +18,10 @@ func GetOfflineUsersHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	_, err = allUsersByLastMSG(utils.Db1.Db)
+	// this one is like this {zakaria:0, hassan:1}
+	// to use this in frontend, in a loop add 0 to the first and 1 to the first ...
+	// just add every element to the top offcourse if
+	lastTalked, err := allUsersByLastMSG(utils.Db1.Db)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -30,43 +31,54 @@ func GetOfflineUsersHandler(w http.ResponseWriter, r *http.Request) {
 	// This copies all onlineusername to offlineUsers
 	// so we have one object, I need sorting
 	maps.Copy(offlineUsers, onlinUsernames)
-	//fmt.Println(websok.ChatHub.LastInertedMsg)
-	//lastChatUsers(utils.Db1.Db, int(websok.ChatHub.LastInertedMsg))
+
+	// this is just one object with 2 objects inside it
+	// you can access them in frontend (ws.js in fetchOfflineUsers function)
+	
+	finalMap := map[string]any{
+		"allUsers":   offlineUsers,
+		"lastTalked": lastTalked,
+	}
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(offlineUsers)
+	json.NewEncoder(w).Encode(finalMap)
 }
 
-func lastChatUsers(db *sql.DB, LIM int) {
-	query := `SELECT * FROM messages WHERE id = ?`
-	row := db.QueryRow(query, LIM)
-	var data string
-	row.Scan(data)
-	fmt.Println(data)
-}
-func allUsersByLastMSG(db *sql.DB) ([]string, error) {
-	query := `SELECT * FROM messages ORDER BY created_at`
+
+func allUsersByLastMSG(db *sql.DB) (map[string]int, error) {
+	query := `SELECT * FROM messages ORDER BY created_at `
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var users []string
+	var lastTalked = make(map[string]int)
+	//var users = []string{}
+	var id int
+	var sender string
+	var receiver string
+	var msg string
+	var created_at string
+	var count = 0
 	for rows.Next() {
-		var id int
-		var sender string
-		var receiver string
-		var msg string
-		var created_at string
 
-		if err := rows.Scan(&id,&sender, &receiver, &msg, &created_at ); err != nil {
+		if err := rows.Scan(&id, &sender, &receiver, &msg, &created_at); err != nil {
 			fmt.Println("err scaning users ,user", err)
 		}
-		users = append(users, sender, receiver)
-		
-		fmt.Println("---------", id, sender, receiver, msg, created_at )
+		if _, ok := lastTalked[sender]; !ok {
+			lastTalked[sender] = count
+			count++
+		} /* else if _, ok := lastTalked[receiver]; !ok {
+			lastTalked[receiver] = count
+			count++
+		} */
+
+		//fmt.Println("---------", id, sender, receiver, msg, created_at)
 	}
-	return users, nil
+
+	// fmt.Println("+++++++++", lastTalked)
+	return lastTalked, nil
 }
+
 func allUsers(db *sql.DB) ([]string, error) {
 	query := `SELECT username FROM users ORDER BY username`
 	rows, err := db.Query(query)
