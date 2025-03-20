@@ -17,8 +17,7 @@ export function startws() {
 
 }
 let messageinput
-let talkedWith = []
-let sortable = {}
+
 function fetchOfflineUsers() {
     fetch('/api/friends-list')
         .then(response => response.json())
@@ -27,31 +26,30 @@ function fetchOfflineUsers() {
             if (userList == null) {
                 return
             }
-          //  console.log(users.lastTalked);
+            //  console.log(users.lastTalked);
             //console.log(users.allUsers);
-            let myFriends = []
-            let count = 0
-            console.log(users.talkedWith == 0);
-            
-            
-            for (const [key, val] of Object.entries(users.lastTalked)) {
-                if ((count == val) && key != currentUser ) {
 
-                    myFriends.push(key)
-                    count++
-                }
+            /*  let myFriends = []
+             let count = 0
+ 
+             for (const [key, val] of Object.entries(users.lastTalked)) {
+                 if ((count == val) && key != currentUser) {
+ 
+                     myFriends.push(key)
+                     count++
+                 }
+ 
+             } */
 
-            }
-           // console.log("myFriends", myFriends);
 
             userList.innerHTML = '';
 
             allUsers = users
 
-
-            ///////////////////////////////// ALL USERS ///////////////////////////////////// 
+            ///////////////////////////////// for talked with --- USERS.lastTalked ///////////////////////////////////// 
+            ///////////////////////////////// for ALL --- USERS.allUsers ///////////////////////////////////// 
             ///////////////////////////////// KEY == USERNAME ///////////////////////////////////// 
-            ///////////////////////////////// VAL == TRUE/FALSE ///////////////////////////////////// 
+            ///////////////////////////////// VAL == TRUE/FALSE true for online / false is offline ///////////////////////////////////// 
             for (const [key, val] of Object.entries(users)) {
 
                 if (key == currentUser) {
@@ -228,10 +226,8 @@ async function fetchConversation(user1, user2, fetchMore = false) {
 
             if (fetchMore) {
                 chatBox.prepend(messageElement)
-                //console.log("22222222222",y)
             } else {
                 chatBox.prepend(messageElement)
-                //console.log("1111111111111",y)
 
             }
         });
@@ -275,10 +271,7 @@ function sendMessage() {
         chatBox.scrollTop = chatBox.scrollHeight;
 
         if (sendTo) {
-            /*  talkedWith.push(currentUser, sendTo)
-             console.log("currentUser", currentUser);
-             console.log("sendTo", sendTo);
-             console.log(talkedWith); */
+
 
             console.log("SEND 1", message, sendTo);
 
@@ -297,7 +290,6 @@ function sendMessage() {
         let chat_section = document.getElementById("chat_section")
         chat_section.style.display = "none"
         let chatBox = document.getElementById("message-input").innerText = ""
-        console.log("GO BAAAACK");
 
     }
 

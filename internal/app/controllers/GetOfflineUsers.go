@@ -20,7 +20,9 @@ func GetOfflineUsersHandler(w http.ResponseWriter, r *http.Request) {
 
 	// this one is like this {zakaria:0, hassan:1}
 	// to use this in frontend, in a loop add 0 to the first and 1 to the first ...
-	// just add every element to the top offcourse if
+	// just add every element to the top offcourse
+	// do this in frontend here is good
+	// you can access them in frontend (ws.js in fetchOfflineUsers function)
 	lastTalked, err := allUsersByLastMSG(utils.Db1.Db)
 	if err != nil {
 		fmt.Println(err)
@@ -34,7 +36,7 @@ func GetOfflineUsersHandler(w http.ResponseWriter, r *http.Request) {
 
 	// this is just one object with 2 objects inside it
 	// you can access them in frontend (ws.js in fetchOfflineUsers function)
-	
+
 	finalMap := map[string]any{
 		"allUsers":   offlineUsers,
 		"lastTalked": lastTalked,
@@ -42,7 +44,6 @@ func GetOfflineUsersHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(finalMap)
 }
-
 
 func allUsersByLastMSG(db *sql.DB) (map[string]int, error) {
 	query := `SELECT * FROM messages ORDER BY created_at `
@@ -52,7 +53,6 @@ func allUsersByLastMSG(db *sql.DB) (map[string]int, error) {
 	}
 	defer rows.Close()
 	var lastTalked = make(map[string]int)
-	//var users = []string{}
 	var id int
 	var sender string
 	var receiver string
