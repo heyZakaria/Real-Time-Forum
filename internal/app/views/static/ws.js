@@ -18,107 +18,238 @@ export function startws() {
 }
 let messageinput
 
+// function fetchOfflineUsers() {
+//     fetch('/api/friends-list')
+//         .then(response => response.json())
+//         .then(users => {
+//             let userList = document.getElementById('friends-list');
+//             if (userList == null) {
+//                 return
+//             }
+//             //  console.log(users.lastTalked);
+//             //console.log(users.allUsers);
+
+//             /*  let myFriends = []
+//              let count = 0
+
+//              for (const [key, val] of Object.entries(users.lastTalked)) {
+//                  if ((count == val) && key != currentUser) {
+
+//                      myFriends.push(key)
+//                      count++
+//                  }
+
+//              } */
+
+
+//             userList.innerHTML = '';
+
+//             allUsers = users
+
+//             ///////////////////////////////// for talked with --- USERS.lastTalked ///////////////////////////////////// 
+//             ///////////////////////////////// for ALL --- USERS.allUsers ///////////////////////////////////// 
+//             ///////////////////////////////// KEY == USERNAME ///////////////////////////////////// 
+//             ///////////////////////////////// VAL == TRUE/FALSE true for online / false is offline ///////////////////////////////////// 
+//             for (const [key, val] of Object.entries(users)) {
+
+//                 if (key == currentUser) {
+//                     continue
+//                 }
+
+//                 let userDiv = document.createElement('div');
+//                 userDiv.classList.add('user');
+
+//                 // make random avatar 
+//                 let img = document.createElement('img');
+//                 //apii for random acvatr
+//                 img.src = `https://api.dicebear.com/7.x/bottts/svg?seed=${key}`
+//                 img.alt = key;
+
+//                 let name = document.createElement('span');
+//                 name.textContent = key;
+
+//                 // if online do green 
+//                 let status = document.createElement('div');
+//                 if (val) {
+
+//                     status.classList.remove('offline');
+//                     status.classList.add('online');
+//                     let showChat = {}
+//                     showChat[key] = false
+//                     userDiv.addEventListener('click', () => {
+
+//                         if (!showChat.key) {
+
+//                             chat_section.style.display = "block"
+//                             sendTo = key
+//                             talkingto.innerHTML = ""
+//                             talkingto.innerHTML = "Chating with : " + sendTo
+//                             initializeChat(currentUser, sendTo)
+//                             showChat.key = true
+//                         } else {
+//                             chat_section.style.display = "none"
+
+//                             talkingto.innerHTML = ""
+//                             showChat.val = false
+//                             sendTo = ""
+//                         }
+//                     });
+
+//                 } else {
+//                     /* userDiv.addEventListener('click', () => {
+//                         if (showChat.key) {
+//                             chat_section.style.display = "none"
+
+//                             talkingto.innerHTML = ""
+//                             showChat.val = false
+//                             sendTo = ""
+//                         }
+//                     }); */
+//                     status.classList.add('offline');
+//                     status.classList.remove('online');
+
+//                 }
+//                 userDiv.appendChild(img);
+//                 userDiv.appendChild(name);
+//                 userDiv.appendChild(status);
+//                 userList.appendChild(userDiv);
+
+//             };
+//             let chat_section = document.getElementById("chat_section")
+//         })
+//         .catch(error => console.error('Error fetching ofline users:', error));
+// }
+
+//// i have a map :
+// finalMap := map[string]any{
+//     "allUsers":   offlineUsers,
+//     "lastTalked": lastTalked,
+// }
+
+
+ 
 function fetchOfflineUsers() {
     fetch('/api/friends-list')
+     
         .then(response => response.json())
         .then(users => {
             let userList = document.getElementById('friends-list');
             if (userList == null) {
-                return
+                return;
             }
-            //  console.log(users.lastTalked);
-            //console.log(users.allUsers);
 
-            /*  let myFriends = []
-             let count = 0
  
-             for (const [key, val] of Object.entries(users.lastTalked)) {
-                 if ((count == val) && key != currentUser) {
- 
-                     myFriends.push(key)
-                     count++
-                 }
- 
-             } */
-
-
             userList.innerHTML = '';
+            
+             const allUsers = users.allUsers;
+            const lastTalked = users.lastTalked;
+            
+             let userArray = [];
+            // i will use infinity in case there is no message to sort alphabiticly
+            for (const [username, isOnline] of Object.entries(allUsers)) {
+                if (username == currentUser) {
+                    continue;
+                }
+                
+                userArray.push({
+                    username: username,
+                    isOnline: isOnline,
+                    
+                     lastMessageOrder: username in lastTalked ? lastTalked[username] : Infinity
+                });
+            }
 
-            allUsers = users
 
-            ///////////////////////////////// for talked with --- USERS.lastTalked ///////////////////////////////////// 
-            ///////////////////////////////// for ALL --- USERS.allUsers ///////////////////////////////////// 
-            ///////////////////////////////// KEY == USERNAME ///////////////////////////////////// 
-            ///////////////////////////////// VAL == TRUE/FALSE true for online / false is offline ///////////////////////////////////// 
-            for (const [key, val] of Object.entries(users)) {
+            console.log("unsorted aray:", userArray);
 
-                if (key == currentUser) {
-                    continue
+
+            // Sort users
+            userArray.sort((a, b) => {
+                //3 cas 
+                
+                // 1 cas If two of peaple talked return last one
+
+                if (a.lastMessageOrder !== Infinity && b.lastMessageOrder !== Infinity) {
+                    return a.lastMessageOrder - b.lastMessageOrder;
                 }
 
+                //2 If only one had messages whit u the one with message comes first 
+                if (a.lastMessageOrder !== Infinity) {
+                    return -1;
+                }
+                if (b.lastMessageOrder !== Infinity) {
+                    return 1;
+                }
+                
+                // 3 if no one do locale compare (alphabitic)
+                return a.username.localeCompare(b.username);
+            });            
+            
+            
+            
+            console.log("sorted userArray:", userArray);
+
+
+            userArray.forEach(user => {
                 let userDiv = document.createElement('div');
                 userDiv.classList.add('user');
-
-                // make random avatar 
+                
                 let img = document.createElement('img');
-                //apii for random acvatr
-                img.src = `https://api.dicebear.com/7.x/bottts/svg?seed=${key}`
-                img.alt = key;
+                img.src = `https://api.dicebear.com/7.x/bottts/svg?seed=${user.username}`;
+                img.alt = user.username;
 
                 let name = document.createElement('span');
-                name.textContent = key;
+                name.textContent = user.username;
 
-                // if online do green 
                 let status = document.createElement('div');
-                if (val) {
-
+                if (user.isOnline) {
                     status.classList.remove('offline');
                     status.classList.add('online');
-                    let showChat = {}
-                    showChat[key] = false
+                    let showChat = {};
+                    showChat[user.username] = false;
+                    
                     userDiv.addEventListener('click', () => {
-
-                        if (!showChat.key) {
-
-                            chat_section.style.display = "block"
-                            sendTo = key
-                            talkingto.innerHTML = ""
-                            talkingto.innerHTML = "Chating with : " + sendTo
-                            initializeChat(currentUser, sendTo)
-                            showChat.key = true
+                        if (!showChat[user.username]) {
+                            chat_section.style.display = "block";
+                            sendTo = user.username;
+                            talkingto.innerHTML = "Chating with : " + sendTo;
+                            initializeChat(currentUser, sendTo);
+                            showChat[user.username] = true;
                         } else {
-                            chat_section.style.display = "none"
-
-                            talkingto.innerHTML = ""
-                            showChat.val = false
-                            sendTo = ""
+                            chat_section.style.display = "none";
+                            talkingto.innerHTML = "";
+                            showChat[user.username] = false;
+                            sendTo = "";
                         }
                     });
-
                 } else {
-                    /* userDiv.addEventListener('click', () => {
-                        if (showChat.key) {
-                            chat_section.style.display = "none"
-
-                            talkingto.innerHTML = ""
-                            showChat.val = false
-                            sendTo = ""
-                        }
-                    }); */
                     status.classList.add('offline');
                     status.classList.remove('online');
-
                 }
+                
                 userDiv.appendChild(img);
                 userDiv.appendChild(name);
                 userDiv.appendChild(status);
                 userList.appendChild(userDiv);
+            });
 
-            };
-            let chat_section = document.getElementById("chat_section")
+            let chat_section = document.getElementById("chat_section");
         })
-        .catch(error => console.error('Error fetching ofline users:', error));
+        .catch(error => console.error('Error fetching users:', error));
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 async function connectWebsocket() {
@@ -259,8 +390,9 @@ function sendMessage() {
     let message = messageInput.value.trim();
 
     let currentTime = new Date()
+    // if (message !== "" && allUsers[sendTo] == true) {
 
-    if (message !== "" && allUsers[sendTo] == true) {
+    if (message !== "" ) {
         let chatBox = document.getElementById("chat-box");
 
         let messageElement = document.createElement("p");
