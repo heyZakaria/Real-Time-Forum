@@ -23,7 +23,26 @@ func GetOfflineUsersHandler(w http.ResponseWriter, r *http.Request) {
 	// just add every element to the top offcourse
 	// do this in frontend here is good
 	// you can access them in frontend (ws.js in fetchOfflineUsers function)
-	lastTalked, err := allUsersByLastMSG(utils.Db1.Db)
+
+	token, err := r.Cookie("session_id")
+	// // fmt.Println(token,"@@@@@@@@@@@@@@@@@")
+	if err != nil {
+		fmt.Println("11")
+	}
+	user_id, err := SelectUser(token.Value)
+	// fmt.Println("useridlogu", user_id)
+	if err != nil {
+		fmt.Println("22", err)
+	}
+	curentuser, err := SelectUsername(user_id)
+	// fmt.Println("usernamelogout:", username)
+	if err != nil {
+		fmt.Println("33", err)
+	}
+
+	fmt.Println("##########", curentuser)
+
+	lastTalked, err := allUsersByLastMSG(utils.Db1.Db, curentuser)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -79,7 +98,7 @@ func GetOfflineUsersHandler(w http.ResponseWriter, r *http.Request) {
 // 	return lastTalked, nil
 // }
 
-func allUsersByLastMSG(db *sql.DB) (map[string]int, error) {
+func allUsersByLastMSG(db *sql.DB, curentuser string) (map[string]int, error) {
 	query := `SELECT sender_id, receiver_id, created_at FROM messages ORDER BY created_at DESC`
 	rows, err := db.Query(query)
 	if err != nil {
@@ -87,8 +106,8 @@ func allUsersByLastMSG(db *sql.DB) (map[string]int, error) {
 	}
 	defer rows.Close()
 
-	// sender_id  
-    // receiver_id
+	// sender_id
+	// receiver_id
 
 	lastTalked := make(map[string]int)
 	var sender, receiver, created_at string
@@ -100,15 +119,19 @@ func allUsersByLastMSG(db *sql.DB) (map[string]int, error) {
 			continue
 		}
 
-		if _, ok := lastTalked[sender]; !ok {
-			lastTalked[sender] = count
-			count++
+		if curentuser == sender || curentuser == receiver {
+			if _, ok := lastTalked[sender]; !ok {
+				lastTalked[sender] = count
+				count++
+			}
+
+			if _, ok := lastTalked[receiver]; !ok {
+				lastTalked[receiver] = count
+				count++
+			}
+
 		}
 
-		if _, ok := lastTalked[receiver]; !ok {
-			lastTalked[receiver] = count
-			count++
-		}
 	}
 
 	return lastTalked, nil
