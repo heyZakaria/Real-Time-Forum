@@ -4,14 +4,14 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"forum/internal/app/models/utils"
-	"forum/internal/app/websok"
 	"maps"
 	"net/http"
+
+	"forum/internal/app/models/utils"
+	"forum/internal/app/websok"
 )
 
 func GetOfflineUsersHandler(w http.ResponseWriter, r *http.Request) {
-
 	onlinUsernames := websok.ChatHub.GetOnlineUsersnames()
 	allUsers, err := allUsers(utils.Db1.Db)
 	if err != nil {
@@ -45,37 +45,72 @@ func GetOfflineUsersHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(finalMap)
 }
 
+// func allUsersByLastMSG(db *sql.DB) (map[string]int, error) {
+// 	query := `SELECT * FROM messages ORDER BY created_at `
+// 	rows, err := db.Query(query)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	defer rows.Close()
+// 	var lastTalked = make(map[string]int)
+// 	var id int
+// 	var sender string
+// 	var receiver string
+// 	var msg string
+// 	var created_at string
+// 	var count = 0
+// 	for rows.Next() {
+
+// 		if err := rows.Scan(&id, &sender, &receiver, &msg, &created_at); err != nil {
+// 			fmt.Println("err scaning users ,user", err)
+// 		}
+// 		if _, ok := lastTalked[sender]; !ok {
+// 			lastTalked[sender] = count
+// 			count++
+// 		} /* else if _, ok := lastTalked[receiver]; !ok {
+// 			lastTalked[receiver] = count
+// 			count++
+// 		} */
+
+// 		//fmt.Println("---------", id, sender, receiver, msg, created_at)
+// 	}
+
+// 	// fmt.Println("+++++++++", lastTalked)
+// 	return lastTalked, nil
+// }
+
 func allUsersByLastMSG(db *sql.DB) (map[string]int, error) {
-	query := `SELECT * FROM messages ORDER BY created_at `
+	query := `SELECT sender_id, receiver_id, created_at FROM messages ORDER BY created_at DESC`
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var lastTalked = make(map[string]int)
-	var id int
-	var sender string
-	var receiver string
-	var msg string
-	var created_at string
-	var count = 0
-	for rows.Next() {
 
-		if err := rows.Scan(&id, &sender, &receiver, &msg, &created_at); err != nil {
-			fmt.Println("err scaning users ,user", err)
+	// sender_id  
+    // receiver_id
+
+	lastTalked := make(map[string]int)
+	var sender, receiver, created_at string
+	count := 0
+
+	for rows.Next() {
+		if err := rows.Scan(&sender, &receiver, &created_at); err != nil {
+			fmt.Println("err scanning messages:", err)
+			continue
 		}
+
 		if _, ok := lastTalked[sender]; !ok {
 			lastTalked[sender] = count
 			count++
-		} /* else if _, ok := lastTalked[receiver]; !ok {
+		}
+
+		if _, ok := lastTalked[receiver]; !ok {
 			lastTalked[receiver] = count
 			count++
-		} */
-
-		//fmt.Println("---------", id, sender, receiver, msg, created_at)
+		}
 	}
 
-	// fmt.Println("+++++++++", lastTalked)
 	return lastTalked, nil
 }
 
@@ -99,7 +134,7 @@ func allUsers(db *sql.DB) ([]string, error) {
 }
 
 func offlinePeople(online map[string]bool, allUsers []string) map[string]bool {
-	var offline = make(map[string]bool)
+	offline := make(map[string]bool)
 	for _, username := range allUsers {
 		if notContains(online, username) {
 			offline[username] = false

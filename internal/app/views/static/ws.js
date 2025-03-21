@@ -141,9 +141,9 @@ function fetchOfflineUsers() {
  
             userList.innerHTML = '';
             
-             const allUsers = users.allUsers;
-            const lastTalked = users.lastTalked;
-            
+             const allUsers = users.allUsers || {}
+            const lastTalked = users.lastTalked || {}
+           
              let userArray = [];
             // i will use infinity in case there is no message to sort alphabiticly
             for (const [username, isOnline] of Object.entries(allUsers)) {
