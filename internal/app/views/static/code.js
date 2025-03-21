@@ -1,6 +1,3 @@
-
-
-
 export const myCode = {
     home: `
     <!--                 HOME                   -->
@@ -18,8 +15,7 @@ export const myCode = {
                 <h3 id="chat-title" > Chat </h3> <br>
                 
                 <h4 id ="talkingto" > </h4><br>
-               
-               
+                
                 <div id="chat-box" style="height: 300px; overflow-y: scroll; border: 1px solid #ad6f6f; padding: 10px;"></div>
                  <div class="typing_indicator">
                     <div id="dot"></div>

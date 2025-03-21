@@ -175,23 +175,9 @@ input[type="submit"]:hover {
 .err-main {
     width: 100%;
     height: 100vh;
-    /* background-image: url('/internal/app/views/static/images/giphy(1).gif'); */
 }
 
-/* .load_more {
-    background-color: var(--primaryColor);
-    color: var(--secondaryColor);
-    padding: 5px;
-    font-weight: bold;
-    font-size: medium;
-    cursor: pointer;
 
-}
-
-.load_more:hover {
-    background-color: #000;
-
-} */
 
 .login_button {
 
@@ -261,14 +247,6 @@ fieldset {
 @media (max-width: 850px) {
 
 
-    * {
-
-        margin: 0;
-        padding: 0;
-        --primaryColor: #a00;
-        --secondaryColor: #eee;
-    }
-
     .container {
         width: max-content;
     }
@@ -279,7 +257,6 @@ fieldset {
     }
 
     .content form {
-        width: 520px;
         color: var(--primaryColor);
         margin-left: auto;
         margin-right: auto;
@@ -352,13 +329,6 @@ fieldset {
 
 @media (max-width: 550px) {
 
-    * {
-        margin: 0;
-        padding: 0;
-        --primaryColor: #a00;
-        --secondaryColor: #eee;
-    }
-
     .container {
         width: max-content;
     }
@@ -430,21 +400,12 @@ fieldset {
 }
 
 
-
-
-
-
 #online-list {
     display: flex;
     flex-direction: column;
     gap: 8px;
     overflow-y: auto;
 }
-
-
-
-
-
 
 .user {
     display: flex;
@@ -467,27 +428,16 @@ fieldset {
     margin-right: 10px;
 }
 
-/* .user .status {
-/* .user .status {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: #43b581;
-    margin-left: auto;
-} */
-
 
 .online {
 
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    /* margin-right: ; */
     background-color: #43b581;
     margin-left: auto;
 
 }
-
 
 .offline {
 

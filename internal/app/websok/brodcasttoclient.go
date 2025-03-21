@@ -38,34 +38,28 @@ func (h *Storeactivewebsocketclient) Run() {
 	for {
 		select {
 		case client := <-h.Regester:
-			//fmt.Println(<-h.Regester, "ddddd")
-			//fmt.Println("!!!!!!!!!!!!!!!!!")
 			h.mu.Lock()
 			h.Clients[client.Username] = client
 			h.mu.Unlock()
 
 		case client := <-h.Unregester:
-			//fmt.Println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1", client.Username)
 			h.mu.Lock()
 			delete(h.Clients, client.Username)
 			h.mu.Unlock()
 			client.Conn.Close()
 
 		case msg := <-h.Messages:
-
 			h.mu.Lock()
 			// show cliant
 			receiver, exists := h.Clients[msg.Receiver]
 			h.mu.Unlock()
 
-			//fmt.Println("READ 2", msg)
 			if exists {
 				L, err := SaveMessage(utils.Db1.Db, msg.Sender, msg.Receiver, msg.Content)
 				if err != nil {
 					fmt.Println("err save mesage", err)
 				}
 				h.LastInertedMsg = L
-				//fmt.Println("---------------", O)
 				receiver.Send <- msg
 
 			} else {

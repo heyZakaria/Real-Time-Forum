@@ -57,7 +57,7 @@ func SendMessageHistory(w http.ResponseWriter, r *http.Request) {
 
 		return
 	}
-	//fmt.Println(conversation[len(conversation)-1], "zzzzzzz")
+	
 	err = json.NewEncoder(w).Encode(conversation)
 	if err != nil {
 		http.Error(w, "cant encode response convertation", http.StatusInternalServerError)

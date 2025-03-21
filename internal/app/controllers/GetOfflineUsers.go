@@ -15,36 +15,28 @@ func GetOfflineUsersHandler(w http.ResponseWriter, r *http.Request) {
 	onlinUsernames := websok.ChatHub.GetOnlineUsersnames()
 	allUsers, err := allUsers(utils.Db1.Db)
 	if err != nil {
-		fmt.Println(err)
+		http.Error(w, "username not fund", http.StatusInternalServerError)
 	}
-
-	// this one is like this {zakaria:0, hassan:1}
-	// to use this in frontend, in a loop add 0 to the first and 1 to the first ...
-	// just add every element to the top offcourse
-	// do this in frontend here is good
-	// you can access them in frontend (ws.js in fetchOfflineUsers function)
 
 	token, err := r.Cookie("session_id")
-	// // fmt.Println(token,"@@@@@@@@@@@@@@@@@")
 	if err != nil {
-		fmt.Println("11")
+		return
 	}
-	user_id, err := SelectUser(token.Value)
-	// fmt.Println("useridlogu", user_id)
-	if err != nil {
-		fmt.Println("22", err)
-	}
-	curentuser, err := SelectUsername(user_id)
-	// fmt.Println("usernamelogout:", username)
-	if err != nil {
-		fmt.Println("33", err)
-	}
+	user_id := 0
+	if token != nil {
 
-	fmt.Println("##########", curentuser)
-
+		user_id, err = SelectUser(token.Value)
+		if err != nil {
+			http.Error(w, "username not fund", http.StatusInternalServerError)
+			
+		}
+	}
+	curentuser, _ := SelectUsername(user_id)
+	
+	
 	lastTalked, err := allUsersByLastMSG(utils.Db1.Db, curentuser)
 	if err != nil {
-		fmt.Println(err)
+		http.Error(w, "username not fund", http.StatusInternalServerError)
 	}
 
 	offlineUsers := offlinePeople(onlinUsernames, allUsers)
@@ -64,40 +56,6 @@ func GetOfflineUsersHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(finalMap)
 }
 
-// func allUsersByLastMSG(db *sql.DB) (map[string]int, error) {
-// 	query := `SELECT * FROM messages ORDER BY created_at `
-// 	rows, err := db.Query(query)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	defer rows.Close()
-// 	var lastTalked = make(map[string]int)
-// 	var id int
-// 	var sender string
-// 	var receiver string
-// 	var msg string
-// 	var created_at string
-// 	var count = 0
-// 	for rows.Next() {
-
-// 		if err := rows.Scan(&id, &sender, &receiver, &msg, &created_at); err != nil {
-// 			fmt.Println("err scaning users ,user", err)
-// 		}
-// 		if _, ok := lastTalked[sender]; !ok {
-// 			lastTalked[sender] = count
-// 			count++
-// 		} /* else if _, ok := lastTalked[receiver]; !ok {
-// 			lastTalked[receiver] = count
-// 			count++
-// 		} */
-
-// 		//fmt.Println("---------", id, sender, receiver, msg, created_at)
-// 	}
-
-// 	// fmt.Println("+++++++++", lastTalked)
-// 	return lastTalked, nil
-// }
-
 func allUsersByLastMSG(db *sql.DB, curentuser string) (map[string]int, error) {
 	query := `SELECT sender_id, receiver_id, created_at FROM messages ORDER BY created_at DESC`
 	rows, err := db.Query(query)
@@ -105,9 +63,6 @@ func allUsersByLastMSG(db *sql.DB, curentuser string) (map[string]int, error) {
 		return nil, err
 	}
 	defer rows.Close()
-
-	// sender_id
-	// receiver_id
 
 	lastTalked := make(map[string]int)
 	var sender, receiver, created_at string
@@ -129,9 +84,7 @@ func allUsersByLastMSG(db *sql.DB, curentuser string) (map[string]int, error) {
 				lastTalked[receiver] = count
 				count++
 			}
-
 		}
-
 	}
 
 	return lastTalked, nil

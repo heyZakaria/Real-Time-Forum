@@ -20,35 +20,21 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 	realtoken := r.URL.Query().Get("token")
 	token := realtoken[11:]
 
-	//fmt.Println("tooken kamla", token[11:])
-
-	//fmt.Println("tooken", token)
-
-	// token, err := r.Cookie("session_id")
-	// // fmt.Println(token,"@@@@@@@@@@@@@@@@@")
-	// if err != nil {
-	// 	fmt.Println("11")
-	// }
+	
 	user_id, err := SelectUser(token)
-	//fmt.Println("useridlogu", user_id)
 	if err != nil {
-		fmt.Println("22", err)
+		http.Error(w, "username not fund", http.StatusInternalServerError)
 	}
 	username, err := SelectUsername(user_id)
-	//fmt.Println("usernamelogout:", username)
 
 	if err != nil {
-		fmt.Println("33", err)
+		http.Error(w, "username not fund", http.StatusInternalServerError)
 	}
 
 	// RemoveSessionFromDB(utils.Db1.Db, token)
 	clearSession(w)
 
-	//fmt.Println("REMOEV")
-	// delete(h.Clients, c.Username)
-	// c.Conn.Close()
-
-	// fmt.Println(websok.UnregisterClientByUsername("xxxx"))
+	
 	if websok.UnregisterClientByUsername(username) {
 		fmt.Println("closse for that:", username)
 	}

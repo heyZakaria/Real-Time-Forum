@@ -29,16 +29,11 @@ func main() {
 
 	http.HandleFunc("/", controllers.Home)
 
-	/* http.HandleFunc("/register", controllers.Registration)
-	http.HandleFunc("/login", controllers.Login)
-	*/
 	http.HandleFunc("/api", api.Codage)
 	http.HandleFunc("/api/registred", controllers.CheckRegistration)
 
-	// http.HandleFunc("/api/online-users", controllers.GetOnlineUsersHandler)
 	http.HandleFunc("/api/friends-list", controllers.GetOfflineUsersHandler)
 	http.HandleFunc("/api/message-history", controllers.SendMessageHistory)
-	//http.HandleFunc("/api/sendnotification",controllers.Sendnotification)
 	http.HandleFunc("/api/current-user", controllers.GetCurrentUsername)
 
 	http.HandleFunc("/api/addComment", controllers.AddComment)

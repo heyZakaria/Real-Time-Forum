@@ -18,119 +18,9 @@ export function startws() {
 }
 let messageinput
 
-// function fetchOfflineUsers() {
-//     fetch('/api/friends-list')
-//         .then(response => response.json())
-//         .then(users => {
-//             let userList = document.getElementById('friends-list');
-//             if (userList == null) {
-//                 return
-//             }
-//             //  console.log(users.lastTalked);
-//             //console.log(users.allUsers);
-
-//             /*  let myFriends = []
-//              let count = 0
-
-//              for (const [key, val] of Object.entries(users.lastTalked)) {
-//                  if ((count == val) && key != currentUser) {
-
-//                      myFriends.push(key)
-//                      count++
-//                  }
-
-//              } */
-
-
-//             userList.innerHTML = '';
-
-//             allUsers = users
-
-//             ///////////////////////////////// for talked with --- USERS.lastTalked ///////////////////////////////////// 
-//             ///////////////////////////////// for ALL --- USERS.allUsers ///////////////////////////////////// 
-//             ///////////////////////////////// KEY == USERNAME ///////////////////////////////////// 
-//             ///////////////////////////////// VAL == TRUE/FALSE true for online / false is offline ///////////////////////////////////// 
-//             for (const [key, val] of Object.entries(users)) {
-
-//                 if (key == currentUser) {
-//                     continue
-//                 }
-
-//                 let userDiv = document.createElement('div');
-//                 userDiv.classList.add('user');
-
-//                 // make random avatar 
-//                 let img = document.createElement('img');
-//                 //apii for random acvatr
-//                 img.src = `https://api.dicebear.com/7.x/bottts/svg?seed=${key}`
-//                 img.alt = key;
-
-//                 let name = document.createElement('span');
-//                 name.textContent = key;
-
-//                 // if online do green 
-//                 let status = document.createElement('div');
-//                 if (val) {
-
-//                     status.classList.remove('offline');
-//                     status.classList.add('online');
-//                     let showChat = {}
-//                     showChat[key] = false
-//                     userDiv.addEventListener('click', () => {
-
-//                         if (!showChat.key) {
-
-//                             chat_section.style.display = "block"
-//                             sendTo = key
-//                             talkingto.innerHTML = ""
-//                             talkingto.innerHTML = "Chating with : " + sendTo
-//                             initializeChat(currentUser, sendTo)
-//                             showChat.key = true
-//                         } else {
-//                             chat_section.style.display = "none"
-
-//                             talkingto.innerHTML = ""
-//                             showChat.val = false
-//                             sendTo = ""
-//                         }
-//                     });
-
-//                 } else {
-//                     /* userDiv.addEventListener('click', () => {
-//                         if (showChat.key) {
-//                             chat_section.style.display = "none"
-
-//                             talkingto.innerHTML = ""
-//                             showChat.val = false
-//                             sendTo = ""
-//                         }
-//                     }); */
-//                     status.classList.add('offline');
-//                     status.classList.remove('online');
-
-//                 }
-//                 userDiv.appendChild(img);
-//                 userDiv.appendChild(name);
-//                 userDiv.appendChild(status);
-//                 userList.appendChild(userDiv);
-
-//             };
-//             let chat_section = document.getElementById("chat_section")
-//         })
-//         .catch(error => console.error('Error fetching ofline users:', error));
-// }
-
-//// i have a map :
-// finalMap := map[string]any{
-//     "allUsers":   offlineUsers,
-//     "lastTalked": lastTalked,
-// }
-
-
- 
 function fetchOfflineUsers() {
     fetch('/api/friends-list')
-     
+
         .then(response => response.json())
         .then(users => {
             let userList = document.getElementById('friends-list');
@@ -138,35 +28,36 @@ function fetchOfflineUsers() {
                 return;
             }
 
- 
             userList.innerHTML = '';
-            
-             const allUsers = users.allUsers || {}
+
+            const allUsers = users.allUsers || {}
             const lastTalked = users.lastTalked || {}
-           
-             let userArray = [];
+
+            let userArray = [];
             // i will use infinity in case there is no message to sort alphabiticly
             for (const [username, isOnline] of Object.entries(allUsers)) {
                 if (username == currentUser) {
                     continue;
                 }
-                
+                if (username == sendTo) {
+                    if (!isOnline) {
+                        let chat_section = document.getElementById("chat_section")
+                        chat_section.style.display = "none"
+                    }
+                }
+
                 userArray.push({
                     username: username,
                     isOnline: isOnline,
-                    
-                     lastMessageOrder: username in lastTalked ? lastTalked[username] : Infinity
+
+                    lastMessageOrder: username in lastTalked ? lastTalked[username] : Infinity
                 });
             }
-
-
-            console.log("unsorted aray:", userArray);
-
 
             // Sort users
             userArray.sort((a, b) => {
                 //3 cas 
-                
+
                 // 1 cas If two of peaple talked return last one
 
                 if (a.lastMessageOrder !== Infinity && b.lastMessageOrder !== Infinity) {
@@ -180,20 +71,16 @@ function fetchOfflineUsers() {
                 if (b.lastMessageOrder !== Infinity) {
                     return 1;
                 }
-                
+
                 // 3 if no one do locale compare (alphabitic)
                 return a.username.localeCompare(b.username);
-            });            
-            
-            
-            
-            console.log("sorted userArray:", userArray);
+            });
 
 
             userArray.forEach(user => {
                 let userDiv = document.createElement('div');
                 userDiv.classList.add('user');
-                
+
                 let img = document.createElement('img');
                 img.src = `https://api.dicebear.com/7.x/bottts/svg?seed=${user.username}`;
                 img.alt = user.username;
@@ -207,7 +94,7 @@ function fetchOfflineUsers() {
                     status.classList.add('online');
                     let showChat = {};
                     showChat[user.username] = false;
-                    
+
                     userDiv.addEventListener('click', () => {
                         if (!showChat[user.username]) {
                             chat_section.style.display = "block";
@@ -226,7 +113,7 @@ function fetchOfflineUsers() {
                     status.classList.add('offline');
                     status.classList.remove('online');
                 }
-                
+
                 userDiv.appendChild(img);
                 userDiv.appendChild(name);
                 userDiv.appendChild(status);
@@ -237,20 +124,6 @@ function fetchOfflineUsers() {
         })
         .catch(error => console.error('Error fetching users:', error));
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 async function connectWebsocket() {
 
@@ -268,23 +141,7 @@ async function connectWebsocket() {
     try {
         aSocket.onopen = function () {
             console.log("Connected to WebSocket server");
-            /* //if (messageinput) {
-                let dots = document.querySelectorAll("#dot")
-                messageinput.addEventListener('keydown', (e) => {
-                    dots.forEach(dot => {
-                        dot.classList.add("dot")
-    
-                    });
-                })
-                messageinput.addEventListener('keyup', () => {
-                    setTimeout(() => {
-                        dots.forEach(dot => {
-                            dot.classList.remove("dot")
-                        });
-                    }, "2000");
-    
-                })
-          //  } */
+
         };
 
         aSocket.onmessage = function (event) {
@@ -308,9 +165,7 @@ async function connectWebsocket() {
             console.log("WebSocket connection closed");
             document.getElementById("chat-box").innerHTML = ""
             document.getElementById("chat_section").style.display = "none";
-            //sendTo = ""
         };
-
 
     } catch (error) {
 
@@ -390,9 +245,8 @@ function sendMessage() {
     let message = messageInput.value.trim();
 
     let currentTime = new Date()
-    // if (message !== "" && allUsers[sendTo] == true) {
 
-    if (message !== "" ) {
+    if (message !== "") {
         let chatBox = document.getElementById("chat-box");
 
         let messageElement = document.createElement("p");
@@ -403,9 +257,6 @@ function sendMessage() {
         chatBox.scrollTop = chatBox.scrollHeight;
 
         if (sendTo) {
-
-
-            console.log("SEND 1", message, sendTo);
 
             // Send the message
             aSocket.send(JSON.stringify({
@@ -424,7 +275,6 @@ function sendMessage() {
         let chatBox = document.getElementById("message-input").innerText = ""
 
     }
-
 }
 
 function throttle(func, delay) {
@@ -457,3 +307,23 @@ function initializeChat(user1, user2) {
     chatBox.addEventListener("scroll", handleScroll)
 }
 
+
+//// This is for typing in progress
+
+/* //if (messageinput) {
+            let dots = document.querySelectorAll("#dot")
+            messageinput.addEventListener('keydown', (e) => {
+                dots.forEach(dot => {
+                    dot.classList.add("dot")
+ 
+                });
+            })
+            messageinput.addEventListener('keyup', () => {
+                setTimeout(() => {
+                    dots.forEach(dot => {
+                        dot.classList.remove("dot")
+                    });
+                }, "2000");
+ 
+            })
+} */
